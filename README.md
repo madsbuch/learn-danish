@@ -108,5 +108,13 @@ Manual runs on other branches keep the APK as an artifact without publishing.
 It is not published by local builds. Android initialization applies the same
 launcher icons and keyboard handling locally and in CI.
 
-For stable upgrade signing, run `./scripts/make-android-keystore.sh` and add the
-four secrets it describes to this app's repository. Keep that keystore safe.
+Release signing requires the four `ANDROID_KEYSTORE_*` / `ANDROID_KEY_*`
+repository secrets; a missing secret stops the release. Pull requests build
+unsigned test APKs and do not need signing secrets.
+
+This repository has a dedicated Dansk signing key. Its local recovery backup
+is in the ignored `.signing/` directory, with owner-only file permissions.
+Keep both the keystore and its password details safe: future upgrades must use
+the same key. GitHub stores the CI copy as encrypted repository secrets.
+For a separate installation, `./scripts/make-android-keystore.sh` generates a
+new key and describes the four secrets to configure.

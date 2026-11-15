@@ -102,8 +102,8 @@ jobs:
       - name: Build the release APK
         run: bun run android:build
 
-      - name: Sign the APK
-        id: sign
+      - name: Sign the APK with the release key
+        if: github.event_name != 'pull_request'
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -115,28 +115,11 @@ jobs:
           mkdir -p out
           trap 'rm -f key.jks aligned.apk' EXIT
 
-          if [ -n "$KEYSTORE_BASE64" ]; then
-            : "${KEYSTORE_PASSWORD:?ANDROID_KEYSTORE_PASSWORD is required with a keystore}"
-            : "${KEY_PASSWORD:?ANDROID_KEY_PASSWORD is required with a keystore}"
-            : "${KEY_ALIAS:?ANDROID_KEY_ALIAS is required with a keystore}"
-            echo "$KEYSTORE_BASE64" | base64 -d > key.jks
-            store_pass="$KEYSTORE_PASSWORD"
-            key_pass="$KEY_PASSWORD"
-            alias="$KEY_ALIAS"
-            echo "stable=true" >> "$GITHUB_OUTPUT"
-          else
-            # No signing secret configured: fall back to a throwaway key so the
-            # APK is at least installable. See scripts/make-android-keystore.sh.
-            echo "::warning::No ANDROID_KEYSTORE_BASE64 secret — signing with a throwaway key. This build cannot upgrade a previous install."
-            store_pass="dansk-ephemeral"
-            key_pass="$store_pass"
-            alias="ephemeral"
-            keytool -genkeypair -keystore key.jks -alias "$alias" \
-              -keyalg RSA -keysize 2048 -validity 10000 \
-              -storepass "$store_pass" -keypass "$key_pass" \
-              -dname "CN=Dansk CI, O=Dansk, C=DK"
-            echo "stable=false" >> "$GITHUB_OUTPUT"
-          fi
+          : "${KEYSTORE_BASE64:?Configure ANDROID_KEYSTORE_BASE64 before releasing}"
+          : "${KEYSTORE_PASSWORD:?Configure ANDROID_KEYSTORE_PASSWORD before releasing}"
+          : "${KEY_PASSWORD:?Configure ANDROID_KEY_PASSWORD before releasing}"
+          : "${KEY_ALIAS:?Configure ANDROID_KEY_ALIAS before releasing}"
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > key.jks
 
           # Tauri names the output directory after the ABI set it built, so find
           # the APK rather than assuming "universal".
@@ -150,8 +133,8 @@ jobs:
 
           "$tools/zipalign" -P 16 -f 4 "$apk" aligned.apk
           "$tools/apksigner" sign \
-            --ks key.jks --ks-pass "pass:$store_pass" \
-            --ks-key-alias "$alias" --key-pass "pass:$key_pass" \
+            --ks key.jks --ks-pass env:KEYSTORE_PASSWORD \
+            --ks-key-alias "$KEY_ALIAS" --key-pass env:KEY_PASSWORD \
             --out out/Dansk-android-universal.apk aligned.apk
           "$tools/apksigner" verify --print-certs out/Dansk-android-universal.apk
           "$tools/zipalign" -c -P 16 4 out/Dansk-android-universal.apk
@@ -163,11 +146,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: android
-          path: out/*
+          # Fork PRs have no secrets; their APK is compiled but never signed or published.
+          path: ${{ github.event_name == 'pull_request' && 'src-tauri/gen/android/app/build/outputs/apk/**/release/*.apk' || 'out/*' }}
           if-no-files-found: error
-
-    outputs:
-      stable-signing: ${{ steps.sign.outputs.stable }}
 
   publish:
     name: Publish latest
@@ -212,15 +193,6 @@ jobs:
           granted once, in the app's Settings screen.
 
           HEADER
-          if [ "${{ needs.android.outputs.stable-signing }}" != "true" ]; then
-            cat >> notes.md <<'WARN'
-          > **Note** — no signing key is configured, so this APK is signed with a
-          > throwaway key and cannot upgrade an earlier install. Run
-          > `scripts/make-android-keystore.sh` once and add the four secrets it
-          > prints to make upgrades seamless.
-
-          WARN
-          fi
           {
             echo "### This build"
             echo
