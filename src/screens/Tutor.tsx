@@ -35,7 +35,7 @@ const STARTERS = [
   "What should I practise today?",
   "Make a course from the words I keep getting wrong",
   "Make me a song about ordering coffee",
-  "When do I use “ty” and when “pan” or “pani”?",
+  "When do I use “en” and when “et”?",
 ];
 
 

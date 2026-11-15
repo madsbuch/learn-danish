@@ -54,6 +54,7 @@ Requires Bun and a Rust toolchain, plus the platform prerequisites for Tauri.
 ```sh
 bun install
 bun run app:dev         # native desktop app
+bun run app:dev:tablet  # tablet-sized window; resize to test the phone layout
 bun run android:dev     # configured Android device or emulator
 ```
 
