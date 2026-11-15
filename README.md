@@ -1,7 +1,7 @@
 # Dansk
 
 A little Danish, every day. A native Danish-learning app for English speakers,
-adapted from Learn Polish with its own identity, app storage and starter content.
+adapted from Learn Polish with its own identity and app storage.
 Built with **Tauri 2, Rust, SQLite and React** for Android and macOS.
 
 ## The app
@@ -18,17 +18,20 @@ Built with **Tauri 2, Rust, SQLite and React** for Android and macOS.
 - **Settings:** AI models and keys, voices, audio cache, themes, reminders,
   costs, memories and database export.
 
-The offline starter collection covers ten everyday subjects plus grammar
-fundamentals. Build your own curriculum with the tutor, or edit and reorganise
-courses yourself. Starter content is seeded once; the app does not overwrite
-subsequent changes.
+The app starts with an empty course library. Ask the tutor to build a course
+around what you want to learn, then edit and reorganise it as you go.
+No default curriculum is installed or restored automatically.
+
+Upgrading from the first release removes unchanged default courses. Edited,
+extended or shared courses are preserved, along with user-created courses.
 
 Danish speech uses the device's `da-DK` voice when available, or the configured
 OpenRouter speech provider. Listening clips are cached for reuse. Typing accepts
 `ae`, `oe` and `aa` for `æ`, `ø` and `å`.
 
 AI features require your own OpenRouter key in Settings; song audio also needs
-a kie.ai key. The offline exercises work without either key.
+a kie.ai key. Once courses have been created, their offline exercises work
+without either key.
 
 ## Visual identity
 
@@ -84,7 +87,6 @@ src/screens/           exercises, tutor, music, settings and detail screens
 src/lib/api.ts         typed Tauri command interface
 src/lib/types.ts       shared frontend data shapes (Danish content uses da)
 src-tauri/src/         database, learning engine, agents, speech and music
-src-tauri/content/     editable offline starter content
 src-tauri/plugins/     Android playback, sharing and background work
 ```
 
@@ -93,11 +95,8 @@ The tutor's tool definitions and instructions live in `src-tauri/src/tutor.rs`;
 all AI agents share the transport in `agent.rs` and `ai.rs`. Wikipedia source
 readers can offer the Danish article when one exists.
 
-Word files use tab-separated `danish`, `english`, `part-of-speech` columns;
-sentences use the first two. Conversation JSON uses `title_da` and each line's
-`da`/`en` pair, plus speaker voice genders. Grammar lessons are Markdown with
-front matter. Content changes affect fresh installs; existing courses remain
-the learner's data.
+Course content is created in the app and stored in its database. Development
+tests use isolated fixtures; those courses are not included in the app.
 
 ## Android releases
 

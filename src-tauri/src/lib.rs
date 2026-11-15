@@ -4,6 +4,7 @@ mod bench;
 mod blocks;
 mod cast;
 mod commands;
+#[cfg(test)]
 mod content;
 mod costs;
 mod courses;
@@ -24,6 +25,7 @@ mod songs;
 mod speech;
 mod srs;
 mod stats;
+mod starter_retirement;
 mod text;
 mod tutor;
 mod wiki;
@@ -209,13 +211,15 @@ mod integration {
             .join(format!("{name}-{}.db", std::process::id()));
         let _ = std::fs::remove_file(&path);
         let mut conn = db::open(&path).expect("open");
+        db::seed_test_courses(&mut conn).expect("historical test fixtures");
+        db::unify_courses(&mut conn).unwrap();
         // Pin the clock to a known day so the assertions do not depend on today.
         db::set_setting(&mut conn, "tz_offset_minutes", "0").unwrap();
         conn
     }
 
     #[test]
-    fn a_fresh_install_seeds_the_whole_curriculum() {
+    fn historical_course_fixtures_can_be_practised_and_deleted() {
         let mut conn = scratch_db("seed");
         // Ten topics and the course holding the grammar lessons.
         assert_eq!(t::topics::table.count().get_result::<i64>(&mut conn).unwrap(), 11);
@@ -392,8 +396,7 @@ mod integration {
             t::topics::table.filter(t::topics::kind.ne("course")).count().get_result(&mut conn).unwrap();
         assert_eq!(kinds, 0);
 
-        // The starter content is filled in around what was there, without
-        // repeating a word the course already teaches.
+        // Existing migrated content survives without adding any defaults.
         let basics: i64 =
             t::topics::table.filter(t::topics::slug.eq("basics")).select(t::topics::id).first(&mut conn).unwrap();
         let hej: i64 = t::course_words::table
@@ -405,8 +408,7 @@ mod integration {
         assert_eq!(hej, 1);
         let dialogues = blocks::for_topic(&mut conn, basics).unwrap().iter().filter(|b| b.format == "dialogue").count();
         assert_eq!(dialogues, 1, "the existing conversation is kept, not doubled");
-        let grammar = grammar_course(&mut conn);
-        assert!(blocks::for_topic(&mut conn, grammar).unwrap().len() >= 7);
+        assert_eq!(t::topics::table.filter(t::topics::slug.eq("grammar-essentials")).count().get_result::<i64>(&mut conn).unwrap(), 0);
 
         // A word taken out goes with its history.
         crate::courses::remove_items(&mut conn, 2, &["rød".into()], &[]).unwrap();
@@ -1808,9 +1810,9 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
             .unwrap();
         assert!(!columns.iter().any(|c| c.name == "legacy_translation"));
         assert_eq!(db::get_setting(&mut conn, "source_language").unwrap(), None);
-        // The rest of the curriculum seeds on top, without duplicating.
+        // No default courses are added to this older database.
         let topics: i64 = t::topics::table.count().get_result(&mut conn).unwrap();
-        assert_eq!(topics, 11);
+        assert_eq!(topics, 1);
         let basics_words: i64 =
             t::words::table.filter(t::words::da.eq("hej")).count().get_result(&mut conn).unwrap();
         assert_eq!(basics_words, 1);

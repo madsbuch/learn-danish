@@ -1,5 +1,6 @@
-//! The whole curriculum is compiled into the binary, so a fresh install works
-//! offline and the seed can never drift from the code that reads it.
+//! Historical curriculum fixtures, compiled only for tests.
+//! They validate retirement of the exact courses shipped in the first release;
+//! production builds contain no default courses or seeding content.
 
 use serde::Deserialize;
 
@@ -14,9 +15,9 @@ macro_rules! topic {
     ($slug:literal, $file:literal) => {
         TopicFiles {
             slug: $slug,
-            words: include_str!(concat!("../content/words/", $file, ".tsv")),
-            sentences: include_str!(concat!("../content/sentences/", $file, ".tsv")),
-            conversation: include_str!(concat!("../content/conversations/", $file, ".json")),
+            words: include_str!(concat!("../test-fixtures/retired-courses/words/", $file, ".tsv")),
+            sentences: include_str!(concat!("../test-fixtures/retired-courses/sentences/", $file, ".tsv")),
+            conversation: include_str!(concat!("../test-fixtures/retired-courses/conversations/", $file, ".json")),
         }
     };
 }
@@ -36,13 +37,13 @@ pub const TOPICS: &[TopicFiles] = &[
 
 /// The starter lessons, written once on a fresh install.
 pub const LESSONS: &[&str] = &[
-    include_str!("../content/lessons/01-vaere.md"),
-    include_str!("../content/lessons/02-have.md"),
-    include_str!("../content/lessons/03-present-tense.md"),
-    include_str!("../content/lessons/04-nouns.md"),
-    include_str!("../content/lessons/05-adjectives.md"),
-    include_str!("../content/lessons/06-word-order.md"),
-    include_str!("../content/lessons/07-polite-danish.md"),
+    include_str!("../test-fixtures/retired-courses/lessons/01-vaere.md"),
+    include_str!("../test-fixtures/retired-courses/lessons/02-have.md"),
+    include_str!("../test-fixtures/retired-courses/lessons/03-present-tense.md"),
+    include_str!("../test-fixtures/retired-courses/lessons/04-nouns.md"),
+    include_str!("../test-fixtures/retired-courses/lessons/05-adjectives.md"),
+    include_str!("../test-fixtures/retired-courses/lessons/06-word-order.md"),
+    include_str!("../test-fixtures/retired-courses/lessons/07-polite-danish.md"),
 ];
 
 #[derive(Debug, Deserialize)]
