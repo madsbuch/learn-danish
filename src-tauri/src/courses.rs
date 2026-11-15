@@ -7,7 +7,7 @@
 //!
 //! Giving a course words, sentences or a dialogue cuts them into drills: the
 //! dialogue, words in eights, sentences in fives. Courses are created by the
-//! learner or their tutor; a fresh install has an empty library.
+//! learner or their tutor; a fresh install has one small demo course.
 
 use std::collections::HashSet;
 

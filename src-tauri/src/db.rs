@@ -1005,12 +1005,18 @@ fn initialize_courses(conn: &mut Conn) -> Result<()> {
             .execute(conn)?;
         set_setting(conn, "starter_seeded", "1")?;
     }
-    crate::starter_retirement::run(conn)
+    crate::starter_retirement::run(conn)?;
+    crate::demo_course::seed_once(conn)
 }
 
 /// Historical release data used only by regression tests, never on app startup.
 #[cfg(test)]
 pub(crate) fn seed_test_courses(conn: &mut Conn) -> Result<()> {
+    // Historical regression fixtures model the release before the small demo.
+    let demo = topics::table.filter(topics::slug.eq(crate::demo_course::SLUG)).select(topics::id).first::<i64>(conn).optional()?;
+    if let Some(demo) = demo {
+        crate::courses::delete(conn, demo)?;
+    }
     for (index, topic) in content::TOPICS.iter().enumerate() {
         let convo: Conversation = serde_json::from_str(topic.conversation)?;
         if convo.slug != topic.slug {

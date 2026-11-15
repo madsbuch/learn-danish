@@ -9,6 +9,7 @@ mod content;
 mod costs;
 mod courses;
 mod db;
+mod demo_course;
 mod error;
 mod files;
 mod examiner;
@@ -1810,11 +1811,11 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
             .unwrap();
         assert!(!columns.iter().any(|c| c.name == "legacy_translation"));
         assert_eq!(db::get_setting(&mut conn, "source_language").unwrap(), None);
-        // No default courses are added to this older database.
+        // Only the small demo is added to this older database.
         let topics: i64 = t::topics::table.count().get_result(&mut conn).unwrap();
-        assert_eq!(topics, 1);
+        assert_eq!(topics, 2);
         let basics_words: i64 =
-            t::words::table.filter(t::words::da.eq("hej")).count().get_result(&mut conn).unwrap();
+            t::course_words::table.filter(t::course_words::topic_id.eq(1)).filter(t::course_words::da.eq("hej")).count().get_result(&mut conn).unwrap();
         assert_eq!(basics_words, 1);
 
         // Opening again is a no-op.

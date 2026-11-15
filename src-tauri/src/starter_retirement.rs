@@ -121,26 +121,12 @@ mod tests {
         db::seed_test_courses(&mut conn).unwrap();
         db::unify_courses(&mut conn).unwrap();
         db::delete_setting(&mut conn, RETIRED).unwrap();
+        db::delete_setting(&mut conn, crate::demo_course::SEEDED).unwrap();
         conn
     }
 
     fn course(conn: &mut Conn, slug: &str) -> i64 {
         topics::table.filter(topics::slug.eq(slug)).select(topics::id).first(conn).unwrap()
-    }
-
-    #[test]
-    fn new_installs_stay_empty_after_reopen_and_progress_reset() {
-        let mut conn = empty("fresh");
-        assert_eq!(topics::table.count().get_result::<i64>(&mut conn).unwrap(), 0);
-        assert_eq!(blocks::table.count().get_result::<i64>(&mut conn).unwrap(), 0);
-        assert!(practice_blocks::overview(&mut conn).unwrap().next.is_empty());
-        stats::collect(&mut conn).unwrap();
-        crate::commands::reset_progress_in(&mut conn).unwrap();
-        drop(conn);
-        let mut conn = db::open(&path("fresh")).unwrap();
-        assert_eq!(topics::table.count().get_result::<i64>(&mut conn).unwrap(), 0);
-        assert_eq!(words::table.count().get_result::<i64>(&mut conn).unwrap(), 0);
-        assert_eq!(db::foreign_key_violations(&mut conn).unwrap(), 0);
     }
 
     #[test]
@@ -163,7 +149,9 @@ mod tests {
         assert_eq!(schema::day_log::table.find(today).select(schema::day_log::xp).first::<i64>(&mut conn).unwrap(), 42);
         drop(conn);
         let mut conn = db::open(&path("released")).unwrap();
-        assert_eq!(topics::table.count().get_result::<i64>(&mut conn).unwrap(), 0);
+        assert_eq!(topics::table.count().get_result::<i64>(&mut conn).unwrap(), 1);
+        assert_eq!(topics::table.select(topics::slug).first::<String>(&mut conn).unwrap(), crate::demo_course::SLUG);
+        assert_eq!(words::table.count().get_result::<i64>(&mut conn).unwrap(), 12);
         assert_eq!(db::foreign_key_violations(&mut conn).unwrap(), 0);
     }
 
@@ -199,5 +187,9 @@ mod tests {
         diesel::update(topics::table.find(renamed)).set(topics::title_en.eq("A new neighbour")).execute(&mut conn).unwrap();
         run(&mut conn).unwrap();
         assert_eq!(topics::table.count().get_result::<i64>(&mut conn).unwrap(), 7);
+        drop(conn);
+        let mut conn = db::open(&path("custom")).unwrap();
+        assert_eq!(topics::table.count().get_result::<i64>(&mut conn).unwrap(), 8);
+        assert_eq!(topics::table.filter(topics::slug.eq(crate::demo_course::SLUG)).count().get_result::<i64>(&mut conn).unwrap(), 1);
     }
 }

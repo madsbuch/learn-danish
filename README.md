@@ -18,20 +18,22 @@ Built with **Tauri 2, Rust, SQLite and React** for Android and macOS.
 - **Settings:** AI models and keys, voices, audio cache, themes, reminders,
   costs, memories and database export.
 
-The app starts with an empty course library. Ask the tutor to build a course
-around what you want to learn, then edit and reorganise it as you go.
-No default curriculum is installed or restored automatically.
+The app starts with one small **First steps** demo course: greetings, names,
+and a few essential words and phrases. Its four short drills let you try the
+app before asking the tutor to build courses around what you want to learn.
+The demo is editable and installed only once; deleting it is permanent.
 
-Upgrading from the first release removes unchanged default courses. Edited,
-extended or shared courses are preserved, along with user-created courses.
+Upgrading from the first release replaces the unchanged default collection
+with this single demo. Edited, extended or shared courses are preserved,
+along with user-created courses.
 
 Danish speech uses the device's `da-DK` voice when available, or the configured
 OpenRouter speech provider. Listening clips are cached for reuse. Typing accepts
 `ae`, `oe` and `aa` for `æ`, `ø` and `å`.
 
 AI features require your own OpenRouter key in Settings; song audio also needs
-a kie.ai key. Once courses have been created, their offline exercises work
-without either key.
+a kie.ai key. The demo and existing courses' offline exercises work without
+either key.
 
 ## Visual identity
 
@@ -95,8 +97,9 @@ The tutor's tool definitions and instructions live in `src-tauri/src/tutor.rs`;
 all AI agents share the transport in `agent.rs` and `ai.rs`. Wikipedia source
 readers can offer the Danish article when one exists.
 
-Course content is created in the app and stored in its database. Development
-tests use isolated fixtures; those courses are not included in the app.
+Beyond the small demo, course content is created in the app and stored in its
+database. Development tests use isolated historical fixtures; those old
+courses are not included in the app.
 
 ## Android releases
 
