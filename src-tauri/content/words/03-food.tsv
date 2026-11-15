@@ -1,0 +1,226 @@
+# danish	english	pos
+mad	food	n
+et måltid	a meal	n-neuter
+morgenmad	breakfast	n
+frokost	lunch	n
+aftensmad	dinner; evening meal	n
+en forret	a starter; an appetizer	n-common
+en hovedret	a main course	n-common
+en dessert	a dessert	n-common
+en snack	a snack	n-common
+en portion	a portion	n-common
+en ret	a dish; a course	n-common
+en opskrift	a recipe	n-common
+en ingrediens	an ingredient	n-common
+en restaurant	a restaurant	n-common
+en café	a café	n-common
+en kantine	a canteen	n-common
+en tjener	a waiter; a server	n-common
+en kok	a cook; a chef	n-common
+et menukort	a menu	n-neuter
+en bordbestilling	a table reservation	n-common
+en buffet	a buffet	n-common
+dagens ret	the dish of the day	n-common
+en madpakke	a packed lunch	n-common
+en sandwich	a sandwich	n-common
+et stykke smørrebrød	a piece of open-faced rye bread	phr
+rugbrød	rye bread	n
+franskbrød	white bread	n
+fuldkornsbrød	wholegrain bread	n
+et rundstykke	a bread roll	n-neuter
+en bolle	a bun	n-common
+et knækbrød	a crispbread	n-neuter
+en croissant	a croissant	n-common
+et wienerbrød	a Danish pastry	n-neuter
+en kanelsnegl	a cinnamon roll	n-common
+en tebirkes	a poppy-seed pastry	n-common
+havregryn	rolled oats	n-plural
+grød	porridge	n
+risengrød	rice pudding (porridge)	n
+en pandekage	a pancake	n-common
+et æg	an egg	n-neuter
+et spejlæg	a fried egg	n-neuter
+røræg	scrambled eggs	n
+smør	butter	n
+margarine	margarine	n
+ost	cheese	n
+flødeost	cream cheese	n
+skæreost	slicing cheese	n
+mælk	milk	n
+sødmælk	whole milk	n
+letmælk	semi-skimmed milk	n
+skummetmælk	skimmed milk	n
+havremælk	oat milk	n
+fløde	cream	n
+piskefløde	whipping cream	n
+cremefraiche	crème fraîche	n
+yoghurt	yogurt	n
+skyr	skyr (cultured dairy product)	n
+kød	meat	n
+oksekød	beef	n
+svinekød	pork	n
+lammekød	lamb	n
+kyllingekød	chicken meat	n
+en kylling	a chicken	n-common
+en and	a duck	n-common
+en kalkun	a turkey	n-common
+hakket kød	minced meat	phr
+hakket oksekød	minced beef	phr
+bacon	bacon	n
+skinke	ham	n
+en pølse	a sausage	n-common
+en frikadelle	a Danish meatball	n-common
+leverpostej	liver pâté	n
+flæskesteg	roast pork	n
+en bøf	a steak; a beef patty	n-common
+fisk	fish (food)	n
+en laks	a salmon	n-common
+en sild	a herring	n-common
+en torsk	a cod	n-common
+en makrel	a mackerel	n-common
+en rødspætte	a plaice	n-common
+en reje	a shrimp; a prawn	n-common
+en musling	a mussel	n-common
+en østers	an oyster	n-common
+en fiskefilet	a fish fillet	n-common
+røget laks	smoked salmon	phr
+marinerede sild	pickled herring	phr
+frugt	fruit	n
+et æble	an apple	n-neuter
+en pære	a pear	n-common
+en banan	a banana	n-common
+en appelsin	an orange	n-common
+en mandarin	a mandarin	n-common
+en citron	a lemon	n-common
+en lime	a lime	n-common
+en grapefrugt	a grapefruit	n-common
+en fersken	a peach	n-common
+en abrikos	an apricot	n-common
+en blomme	a plum	n-common
+et kirsebær	a cherry	n-neuter
+et jordbær	a strawberry	n-neuter
+et hindbær	a raspberry	n-neuter
+et blåbær	a blueberry	n-neuter
+et brombær	a blackberry	n-neuter
+en vindrue	a grape	n-common
+en melon	a melon	n-common
+en vandmelon	a watermelon	n-common
+en ananas	a pineapple	n-common
+en mango	a mango	n-common
+en kiwi	a kiwi fruit	n-common
+en avocado	an avocado	n-common
+en rosin	a raisin	n-common
+en dadel	a date (fruit)	n-common
+en figen	a fig	n-common
+grøntsager	vegetables	n-plural
+en kartoffel	a potato	n-common
+en gulerod	a carrot	n-common
+et løg	an onion	n-neuter
+et hvidløg	a garlic bulb	n-neuter
+et fed hvidløg	a clove of garlic	phr
+en porre	a leek	n-common
+en tomat	a tomato	n-common
+en agurk	a cucumber	n-common
+en peberfrugt	a bell pepper	n-common
+en chili	a chilli pepper	n-common
+en squash	a courgette; a zucchini	n-common
+en aubergine	an aubergine; an eggplant	n-common
+et græskar	a pumpkin	n-neuter
+en champignon	a button mushroom	n-common
+en ært	a pea	n-common
+en bønne	a bean	n-common
+en kikært	a chickpea	n-common
+en linse	a lentil	n-common
+spinat	spinach	n
+broccoli	broccoli	n
+blomkål	cauliflower	n
+hvidkål	white cabbage	n
+rødkål	red cabbage	n
+grønkål	kale	n
+salat	lettuce; salad	n
+majs	sweetcorn; maize	n
+en rødbede	a beetroot	n-common
+en radise	a radish	n-common
+en asparges	an asparagus spear	n-common
+ris	rice	n
+pasta	pasta	n
+spaghetti	spaghetti	n
+nudler	noodles	n-plural
+mel	flour	n
+sukker	sugar	n
+salt	salt	n
+peber	pepper (seasoning)	n
+olie	oil	n
+olivenolie	olive oil	n
+eddike	vinegar	n
+sennep	mustard	n
+ketchup	ketchup	n
+mayonnaise	mayonnaise	n
+remoulade	remoulade sauce	n
+sovs	sauce; gravy	n
+en suppe	a soup	n-common
+bouillon	stock; broth	n
+persille	parsley	n
+dild	dill	n
+basilikum	basil	n
+oregano	oregano	n
+timian	thyme	n
+kanel	cinnamon	n
+karry	curry powder	n
+ingefær	ginger	n
+vanilje	vanilla	n
+honning	honey	n
+syltetøj	jam	n
+marmelade	marmalade; jam	n
+chokolade	chocolate	n
+slik	sweets; candy	n
+lakrids	liquorice	n
+en kage	a cake	n-common
+en småkage	a biscuit; a cookie	n-common
+en is	an ice cream	n-common
+en nød	a nut	n-common
+en mandel	an almond	n-common
+en hasselnød	a hazelnut	n-common
+en valnød	a walnut	n-common
+vand	water	n
+danskvand	sparkling water	n
+postevand	tap water	n
+kaffe	coffee	n
+te	tea	n
+kakao	cocoa; hot chocolate	n
+juice	juice	n
+æblejuice	apple juice	n
+appelsinjuice	orange juice	n
+saftevand	fruit cordial mixed with water	n
+en sodavand	a soft drink	n-common
+en øl	a beer	n-common
+vin	wine	n
+rødvin	red wine	n
+hvidvin	white wine	n
+at spise	to eat	v
+at drikke	to drink	v
+at smage	to taste	v
+at bestille mad	to order food	phr
+at koge	to boil	v
+at stege	to fry; to roast	v
+at bage	to bake	v
+at skære	to cut	v
+at hakke	to chop	v
+at røre	to stir	v
+at skrælle	to peel	v
+at servere	to serve	v
+sulten	hungry	adj
+tørstig	thirsty	adj
+mæt	full after eating	adj
+lækker	delicious	adj
+saltet	salty; salted	adj
+syrlig	tart; sour-tasting	adj
+bitter	bitter	adj
+stærk mad	spicy food	phr
+vegetarisk	vegetarian	adj
+vegansk	vegan	adj
+glutenfri	gluten-free	adj
+laktosefri	lactose-free	adj
+rå	raw	adj
+stegt	fried; roasted	adj
+kogt	boiled	adj

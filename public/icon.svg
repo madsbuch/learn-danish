@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <title>Dansk — a little Danish, every day</title>
+  <rect width="1024" height="1024" rx="224" fill="#b52d3a"/>
+  <!-- A quiet Dannebrog cross beneath a Danish ø speech mark. -->
+  <path d="M304 0h64v1024h-64zM0 304h1024v64H0z" fill="#fff8e9" opacity=".12"/>
+  <path d="M304 228h416a104 104 0 0 1 104 104v324a104 104 0 0 1-104 104H470L292 842l30-82h-18a104 104 0 0 1-104-104V332a104 104 0 0 1 104-104z" fill="#fff8e9"/>
+  <ellipse cx="512" cy="492" rx="125" ry="146" fill="none" stroke="#173b48" stroke-width="67"/>
+  <path d="m386 648 252-312" stroke="#173b48" stroke-width="53" stroke-linecap="round"/>
+</svg>

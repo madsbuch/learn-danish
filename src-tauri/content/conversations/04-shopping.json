@@ -1,0 +1,92 @@
+{
+  "slug": "shopping",
+  "title_da": "En ny jakke",
+  "title_en": "A new jacket",
+  "summary_en": "Emil tries on a jacket in a clothes shop and pays at the checkout.",
+  "speakers": {
+    "Emil": "m",
+    "Ekspedient": "f"
+  },
+  "lines": [
+    {
+      "speaker": "Ekspedient",
+      "da": "Hej! Kan jeg hjælpe dig?",
+      "en": "Hello! Can I help you?"
+    },
+    {
+      "speaker": "Emil",
+      "da": "Ja, jeg leder efter en regnjakke.",
+      "en": "Yes, I am looking for a raincoat."
+    },
+    {
+      "speaker": "Ekspedient",
+      "da": "Hvilken størrelse bruger du?",
+      "en": "What size do you wear?"
+    },
+    {
+      "speaker": "Emil",
+      "da": "Normalt medium. Har I en mørkeblå?",
+      "en": "Usually medium. Do you have a dark blue one?"
+    },
+    {
+      "speaker": "Ekspedient",
+      "da": "Ja, prøv denne her.",
+      "en": "Yes, try this one."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Hvor er prøverummet?",
+      "en": "Where is the fitting room?"
+    },
+    {
+      "speaker": "Ekspedient",
+      "da": "Det er lige bag dig, til venstre.",
+      "en": "It is just behind you, on the left."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Den er lidt stram. Har I en større?",
+      "en": "It is a little tight. Do you have a larger one?"
+    },
+    {
+      "speaker": "Ekspedient",
+      "da": "Ja, her er den i large.",
+      "en": "Yes, here it is in large."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Den passer meget bedre. Hvad koster den?",
+      "en": "This one fits much better. How much is it?"
+    },
+    {
+      "speaker": "Ekspedient",
+      "da": "Den er på tilbud til fire hundrede kroner.",
+      "en": "It is on special offer for four hundred kroner."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Fint, jeg tager den. Kan jeg betale med kort?",
+      "en": "Great, I will take it. Can I pay by card?"
+    },
+    {
+      "speaker": "Ekspedient",
+      "da": "Ja. Vil du have en pose?",
+      "en": "Yes. Would you like a bag?"
+    },
+    {
+      "speaker": "Emil",
+      "da": "Nej tak, jeg har en taske med.",
+      "en": "No thanks, I have brought a bag."
+    },
+    {
+      "speaker": "Ekspedient",
+      "da": "Her er kvitteringen. Du kan bytte den med bonen.",
+      "en": "Here is the receipt. You can exchange it with the receipt."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Mange tak. Hav en god dag!",
+      "en": "Thank you very much. Have a good day!"
+    }
+  ]
+}

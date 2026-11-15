@@ -1,0 +1,92 @@
+{
+  "slug": "travel",
+  "title_da": "Med toget til Odense",
+  "title_en": "Taking the train to Odense",
+  "summary_en": "Alex asks a station employee about buying a ticket and finding his train.",
+  "speakers": {
+    "Alex": "m",
+    "Medarbejder": "f"
+  },
+  "lines": [
+    {
+      "speaker": "Alex",
+      "da": "Undskyld, jeg skal til Odense. Hvornår går det næste tog?",
+      "en": "Excuse me, I need to go to Odense. When does the next train leave?"
+    },
+    {
+      "speaker": "Medarbejder",
+      "da": "Det går om tyve minutter.",
+      "en": "It leaves in twenty minutes."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Skal jeg skifte undervejs?",
+      "en": "Do I need to change along the way?"
+    },
+    {
+      "speaker": "Medarbejder",
+      "da": "Nej, det kører direkte til Odense.",
+      "en": "No, it goes directly to Odense."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Hvor kan jeg købe en billet?",
+      "en": "Where can I buy a ticket?"
+    },
+    {
+      "speaker": "Medarbejder",
+      "da": "Du kan bruge automaten derovre eller købe den i appen.",
+      "en": "You can use the machine over there or buy it in the app."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Tak. Skal jeg også have en pladsbillet?",
+      "en": "Thank you. Do I also need a seat reservation?"
+    },
+    {
+      "speaker": "Medarbejder",
+      "da": "Det er en god idé, hvis du vil være sikker på at få en siddeplads.",
+      "en": "It is a good idea if you want to be sure of getting a seat."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Hvilket spor skal jeg gå til?",
+      "en": "Which track should I go to?"
+    },
+    {
+      "speaker": "Medarbejder",
+      "da": "Spor fire. Gå ned ad trappen, og følg skiltene.",
+      "en": "Track four. Go down the stairs and follow the signs."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Er der en elevator? Jeg har en tung kuffert.",
+      "en": "Is there a lift? I have a heavy suitcase."
+    },
+    {
+      "speaker": "Medarbejder",
+      "da": "Ja, elevatoren er lige til højre.",
+      "en": "Yes, the lift is just to the right."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Hvor lang tid tager turen?",
+      "en": "How long does the journey take?"
+    },
+    {
+      "speaker": "Medarbejder",
+      "da": "Cirka halvanden time. Hold øje med skærmene for ændringer.",
+      "en": "About an hour and a half. Keep an eye on the screens for changes."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Det gør jeg. Mange tak for hjælpen!",
+      "en": "I will. Thank you very much for your help!"
+    },
+    {
+      "speaker": "Medarbejder",
+      "da": "Velbekomme. God tur!",
+      "en": "You are welcome. Have a good trip!"
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+# danish	english	pos
+en rejse	a journey; a trip	n-common
+en tur	a trip; a walk	n-common
+en ferie	a holiday; a vacation	n-common
+en udflugt	an excursion	n-common
+en destination	a destination	n-common
+en turist	a tourist	n-common
+en rejsende	a traveller	n-common
+en passager	a passenger	n-common
+en guide	a guide	n-common
+en rejseguide	a travel guide	n-common
+et turistkontor	a tourist information office	n-neuter
+en billet	a ticket	n-common
+en enkeltbillet	a one-way ticket	n-common
+en returbillet	a return ticket	n-common
+en pladsbillet	a seat reservation ticket	n-common
+et rejsekort	a travel card	n-neuter
+et pendlerkort	a commuter pass	n-neuter
+en zone	a fare zone	n-common
+en billetautomat	a ticket machine	n-common
+en billetkontrol	a ticket inspection	n-common
+en kontrollør	a ticket inspector	n-common
+en bøde	a fine	n-common
+en afgang	a departure	n-common
+en ankomst	an arrival	n-common
+en forsinkelse	a delay	n-common
+en aflysning	a cancellation	n-common
+en køreplan	a timetable	n-common
+en forbindelse	a connection	n-common
+et skift	a change; a transfer	n-neuter
+en perron	a platform	n-common
+et spor	a track	n-neuter
+en station	a station	n-common
+en banegård	a railway station	n-common
+en hovedbanegård	a central railway station	n-common
+et stoppested	a bus stop	n-neuter
+en busterminal	a bus terminal	n-common
+en bus	a bus	n-common
+et tog	a train	n-neuter
+et S-tog	a suburban train (Copenhagen)	n-neuter
+en metro	a metro	n-common
+en letbane	a light railway	n-common
+et regionaltog	a regional train	n-neuter
+et lyntog	an express train	n-neuter
+en togvogn	a train carriage	n-common
+et sæde	a seat	n-neuter
+en siddeplads	a seat; a place to sit	n-common
+en midtergang	an aisle	n-common
+en vinduesplads	a window seat	n-common
+en gangplads	an aisle seat	n-common
+første klasse	first class	phr
+anden klasse	second class	phr
+en chauffør	a driver	n-common
+en taxa	a taxi	n-common
+en taxaholdeplads	a taxi rank	n-common
+en bil	a car	n-common
+en lejebil	a rental car	n-common
+en elbil	an electric car	n-common
+en varevogn	a van	n-common
+en lastbil	a lorry; a truck	n-common
+en motorcykel	a motorcycle	n-common
+en knallert	a moped	n-common
+en cykel	a bicycle	n-common
+en elcykel	an electric bicycle	n-common
+en ladcykel	a cargo bicycle	n-common
+en cykelsti	a cycle path	n-common
+en cykelhjelm	a bicycle helmet	n-common
+en cykellås	a bicycle lock	n-common
+en cykellygte	a bicycle light	n-common
+en cykelpumpe	a bicycle pump	n-common
+et dæk	a tyre	n-neuter
+en bremse	a brake	n-common
+et styr	handlebars; a steering bar	n-neuter
+en sadel	a saddle	n-common
+en kæde	a chain	n-common
+en pedal	a pedal	n-common
+en punktering	a puncture	n-common
+en færge	a ferry	n-common
+en båd	a boat	n-common
+et skib	a ship	n-neuter
+en havn	a harbour; a port	n-common
+en kaj	a quay	n-common
+en færgeterminal	a ferry terminal	n-common
+en lufthavn	an airport	n-common
+et fly	an aeroplane	n-neuter
+en flybillet	a plane ticket	n-common
+en flyafgang	a flight departure	n-common
+en flyvning	a flight	n-common
+en gate	a boarding gate	n-common
+et boardingkort	a boarding pass	n-neuter
+en terminal	a terminal	n-common
+en sikkerhedskontrol	a security check	n-common
+en paskontrol	a passport control	n-common
+et pas	a passport	n-neuter
+et visum	a visa	n-neuter
+et kørekort	a driving licence	n-neuter
+bagage	luggage	n-common
+håndbagage	hand luggage	n-common
+en kuffert	a suitcase	n-common
+en rygsæk	a backpack	n-common
+et bagagebånd	a baggage carousel	n-neuter
+en bagageboks	a luggage locker	n-common
+en rejseforsikring	a travel insurance policy	n-common
+en grænse	a border	n-common
+en toldkontrol	a customs check	n-common
+et hotel	a hotel	n-neuter
+et vandrerhjem	a hostel	n-neuter
+en campingplads	a campsite	n-common
+et sommerhus	a holiday cottage	n-neuter
+en overnatning	an overnight stay	n-common
+en reception	a reception desk; a reception area	n-common
+en receptionist	a receptionist	n-common
+en reservation	a reservation	n-common
+et enkeltværelse	a single room	n-neuter
+et dobbeltværelse	a double room	n-neuter
+et familieværelse	a family room	n-neuter
+et nøglekort	a key card	n-neuter
+et værelsesnummer	a room number	n-neuter
+en udtjekning	a check-out	n-common
+en indtjekning	a check-in	n-common
+en morgenmadsbuffet	a breakfast buffet	n-common
+en udsigt	a view	n-common
+en balkon	a balcony	n-common
+en elevator	a lift; an elevator	n-common
+en parkeringsplads	a parking space; a car park	n-common
+en parkeringsautomat	a parking meter	n-common
+en parkeringsbillet	a parking ticket (paid parking)	n-common
+en ladestander	an EV charging point	n-common
+en tankstation	a petrol station	n-common
+benzin	petrol; gasoline	n
+diesel	diesel	n
+en motorvej	a motorway	n-common
+en landevej	a country road	n-common
+en vej	a road; a way	n-common
+en gade	a street	n-common
+et fortov	a pavement; a sidewalk	n-neuter
+et fodgængerfelt	a pedestrian crossing	n-neuter
+en fodgænger	a pedestrian	n-common
+en gågade	a pedestrian street	n-common
+et kryds	a crossroads; a junction	n-neuter
+en rundkørsel	a roundabout	n-common
+et lyskryds	a traffic-light junction	n-neuter
+et trafiklys	a traffic light	n-neuter
+en bro	a bridge	n-common
+en tunnel	a tunnel	n-common
+en genvej	a shortcut	n-common
+en omvej	a detour	n-common
+en ensrettet gade	a one-way street	phr
+et vejarbejde	roadworks	n-neuter
+en trafikprop	a traffic jam	n-common
+trafik	traffic	n
+en hastighed	a speed	n-common
+en fartgrænse	a speed limit	n-common
+en sikkerhedssele	a seat belt	n-common
+et rat	a steering wheel	n-neuter
+et vejskilt	a road sign	n-neuter
+et kort	a map; a card	n-neuter
+en rute	a route	n-common
+en retning	a direction	n-common
+en afstand	a distance	n-common
+en kilometer	a kilometre	n-common
+en meter	a metre	n-common
+et hjørne	a corner	n-neuter
+en indgang	an entrance	n-common
+en udgang	an exit	n-common
+en nødudgang	an emergency exit	n-common
+venstre	left	adj
+højre	right	adj
+ligeud	straight ahead	adv
+til venstre	to the left	phr
+til højre	to the right	phr
+tilbage	back	adv
+fremad	forwards	adv
+nord	north	n
+syd	south	n
+øst	east	n
+vest	west	n
+nordpå	northwards	adv
+sydpå	southwards	adv
+østpå	eastwards	adv
+vestpå	westwards	adv
+herfra	from here	adv
+derfra	from there	adv
+langt væk	far away	phr
+i nærheden	nearby	phr
+på vej	on the way	phr
+til fods	on foot	phr
+ombord	on board	adv
+udenlands	abroad	adv
+indenrigs	domestic (travel)	adj
+udenrigs	international (travel)	adj
+direkte	direct; directly	adj
+forsinket	delayed	adj
+aflyst	cancelled	adj
+ledig	available; vacant	adj
+optaget	occupied	adj
+at rejse	to travel	v
+at tage af sted	to set off	v
+at ankomme	to arrive	v
+at afgå	to depart	v
+at køre	to drive; to go by vehicle	v
+at cykle	to cycle	v
+at sejle	to sail	v
+at flyve	to fly	v
+at gå	to walk; to go	v
+at dreje	to turn	v
+at krydse	to cross	v
+at parkere	to park	v
+at bremse	to brake	v
+at overhale	to overtake	v
+at stige på	to board	v
+at stige af	to get off	v
+at skifte tog	to change trains	phr
+at tjekke ind	to check in	v
+at tjekke ud	to check out	v
+at fare vild	to get lost	v
+at finde vej	to find the way	phr
+at hente	to pick up; to fetch	v
+at leje	to rent	v
+København	Copenhagen	proper
+Aarhus	Aarhus	proper
+Odense	Odense	proper
+Aalborg	Aalborg	proper
+Jylland	Jutland	proper
+Fyn	Funen	proper
+Sjælland	Zealand	proper
+Bornholm	Bornholm	proper

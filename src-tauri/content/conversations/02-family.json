@@ -1,0 +1,92 @@
+{
+  "slug": "family",
+  "title_da": "Familien kommer på besøg",
+  "title_en": "The family is coming to visit",
+  "summary_en": "Sofie tells her friend Emil about a family birthday gathering.",
+  "speakers": {
+    "Sofie": "f",
+    "Emil": "m"
+  },
+  "lines": [
+    {
+      "speaker": "Emil",
+      "da": "Hvad skal du lave på søndag?",
+      "en": "What are you doing on Sunday?"
+    },
+    {
+      "speaker": "Sofie",
+      "da": "Min familie kommer på besøg. Min mor har fødselsdag.",
+      "en": "My family is coming to visit. It is my mother's birthday."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Hvor mange kommer der?",
+      "en": "How many people are coming?"
+    },
+    {
+      "speaker": "Sofie",
+      "da": "Vi bliver tolv. Mine forældre, mine søskende og deres børn.",
+      "en": "There will be twelve of us. My parents, my siblings and their children."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Hvor mange søskende har du?",
+      "en": "How many siblings do you have?"
+    },
+    {
+      "speaker": "Sofie",
+      "da": "Jeg har en storebror og en lillesøster.",
+      "en": "I have an older brother and a younger sister."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Bor de også i Aarhus?",
+      "en": "Do they also live in Aarhus?"
+    },
+    {
+      "speaker": "Sofie",
+      "da": "Min bror gør, men min søster bor i Odense.",
+      "en": "My brother does, but my sister lives in Odense."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Har din søster børn?",
+      "en": "Does your sister have children?"
+    },
+    {
+      "speaker": "Sofie",
+      "da": "Ja, hun har en lille datter. Hun er to år.",
+      "en": "Yes, she has a little daughter. She is two years old."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Det bliver hyggeligt at se hende.",
+      "en": "It will be lovely to see her."
+    },
+    {
+      "speaker": "Sofie",
+      "da": "Ja, jeg savner hende. Hun er så sjov.",
+      "en": "Yes, I miss her. She is so funny."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Kommer dine bedsteforældre også?",
+      "en": "Are your grandparents coming too?"
+    },
+    {
+      "speaker": "Sofie",
+      "da": "Min mormor kommer. Hun glæder sig meget.",
+      "en": "My maternal grandmother is coming. She is really looking forward to it."
+    },
+    {
+      "speaker": "Emil",
+      "da": "Hils din mor, og sig til lykke fra mig.",
+      "en": "Give your mother my regards and wish her a happy birthday from me."
+    },
+    {
+      "speaker": "Sofie",
+      "da": "Det skal jeg gøre. Tak!",
+      "en": "I will. Thank you!"
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+# danish	english	pos
+en butik	a shop	n-common
+en forretning	a shop; a business	n-common
+et supermarked	a supermarket	n-neuter
+et stormagasin	a department store	n-neuter
+et indkøbscenter	a shopping centre	n-neuter
+et marked	a market	n-neuter
+en bod	a stall	n-common
+en kiosk	a kiosk; a convenience shop	n-common
+en bager	a baker; a bakery shop	n-common
+en slagter	a butcher	n-common
+en fiskehandler	a fishmonger	n-common
+en grønthandler	a greengrocer	n-common
+en boghandel	a bookshop	n-common
+en tøjbutik	a clothes shop	n-common
+en skobutik	a shoe shop	n-common
+en genbrugsbutik	a charity shop; a second-hand shop	n-common
+en netbutik	an online shop	n-common
+en kunde	a customer	n-common
+en ekspedient	a shop assistant	n-common
+en sælger	a seller; a salesperson	n-common
+en kasse	a checkout; a cash register	n-common
+en selvbetjeningskasse	a self-service checkout	n-common
+en kø	a queue	n-common
+en indkøbsvogn	a shopping trolley	n-common
+en indkøbskurv	a shopping basket	n-common
+en indkøbsliste	a shopping list	n-common
+en pose	a bag	n-common
+en papirpose	a paper bag	n-common
+en plastikpose	a plastic bag	n-common
+et indkøbsnet	a reusable shopping bag	n-neuter
+en vare	an item; a product	n-common
+et produkt	a product	n-neuter
+et mærke	a brand	n-neuter
+en etiket	a label	n-common
+en stregkode	a barcode	n-common
+et prisskilt	a price tag	n-neuter
+en pris	a price	n-common
+et tilbud	a special offer	n-neuter
+et udsalg	a sale	n-neuter
+en rabat	a discount	n-common
+en normalpris	a regular price	n-common
+en tilbudspris	a sale price	n-common
+en medlemspris	a member price	n-common
+en mængderabat	a bulk discount	n-common
+et kup	a bargain	n-neuter
+penge	money	n-plural
+en krone	a krone (currency unit)	n-common
+en øre	an øre (one hundredth of a krone)	n-common
+en mønt	a coin	n-common
+en pengeseddel	a banknote	n-common
+kontanter	cash	n-plural
+byttepenge	change (money)	n-plural
+en pung	a wallet; a purse	n-common
+et betalingskort	a payment card	n-neuter
+et kreditkort	a credit card	n-neuter
+et dankort	a Dankort debit card	n-neuter
+en kortterminal	a card terminal	n-common
+en pinkode	a PIN	n-common
+en betaling	a payment	n-common
+en kvittering	a receipt	n-common
+en bon	a till receipt	n-common
+en faktura	an invoice	n-common
+en regning	a bill	n-common
+et beløb	an amount of money	n-neuter
+en saldo	a balance	n-common
+en konto	an account	n-common
+en bank	a bank	n-common
+en hæveautomat	a cash machine; an ATM	n-common
+en overførsel	a transfer	n-common
+en rente	an interest rate	n-common
+et gebyr	a fee	n-neuter
+moms	VAT	n
+en afgift	a tax; a duty	n-common
+et budget	a budget	n-neuter
+en udgift	an expense	n-common
+en indtægt	an income	n-common
+en opsparing	savings	n-common
+et lån	a loan	n-neuter
+en gæld	a debt	n-common
+en forsikring	an insurance policy	n-common
+pant	a refundable deposit	n
+en pantautomat	a bottle return machine	n-common
+en pantbon	a bottle deposit receipt	n-common
+en bestilling	an order	n-common
+en levering	a delivery	n-common
+fragt	shipping; freight	n
+en pakke	a parcel	n-common
+en pakkeshop	a parcel collection shop	n-common
+en leveringsadresse	a delivery address	n-common
+en returvare	a returned item	n-common
+en returret	a right to return an item	n-common
+en bytteret	a right to exchange an item	n-common
+en reklamation	a complaint about a faulty product	n-common
+en garanti	a guarantee; a warranty	n-common
+et gavekort	a gift card	n-neuter
+en gave	a gift	n-common
+et gavepapir	a wrapping paper	n-neuter
+en ønskeliste	a wish list	n-common
+en størrelse	a size	n-common
+et prøverum	a fitting room	n-neuter
+et spejl	a mirror	n-neuter
+et bøjlesæt	a set of clothes hangers	n-neuter
+tøj	clothes	n
+en skjorte	a shirt	n-common
+en bluse	a blouse; a top	n-common
+en T-shirt	a T-shirt	n-common
+en trøje	a sweater; a jersey	n-common
+en sweater	a sweater	n-common
+en cardigan	a cardigan	n-common
+en hættetrøje	a hoodie	n-common
+en jakke	a jacket	n-common
+en frakke	a coat	n-common
+en regnjakke	a raincoat	n-common
+en vinterjakke	a winter jacket	n-common
+en vest	a waistcoat; a vest	n-common
+et jakkesæt	a suit	n-neuter
+en kjole	a dress	n-common
+en nederdel	a skirt	n-common
+bukser	trousers	n-plural
+jeans	jeans	n-plural
+shorts	shorts	n-plural
+leggings	leggings	n-plural
+undertøj	underwear	n
+en undertrøje	a vest; an undershirt	n-common
+underbukser	underpants	n-plural
+en bh	a bra	n-common
+en sok	a sock	n-common
+en strømpe	a stocking; a sock	n-common
+strømpebukser	tights	n-plural
+nattøj	nightwear	n
+badetøj	swimwear	n
+en badedragt	a swimsuit	n-common
+en bikini	a bikini	n-common
+en sko	a shoe	n-common
+en støvle	a boot	n-common
+en sandal	a sandal	n-common
+en hjemmesko	a slipper	n-common
+en gummistøvle	a wellington boot	n-common
+en løbesko	a running shoe	n-common
+en hue	a woolly hat	n-common
+en hat	a hat	n-common
+en kasket	a cap	n-common
+et tørklæde	a scarf	n-neuter
+en handske	a glove	n-common
+en vante	a mitten	n-common
+et bælte	a belt	n-neuter
+et slips	a tie	n-neuter
+en taske	a bag; a handbag	n-common
+en skuldertaske	a shoulder bag	n-common
+et armbånd	a bracelet	n-neuter
+en halskæde	a necklace	n-common
+en ring	a ring	n-common
+en ørering	an earring	n-common
+et smykke	a piece of jewellery	n-neuter
+bomuld	cotton	n
+uld	wool	n
+silke	silk	n
+hør	linen; flax	n
+læder	leather	n
+polyester	polyester	n
+et stof	a fabric	n-neuter
+en lynlås	a zip	n-common
+en knap	a button	n-common
+en lomme	a pocket	n-common
+et ærme	a sleeve	n-neuter
+en krave	a collar	n-common
+en søm	a seam	n-common
+en farve	a colour	n-common
+rød	red	adj
+hvid	white	adj
+blå	blue	adj
+grøn	green	adj
+gul	yellow	adj
+sort	black	adj
+grå	grey	adj
+brun	brown	adj
+orange	orange (colour)	adj
+lilla	purple	adj
+lyserød	pink	adj
+mørkeblå	dark blue	adj
+lyseblå	light blue	adj
+beige	beige	adj
+stribet	striped	adj
+ternet	checked	adj
+prikket	polka-dotted	adj
+ensfarvet	plain; one-coloured	adj
+billig	cheap; inexpensive	adj
+dyr	expensive	adj
+gratis	free of charge	adj
+nedsat	reduced in price	adj
+udsolgt	sold out	adj
+brugt	used; second-hand	adj
+ny	new	adj
+stram	tight	adj
+løs	loose	adj
+slidt	worn	adj
+vandafvisende	water-repellent	adj
+kontaktløs	contactless	adj
+at købe	to buy	v
+at sælge	to sell	v
+at betale	to pay	v
+at koste	to cost	v
+at bytte	to exchange	v
+at returnere	to return an item	v
+at bestille	to order	v
+at handle	to shop	v
+at sammenligne	to compare	v
+at spare op	to save up	v
+at hæve penge	to withdraw money	phr
+at overføre	to transfer	v
+at pakke ind	to wrap	v
+at prøve på	to try on	v
+at passe i størrelsen	to fit in size	phr
+på tilbud	on special offer	phr
+på lager	in stock	phr
+til salg	for sale	phr
+to for én	two for one	phr
+åbningstider	opening hours	n-plural
+lukket	closed	adj
+åben	open	adj

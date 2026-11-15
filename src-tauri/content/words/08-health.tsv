@@ -1,0 +1,218 @@
+# danish	english	pos
+en krop	a body	n-common
+et hoved	a head	n-neuter
+et ansigt	a face	n-neuter
+en pande	a forehead	n-common
+en kind	a cheek	n-common
+en hage	a chin	n-common
+en kæbe	a jaw	n-common
+et øje	an eye	n-neuter
+et øjenbryn	an eyebrow	n-neuter
+en øjenvippe	an eyelash	n-common
+et øjenlåg	an eyelid	n-neuter
+et øre	an ear	n-neuter
+en øreflip	an earlobe	n-common
+en næse	a nose	n-common
+et næsebor	a nostril	n-neuter
+en mund	a mouth	n-common
+en læbe	a lip	n-common
+en tunge	a tongue	n-common
+en tand	a tooth	n-common
+et tandkød	gums	n-neuter
+en kindtand	a molar	n-common
+en fortand	a front tooth	n-common
+en hals	a throat; a neck	n-common
+en nakke	the back of the neck	n-common
+en skulder	a shoulder	n-common
+en arm	an arm	n-common
+en albue	an elbow	n-common
+et håndled	a wrist	n-neuter
+en hånd	a hand	n-common
+en håndflade	a palm	n-common
+en finger	a finger	n-common
+en tommelfinger	a thumb	n-common
+en pegefinger	an index finger	n-common
+en lillefinger	a little finger	n-common
+en negl	a fingernail; a toenail	n-common
+et bryst	a chest; a breast	n-neuter
+en ryg	a back	n-common
+en rygsøjle	a spine	n-common
+en lænd	a lower back	n-common
+en mave	a stomach; a belly	n-common
+en navle	a navel	n-common
+en hofte	a hip	n-common
+et bækken	a pelvis	n-neuter
+et ben	a leg; a bone	n-neuter
+et lår	a thigh	n-neuter
+et knæ	a knee	n-neuter
+en læg	a calf of the leg	n-common
+en ankel	an ankle	n-common
+en fod	a foot	n-common
+en hæl	a heel	n-common
+en tå	a toe	n-common
+en storetå	a big toe	n-common
+en hud	skin	n-common
+et hår	a hair; hair	n-neuter
+en muskel	a muscle	n-common
+en knogle	a bone	n-common
+et led	a joint	n-neuter
+en sene	a tendon	n-common
+en nerve	a nerve	n-common
+et hjerte	a heart	n-neuter
+en lunge	a lung	n-common
+en lever	a liver	n-common
+en nyre	a kidney	n-common
+en hjerne	a brain	n-common
+en tarm	an intestine	n-common
+et blod	blood	n-neuter
+en blodåre	a blood vessel	n-common
+en puls	a pulse	n-common
+et blodtryk	blood pressure	n-neuter
+en vejrtrækning	breathing	n-common
+et åndedrag	a breath	n-neuter
+en sundhed	health	n-common
+en sygdom	a disease; an illness	n-common
+et helbred	health; state of health	n-neuter
+et symptom	a symptom	n-neuter
+en smerte	a pain	n-common
+en hovedpine	a headache	n-common
+en mavepine	a stomach ache	n-common
+en tandpine	a toothache	n-common
+en rygsmerte	back pain	n-common
+en forkølelse	a cold	n-common
+en influenza	influenza; flu	n-common
+en feber	a fever	n-common
+en hoste	a cough	n-common
+et nys	a sneeze	n-neuter
+en halsbetændelse	a throat infection	n-common
+en lungebetændelse	pneumonia	n-common
+en ørebetændelse	an ear infection	n-common
+en infektion	an infection	n-common
+en betændelse	inflammation; an infection	n-common
+en allergi	an allergy	n-common
+en høfeber	hay fever	n-common
+en astma	asthma	n-common
+en diabetes	diabetes	n-common
+en migræne	a migraine	n-common
+en kvalme	nausea	n-common
+en svimmelhed	dizziness	n-common
+en diarré	diarrhoea	n-common
+en forstoppelse	constipation	n-common
+en opkastning	vomiting	n-common
+en hævelse	a swelling	n-common
+et udslæt	a rash	n-neuter
+en kløe	an itch; itching	n-common
+et sår	a wound; a sore	n-neuter
+en rift	a scratch; a small cut	n-common
+et blåt mærke	a bruise	n-neuter
+en forbrænding	a burn	n-common
+en forstuvning	a sprain	n-common
+et knoglebrud	a bone fracture	n-neuter
+en skade	an injury; damage	n-common
+en ulykke	an accident	n-common
+en blødning	bleeding; a haemorrhage	n-common
+et næseblod	a nosebleed	n-neuter
+en læge	a doctor	n-common
+en praktiserende læge	a general practitioner	n-common
+en speciallæge	a medical specialist	n-common
+en tandlæge	a dentist	n-common
+en sygeplejerske	a nurse	n-common
+en jordemoder	a midwife	n-common
+en fysioterapeut	a physiotherapist	n-common
+en psykolog	a psychologist	n-common
+en patient	a patient	n-common
+et hospital	a hospital	n-neuter
+et sygehus	a hospital	n-neuter
+en klinik	a clinic	n-common
+en lægeklinik	a doctor's surgery	n-common
+en skadestue	an emergency department	n-common
+en lægevagt	an out-of-hours medical service	n-common
+et venteværelse	a waiting room	n-neuter
+en ambulance	an ambulance	n-common
+et apotek	a pharmacy	n-neuter
+en konsultation	a medical consultation	n-common
+en lægetid	a doctor's appointment	n-common
+en journal	a medical record	n-common
+et sundhedskort	a Danish health insurance card	n-neuter
+en henvisning	a referral	n-common
+en recept	a prescription	n-common
+en medicin	medicine; medication	n-common
+en tablet	a tablet; a pill	n-common
+en pille	a pill	n-common
+en kapsel	a capsule	n-common
+en salve	an ointment	n-common
+en næsespray	a nasal spray	n-common
+en hostesaft	a cough mixture	n-common
+et smertestillende middel	a painkiller	n-neuter
+en dosis	a dose	n-common
+en bivirkning	a side effect	n-common
+en indlægsseddel	a medicine information leaflet	n-common
+en vaccination	a vaccination	n-common
+en vaccine	a vaccine	n-common
+en blodprøve	a blood test	n-common
+en urinprøve	a urine sample; a urine test	n-common
+et røntgenbillede	an X-ray image	n-neuter
+en scanning	a scan	n-common
+en operation	an operation; surgery	n-common
+en bedøvelse	anaesthesia; an anaesthetic	n-common
+en behandling	a treatment	n-common
+en genoptræning	rehabilitation	n-common
+en kontrol	a check-up; an inspection	n-common
+et termometer	a thermometer	n-neuter
+et plaster	an adhesive dressing; a plaster	n-neuter
+en forbinding	a bandage; a dressing	n-common
+en krykke	a crutch	n-common
+en kørestol	a wheelchair	n-common
+en førstehjælpskasse	a first-aid kit	n-common
+en førstehjælp	first aid	n-common
+en håndsprit	hand sanitiser	n-common
+en sæbe	soap; a bar of soap	n-common
+en tandbørste	a toothbrush	n-common
+en tandpasta	toothpaste	n-common
+en tandtråd	dental floss	n-common
+en shampoo	shampoo	n-common
+en solcreme	sunscreen	n-common
+en hygiejne	hygiene	n-common
+en søvn	sleep	n-common
+en søvnløshed	insomnia	n-common
+en træthed	tiredness; fatigue	n-common
+en hvile	rest	n-common
+en afslapning	relaxation	n-common
+en motion	physical exercise	n-common
+en appetit	an appetite	n-common
+en tørst	thirst	n-common
+en væske	a liquid; fluid	n-common
+en stress	stress	n-common
+en angst	anxiety	n-common
+en depression	depression	n-common
+en trivsel	well-being	n-common
+at nyse	to sneeze	v
+at hoste	to cough	v
+at kaste op	to vomit	v
+at bløde	to bleed	v
+at trække vejret	to breathe	v
+at sluge	to swallow	v
+at tygge	to chew	v
+at mærke	to feel; to notice	v
+at gøre ondt	to hurt; to be painful	v
+at have ondt i halsen	to have a sore throat	v
+at måle temperaturen	to take a temperature	v
+at tage medicin	to take medicine	v
+at blive rask	to get well	v
+at komme sig	to recover	v
+at hvile sig	to rest	v
+at slappe af	to relax	v
+at sove	to sleep	v
+at vågne	to wake up	v
+at falde i søvn	to fall asleep	v
+at behandle	to treat	v
+at bestille tid hos lægen	to book a doctor's appointment	v
+syg	ill; sick	adj
+rask	well; recovered	adj
+sund	healthy	adj
+øm	sore; tender	adj
+hævet	swollen	adj
+smitsom	contagious	adj
+kronisk	chronic	adj
+akut	acute; urgent	adj
+receptpligtig	prescription-only	adj

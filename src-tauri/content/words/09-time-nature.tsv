@@ -1,0 +1,215 @@
+# danish	english	pos
+en tid	time; an appointment time	n-common
+et tidspunkt	a point in time	n-neuter
+et sekund	a second	n-neuter
+et minut	a minute	n-neuter
+en time	an hour	n-common
+et kvarter	a quarter of an hour	n-neuter
+en halv time	half an hour	phr
+en dag	a day	n-common
+et døgn	a period of twenty-four hours	n-neuter
+en uge	a week	n-common
+en måned	a month	n-common
+et år	a year	n-neuter
+et årti	a decade	n-neuter
+et århundrede	a century	n-neuter
+en kalender	a calendar	n-common
+en dato	a date	n-common
+en hverdag	a weekday; an ordinary day	n-common
+en weekend	a weekend	n-common
+en helligdag	a public holiday	n-common
+en morgen	a morning	n-common
+en formiddag	a late morning; before noon	n-common
+en middag	noon; a dinner	n-common
+en eftermiddag	an afternoon	n-common
+en aften	an evening	n-common
+en nat	a night	n-common
+en midnat	midnight	n-common
+en mandag	a Monday	n-common
+en tirsdag	a Tuesday	n-common
+en onsdag	a Wednesday	n-common
+en torsdag	a Thursday	n-common
+en fredag	a Friday	n-common
+en lørdag	a Saturday	n-common
+en søndag	a Sunday	n-common
+januar	January	n
+februar	February	n
+marts	March	n
+april	April	n
+maj	May	n
+juni	June	n
+juli	July	n
+august	August	n
+september	September	n
+oktober	October	n
+november	November	n
+december	December	n
+en årstid	a season	n-common
+et forår	a spring season	n-neuter
+en sommer	a summer	n-common
+et efterår	an autumn	n-neuter
+en vinter	a winter	n-common
+i dag	today	adv
+i går	yesterday	adv
+i morgen	tomorrow	adv
+i forgårs	the day before yesterday	adv
+i overmorgen	the day after tomorrow	adv
+i morges	this morning	adv
+i aften	this evening; tonight	adv
+i nat	tonight; last night, depending on context	adv
+for tiden	at present; these days	adv
+lige nu	right now	adv
+indtil videre	for the time being	adv
+snart	soon	adv
+senere	later	adv
+tidligere	earlier; previously	adv
+altid	always	adv
+aldrig	never	adv
+ofte	often	adv
+sjældent	rarely	adv
+sommetider	sometimes	adv
+jævnligt	regularly	adv
+straks	immediately	adv
+bagefter	afterwards	adv
+samtidig	at the same time	adv
+pludselig	suddenly	adv
+endelig	finally	adv
+foreløbig	for now; provisionally	adv
+rettidig	timely; on time	adj
+varig	lasting; permanent	adj
+midlertidig	temporary	adj
+et vejr	weather	n-neuter
+en vejrudsigt	a weather forecast	n-common
+en temperatur	a temperature	n-common
+en grad	a degree	n-common
+en sol	a sun	n-common
+et solskin	sunshine	n-neuter
+en solopgang	a sunrise	n-common
+en solnedgang	a sunset	n-common
+en skygge	a shadow; shade	n-common
+en himmel	a sky; heaven	n-common
+en sky	a cloud	n-common
+et skydække	cloud cover	n-neuter
+en regn	rain	n-common
+en regnbyge	a rain shower	n-common
+en regndråbe	a raindrop	n-common
+en støvregn	drizzle	n-common
+en sne	snow	n-common
+et snefnug	a snowflake	n-neuter
+en snestorm	a snowstorm	n-common
+en slud	sleet	n-common
+et hagl	a hailstone; hail	n-neuter
+en frost	frost; freezing temperatures	n-common
+en rimfrost	hoar frost	n-common
+en tø	a thaw	n-common
+en vind	wind	n-common
+en brise	a breeze	n-common
+en blæst	windy weather	n-common
+en storm	a storm	n-common
+en orkan	a hurricane	n-common
+et vindstød	a gust of wind	n-neuter
+en tåge	fog	n-common
+en dis	haze	n-common
+dug på græsset	dew on the grass	phr
+en fugtighed	humidity; dampness	n-common
+en torden	thunder	n-common
+et lyn	a flash of lightning	n-neuter
+et tordenvejr	a thunderstorm	n-neuter
+en regnbue	a rainbow	n-common
+en hedebølge	a heatwave	n-common
+en tørke	a drought	n-common
+en oversvømmelse	a flood	n-common
+et klima	a climate	n-neuter
+en natur	nature	n-common
+et landskab	a landscape	n-neuter
+en skov	a forest; a wood	n-common
+et træ	a tree; wood	n-neuter
+en busk	a bush	n-common
+en gren	a branch	n-common
+et blad	a leaf; a magazine	n-neuter
+en rod	a root	n-common
+en bark	bark of a tree	n-common
+en stamme	a tree trunk; a tribe	n-common
+en eg	an oak	n-common
+en bøg	a beech tree	n-common
+en birk	a birch tree	n-common
+et grantræ	a spruce tree	n-neuter
+et fyrretræ	a pine tree	n-neuter
+en pil	a willow; an arrow	n-common
+en blomst	a flower	n-common
+en rose	a rose	n-common
+en tulipan	a tulip	n-common
+en påskelilje	a daffodil	n-common
+en mælkebøtte	a dandelion	n-common
+en plante	a plant	n-common
+et græs	grass	n-neuter
+en mos	moss; mash	n-common
+et frø	a seed	n-neuter
+en jord	earth; soil	n-common
+en sten	a stone	n-common
+et sand	sand	n-neuter
+en bakke	a hill; a tray	n-common
+en dal	a valley	n-common
+en eng	a meadow	n-common
+en mark	a field	n-common
+en hede	a heath; heat	n-common
+en mose	a bog; a marsh	n-common
+en sø	a lake	n-common
+en å	a stream; a small river	n-common
+en flod	a river	n-common
+en bæk	a brook	n-common
+et hav	a sea; an ocean	n-neuter
+en kyst	a coast	n-common
+en fjord	a fjord; an inlet	n-common
+en ø	an island	n-common
+en halvø	a peninsula	n-common
+en klit	a sand dune	n-common
+en bølge	a wave	n-common
+et tidevand	a tide	n-neuter
+et dyr	an animal	n-neuter
+et pattedyr	a mammal	n-neuter
+en fugl	a bird	n-common
+en fisk	a fish	n-common
+et insekt	an insect	n-neuter
+en sommerfugl	a butterfly	n-common
+en bi	a bee	n-common
+en hveps	a wasp	n-common
+en myre	an ant	n-common
+en myg	a mosquito	n-common
+en bille	a beetle	n-common
+en edderkop	a spider	n-common
+en snegl	a snail; a slug	n-common
+en regnorm	an earthworm	n-common
+en frø	a frog	n-common
+en ræv	a fox	n-common
+en hare	a hare	n-common
+et rådyr	a roe deer	n-neuter
+en hjort	a deer; a stag	n-common
+et egern	a squirrel	n-neuter
+et pindsvin	a hedgehog	n-neuter
+en grævling	a badger	n-common
+en sæl	a seal	n-common
+en svane	a swan	n-common
+en gås	a goose	n-common
+en måge	a gull	n-common
+en solsort	a blackbird	n-common
+en ugle	an owl	n-common
+en krage	a crow	n-common
+en rede	a nest	n-common
+en fjer	a feather	n-common
+en vinge	a wing	n-common
+en pote	a paw	n-common
+en hale	a tail	n-common
+at regne	to rain; to calculate	v
+at sne	to snow	v
+at blæse	to blow; to be windy	v
+at fryse	to freeze; to feel cold	v
+at tø	to thaw	v
+at skinne	to shine	v
+at vokse	to grow	v
+at blomstre	to bloom	v
+at spire	to sprout	v
+solrig	sunny	adj
+overskyet	overcast	adj
+blæsende	windy	adj
+fugtig	damp; humid	adj

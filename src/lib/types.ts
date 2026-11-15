@@ -1,0 +1,767 @@
+// Mirrors the serde structs in src-tauri/src/models.rs.
+
+export interface Topic {
+  id: number;
+  ord: number;
+  slug: string;
+  /** Always "course": every topic is a course, a folder of blocks. */
+  kind: string;
+  titleDa: string;
+  title: string;
+  summary: string;
+}
+
+export interface Word {
+  id: number;
+  da: string;
+  meaning: string;
+  pos: string;
+  /** The drill it belongs to. */
+  blockId: number;
+  block: string;
+}
+
+export interface Sentence {
+  id: number;
+  da: string;
+  meaning: string;
+  blockId: number;
+  block: string;
+}
+
+export interface DialogueLine {
+  ord: number;
+  speaker: string;
+  /** "f" or "m" — decides which voice reads the line. */
+  gender: string;
+  da: string;
+  meaning: string;
+}
+
+export interface CataloguePage {
+  words: Word[];
+  sentences: Sentence[];
+  totalWords: number;
+  totalSentences: number;
+}
+
+export interface StreamEvent {
+  id: string;
+  delta: string;
+  done: boolean;
+  error: string | null;
+}
+
+export interface Voice {
+  name: string;
+  gender: string;
+  description: string;
+}
+
+/** A line queued for synthesis, with the voice gender to read it in. */
+export interface SpeechLine {
+  text: string;
+  gender: string;
+}
+
+export type ExerciseKind =
+  | "dialogueRead"
+  | "intro"
+  | "recognise"
+  | "produce"
+  | "type"
+  | "sentenceIntro"
+  | "wordOrder"
+  | "dialogueGap"
+  | "gapFill"
+  | "memory";
+
+export interface Exercise {
+  key: string;
+  kind: ExerciseKind;
+  itemKind: "word" | "sentence" | "dialogue" | "set";
+  itemId: number;
+  isNew: boolean;
+  prompt: string;
+  hint: string;
+  answer: string;
+  options: string[];
+  tokens: string[];
+  da: string;
+  meaning: string;
+  /** Fill-the-gaps: sentences with one word missing; the bank is `options`. */
+  gaps: Gap[];
+  /** Memory cards: the Danish/English pairs to find. */
+  pairs: Pair[];
+}
+
+export interface Gap {
+  before: string;
+  answer: string;
+  after: string;
+  meaning: string;
+}
+
+export interface Pair {
+  da: string;
+  en: string;
+}
+
+export interface SessionPlan {
+  day: number;
+  topic: Topic;
+  dialogue: DialogueLine[];
+  exercises: Exercise[];
+  newWords: number;
+  reviewWords: number;
+  newSentences: number;
+  reviewSentences: number;
+  alreadyCompleted: boolean;
+  /** The drill block this session practises. */
+  blockId: number;
+  /** Done before and not due: extra practice — half XP, schedule unchanged. */
+  extra: boolean;
+}
+
+// ------------------------------------------------------------------ blocks
+
+export type Complexity = "low" | "medium" | "high";
+export type BlockResult = "pass" | "partial" | "fail";
+
+/** A unit of learning: a small drill, or a study lesson checked by an examiner. */
+export interface Block {
+  id: number;
+  kind: "drill" | "study";
+  /** Drills: words | memory | typing | sentences | gaps | dialogue. */
+  format: string;
+  title: string;
+  summary: string;
+  complexity: Complexity;
+  /** The first course it was listed in, for display. */
+  topicId: number | null;
+  topicTitle: string | null;
+  /** Every course that lists it. */
+  courseIds: number[];
+  /** Who made it; informational — every block can be edited and deleted. */
+  origin: "starter" | "tutor" | "you";
+  periodDays: number;
+  intervalDays: number;
+  /** Day number; null until done once. */
+  dueDay: number | null;
+  lastDay: number | null;
+  lastResult: BlockResult | null;
+  reps: number;
+  /** Writing blocks: 0 guided (word bank, hints), 1 supported (hints), 2 free. */
+  supportLevel: number;
+  /** Beyond the course's level: needed to master it, not to complete it. */
+  challenge: boolean;
+  /** Passed at least once. */
+  passed: boolean;
+  items: number;
+  /** A listening block's song. */
+  songId: number | null;
+}
+
+export interface BlockDetail extends Block {
+  lesson: string;
+  objectives: string[];
+  words: [string, string][];
+  sentences: [string, string][];
+  lastFeedback: string | null;
+  /** The courses that list it: [id, English title, Danish title]. */
+  courses: [number, string, string][];
+  /** A conversation drill's dialogue. */
+  lines: DialogueLine[];
+  /** What the last check against the block's Wikipedia sources changed. */
+  factNote: string | null;
+  /** When the lesson was last checked against its sources (seconds). */
+  factCheckedAt: number | null;
+}
+
+export interface BlockOverview {
+  today: number;
+  /** Today's list, still to do: the most at risk first. */
+  due: Block[];
+  next: Block[];
+  doneToday: number;
+  /** For a big day: the rest of what is due, then what is due soonest. */
+  more: Block[];
+  planTotal: number;
+  planDone: number;
+  budgetMinutes: number;
+  /** Due but not on today's list, in minutes. */
+  behindMinutes: number;
+  /** Done before their day this past week, in minutes. */
+  aheadMinutes: number;
+}
+
+export interface Assessment {
+  result: BlockResult;
+  summary: string;
+  strengths: string[];
+  toReview: string[];
+  nextDueDay: number;
+  xp: number;
+}
+
+export interface CheckinTurn {
+  checkinId: number;
+  reply: string;
+  assessment: Assessment | null;
+  firstCompletionToday: boolean;
+  /** What the examiner saved to or changed in memory this turn. */
+  remembered: string[];
+}
+
+export interface AnswerResult {
+  correct: boolean;
+  expected: string;
+  xpGained: number;
+  totalXp: number;
+  dayXp: number;
+  level: number;
+}
+
+export interface Achievement {
+  code: string;
+  title: string;
+  description: string;
+  icon: string;
+  unlocked: boolean;
+  progress: number;
+}
+
+export interface DayStat {
+  day: number;
+  xp: number;
+  answered: number;
+  correct: number;
+  completed: boolean;
+  /** Missed, but a streak freeze kept the run going. */
+  frozen: boolean;
+}
+
+export interface TopicProgress {
+  topic: Topic;
+  totalWords: number;
+  seenWords: number;
+  masteredWords: number;
+  totalSentences: number;
+  seenSentences: number;
+  totalBlocks: number;
+  /** Blocks done at least once. */
+  startedBlocks: number;
+  /** The course's picture: a file id, loaded with fileUrl(). */
+  imageFileId: number | null;
+  /** Completed: every core block passed once. Mastered: everything holds, challenges too. */
+  status: "active" | "completed" | "mastered";
+  /** Blocks needed to complete it (not challenges), and how many are passed. */
+  coreBlocks: number;
+  passedCore: number;
+  challenges: number;
+}
+
+/** A course just completed or mastered. */
+export interface Milestone {
+  topicId: number;
+  title: string;
+  mastered: boolean;
+}
+
+export interface Stats {
+  day: number;
+  totalXp: number;
+  dayXp: number;
+  dailyGoal: number;
+  level: number;
+  xpIntoLevel: number;
+  xpForNextLevel: number;
+  currentStreak: number;
+  /** Freezes kept: each covers one missed day (at most two). */
+  streakFreezes: number;
+  longestStreak: number;
+  wordsSeen: number;
+  wordsMastered: number;
+  wordsTotal: number;
+  sentencesSeen: number;
+  sentencesTotal: number;
+  dialoguesSeen: number;
+  dialoguesTotal: number;
+  dueToday: number;
+  accuracy: number;
+  completedToday: boolean;
+  history: DayStat[];
+  achievements: Achievement[];
+}
+
+export interface Settings {
+  dailyGoal: number;
+  reminderHour: number;
+  reminderMinute: number;
+  remindersEnabled: boolean;
+  hasApiKey: boolean;
+  /** Empty until the learner loads the catalogue and picks one. */
+  aiModel: string;
+  ttsVoiceFemale: string;
+  ttsVoiceMale: string;
+  ttsSpeed: number;
+  ttsPrefetch: boolean;
+  tzOffsetMinutes: number;
+  /** Empty means the songwriter uses the tutor model. */
+  songwriterModel: string;
+  /** Plays the other side in writing blocks; empty means the tutor model. */
+  partnerModel: string;
+  /** "Talk about it" chats; empty means the tutor model. */
+  wordChatModel: string;
+  /** Models starred in the model picker, shown first. */
+  favoriteModels: string[];
+  /** The shortest a day's list of check-ins gets, in minutes. */
+  reviewFloorMinutes: number;
+  /** Draws course pictures; empty means the default image model. */
+  imageModel: string;
+  hasKieKey: boolean;
+  sunoModel: string;
+  sunoModels: string[];
+  /** What the songwriter writes for: about 2, 3 or 4–5 minutes. */
+  songLength: SongLength;
+  /** Empty until first stored. */
+  theme: "" | "system" | "light" | "dark";
+  playerRepeat: "" | "off" | "all" | "one";
+}
+
+export interface SettingsPatch {
+  dailyGoal?: number;
+  reminderHour?: number;
+  reminderMinute?: number;
+  remindersEnabled?: boolean;
+  aiModel?: string;
+  ttsVoiceFemale?: string;
+  ttsVoiceMale?: string;
+  ttsSpeed?: number;
+  ttsPrefetch?: boolean;
+  songwriterModel?: string;
+  partnerModel?: string;
+  wordChatModel?: string;
+  favoriteModels?: string[];
+  reviewFloorMinutes?: number;
+  imageModel?: string;
+  sunoModel?: string;
+  songLength?: SongLength;
+  theme?: "system" | "light" | "dark";
+  playerRepeat?: "off" | "all" | "one";
+}
+
+export interface BlockFinished extends SessionResult {
+  block: Block;
+  result: BlockResult;
+  /** Extra practice: the schedule did not move. */
+  extra: boolean;
+}
+
+export interface SessionResult {
+  firstCompletionToday: boolean;
+  newlyUnlocked: Achievement[];
+  stats: Stats;
+  /** Courses this completed or mastered. */
+  milestones: Milestone[];
+}
+
+export interface TutorAction {
+  kind:
+    | "courseCreated"
+    | "courseUpdated"
+    | "courseDeleted"
+    // Older conversations, from before programmes became courses.
+    | "programmeCreated"
+    | "programmeUpdated"
+    | "programmeDeleted"
+    | "settingsChanged"
+    | "songStarted"
+    | "songsDeleted"
+    | "blockCreated"
+    | "blockUpdated"
+    | "blockDeleted"
+    | "blockScheduled"
+    | "blockSuggested"
+    | "memory"
+    | "playlistChanged";
+  label: string;
+  topicId: number | null;
+  songId: number | null;
+  blockId: number | null;
+}
+
+export interface Conversation {
+  id: number;
+  title: string;
+  /** The last thing said, shortened. */
+  preview: string;
+  messages: number;
+  /** Seconds since the epoch. */
+  updatedAt: number;
+  /** The tutor is working on a reply in the background. */
+  working: boolean;
+  /** Why the last reply failed, if it did. */
+  error: string | null;
+  /** "word" for a chat about a word or sentence ("Talk about it"). */
+  tag: string | null;
+}
+
+/** `tutor_talk_about`: the conversation about a word, new or carried on. */
+export interface TalkAbout {
+  conversationId: number;
+  existing: boolean;
+}
+
+/** `tutor_send` returns at once; the reply follows in the background. */
+export interface TutorStarted {
+  conversationId: number;
+  message: ChatMessage;
+}
+
+/** `tutor://done`: a background reply finished, or failed. */
+export interface TutorDone {
+  conversationId: number;
+  message: ChatMessage | null;
+  error: string | null;
+}
+
+export interface ChatMessage {
+  id: number;
+  conversationId: number;
+  role: "user" | "assistant";
+  content: string;
+  actions: TutorAction[];
+}
+
+/** What a tool is doing while an agent runs (`agent://status`). */
+export interface AgentStatus {
+  id: string;
+  label: string;
+}
+
+export interface AiModel {
+  id: string;
+  name: string;
+  contextLength: number;
+  /** Dollars per input token, e.g. "0.0000003". */
+  promptPrice: string;
+  /** Dollars per output token. */
+  completionPrice: string;
+  /** Dollars per input token read from the provider's cache; "" when not reported. */
+  cacheReadPrice: string;
+  /** When it was added to OpenRouter (seconds since the epoch). */
+  created: number;
+  /** Non-empty for speech models: the voice names the model accepts. */
+  voices: string[];
+  /** Can call tools — the tutor needs this to act in the app. */
+  tools: boolean;
+  /** Can make images — for course pictures. */
+  images: boolean;
+}
+
+export interface AudioClip {
+  mime: string;
+  base64: string;
+  cached: boolean;
+}
+
+export interface AudioCacheStats {
+  clips: number;
+  bytes: number;
+  sentencesCached: number;
+  sentencesTotal: number;
+}
+
+/** How much of one course can be played without the network. */
+export interface CourseAudio {
+  topicId: number;
+  title: string;
+  titleDa: string;
+  total: number;
+  stored: number;
+  bytes: number;
+}
+
+export interface AudioOverview {
+  clips: number;
+  bytes: number;
+  courses: CourseAudio[];
+  /** Clips no course uses with the current voices. */
+  unusedClips: number;
+  unusedBytes: number;
+}
+
+export interface AudioItem {
+  kind: "word" | "sentence" | "line";
+  text: string;
+  gender: string;
+  stored: boolean;
+  bytes: number;
+}
+
+/** A Wikipedia article a study block is built on. */
+export interface WikiSource {
+  id: number;
+  blockId: number;
+  lang: string;
+  title: string;
+  url: string;
+  summary: string;
+  imageFileId: number | null;
+  /** Danish Wikipedia has it too. */
+  danishTitle: string | null;
+  checkedAt: number;
+}
+
+/** A source's article, for the reader. */
+export interface ArticleView {
+  lang: string;
+  title: string;
+  url: string;
+  /** Markdown. */
+  content: string;
+}
+
+/** The outcome of checking a lesson against its sources. */
+export interface FactCheck {
+  blockId: number;
+  title: string;
+  updated: boolean;
+  note: string | null;
+}
+
+export interface CacheProgress {
+  done: number;
+  total: number;
+  failed: number;
+  finished: boolean;
+  error: string | null;
+}
+
+// ------------------------------------------------------------------ songs
+
+/** One phrase: sung in English, then in Danish (choruses: Danish only). */
+export interface SongLine {
+  en: string;
+  da: string;
+}
+
+export type SongSectionKind = "verse" | "chorus" | "bridge" | "intro" | "outro";
+
+export interface SongSection {
+  kind: SongSectionKind;
+  lines: SongLine[];
+}
+
+export interface SongDraft {
+  title: string;
+  chorusDa: string;
+  chorusEn: string;
+  style: string;
+  /** "f", "m" or "" for no preference. */
+  vocalGender: string;
+  sections: SongSection[];
+  /** The course whose words it uses; its listening block is filed there. */
+  topicId?: number | null;
+  /** How it came about — kept with the song; pass it back unchanged. */
+  origin?: SongOrigin;
+}
+
+/** Everything that went into making a song, besides its lyrics and style. */
+export interface SongOrigin {
+  brief: string;
+  requestedStyle: string;
+  requestedVocalGender: string;
+  requestedChorus: string;
+  length: string;
+  songwriterModel: string;
+  revisions: string[];
+}
+
+export interface SongTrack {
+  id: number;
+  songId: number;
+  ord: number;
+  /** The take's audio and cover art: file ids, loaded with fileUrl(). */
+  audioFileId: number;
+  imageFileId: number | null;
+  /** Copies on disk, only for Android's native player. */
+  audioPath: string;
+  imagePath: string | null;
+  duration: number;
+  playCount: number;
+  /** Lyrics timed to this take, once Suno's word timings are known. */
+  lines: TimedLine[] | null;
+}
+
+/** One sung line and when it is sung. */
+export interface TimedLine {
+  start: number;
+  end: number;
+  text: string;
+  /** "da", "en", or "" for ad-libs that are not in the lyrics. */
+  lang: string;
+  /** For a Danish line, its English meaning. */
+  gloss: string | null;
+  /** Set on the first line of a section, e.g. "Chorus". */
+  section: string | null;
+}
+
+export interface Song extends SongDraft {
+  id: number;
+  status: "generating" | "ready" | "failed";
+  error: string | null;
+  createdAt: number;
+  tracks: SongTrack[];
+}
+
+export interface PlaylistEntry {
+  /** The entry itself; the same take may be in a playlist twice. */
+  id: number;
+  trackId: number;
+}
+
+export interface Playlist {
+  id: number;
+  name: string;
+  entries: PlaylistEntry[];
+}
+
+export type SongLength = "short" | "medium" | "long";
+
+export interface DraftRequest {
+  length?: SongLength;
+  brief?: string;
+  topicId?: number | null;
+  chorusDa?: string;
+  style?: string;
+  vocalGender?: string;
+  previous?: SongDraft;
+  feedback?: string;
+}
+
+// ------------------------------------------------------------------ casting
+
+/** A Sonos room or group. */
+export interface CastDevice {
+  id: string;
+  name: string;
+  baseUrl: string;
+}
+
+export interface CastItem {
+  trackId: number;
+  title: string;
+  artist: string;
+}
+
+export interface CastState {
+  device: CastDevice;
+  items: CastItem[];
+  index: number;
+  trackId: number | null;
+  playing: boolean;
+  transport: string;
+  position: number;
+  duration: number;
+  /** 0–100, or -1 when the speaker did not say. */
+  volume: number;
+  repeat: string;
+  /** The speaker has moved on to something that is not ours. */
+  detached: boolean;
+}
+
+/** What one AI feature cost, over a day or a window. */
+export interface FeatureCost {
+  feature: string;
+  costUsd: number;
+  calls: number;
+  /** Requests whose price the provider did not report (speech). */
+  unpriced: number;
+}
+
+export interface DayCost {
+  day: number;
+  costUsd: number;
+  calls: number;
+  features: FeatureCost[];
+}
+
+export interface CostSummary {
+  today: number;
+  days: number;
+  todayUsd: number;
+  totalUsd: number;
+  allTimeUsd: number;
+  features: FeatureCost[];
+  /** Days with any AI use, newest first. */
+  perDay: DayCost[];
+}
+
+export type MemoryCategory = "goal" | "preference" | "context" | "strength" | "struggle";
+
+/** One fact the agents remember about the learner. */
+export interface Memory {
+  id: number;
+  content: string;
+  category: MemoryCategory;
+  /** "tutor", "examiner" or "you". */
+  source: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface MemoryOverview {
+  enabled: boolean;
+  memories: Memory[];
+}
+
+/** A phrase with its meaning. */
+export interface Phrase {
+  da: string;
+  en: string;
+}
+
+/** A writing goal's help: a way to start, and words to use. */
+export interface GoalHelp {
+  goal: string;
+  starter: Phrase;
+  words: Phrase[];
+}
+
+/** Tokens one feature used lately: what a month with another model is estimated from. */
+export interface FeatureUsage {
+  feature: string;
+  requests: number;
+  tokensIn: number;
+  tokensCached: number;
+  tokensOut: number;
+  /** Days the counts cover. */
+  days: number;
+}
+
+/** One benchmark item's outcome. */
+export interface BenchItem {
+  part: "danish" | "tools" | "rules";
+  name: string;
+  /** 0–1. */
+  score: number;
+  note: string;
+  answer: string;
+}
+
+/** A benchmark run on one model. */
+export interface BenchRun {
+  id: number;
+  model: string;
+  createdAt: number;
+  score: number;
+  danish: number;
+  tools: number;
+  rules: number;
+  /** Average seconds per reply. */
+  seconds: number;
+  costUsd: number | null;
+  items: BenchItem[];
+}

@@ -1,0 +1,92 @@
+{
+  "slug": "basics",
+  "title_da": "En ny nabo",
+  "title_en": "A new neighbour",
+  "summary_en": "Alex has just moved to Copenhagen and meets his neighbour Anna in the stairwell.",
+  "speakers": {
+    "Anna": "f",
+    "Alex": "m"
+  },
+  "lines": [
+    {
+      "speaker": "Anna",
+      "da": "Hej! Er du vores nye nabo?",
+      "en": "Hi! Are you our new neighbour?"
+    },
+    {
+      "speaker": "Alex",
+      "da": "Ja, jeg er lige flyttet ind. Jeg hedder Alex.",
+      "en": "Yes, I have just moved in. My name is Alex."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Velkommen! Jeg hedder Anna.",
+      "en": "Welcome! My name is Anna."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Tak. Det er rart at møde dig.",
+      "en": "Thank you. It is nice to meet you."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Hvor kommer du fra?",
+      "en": "Where are you from?"
+    },
+    {
+      "speaker": "Alex",
+      "da": "Jeg kommer fra England. Jeg lærer dansk.",
+      "en": "I come from England. I am learning Danish."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Du taler allerede godt dansk.",
+      "en": "You already speak Danish well."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Tak, men jeg forstår ikke altid det hele.",
+      "en": "Thank you, but I do not always understand everything."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Du må gerne bede mig om at tale langsommere.",
+      "en": "You are welcome to ask me to speak more slowly."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Tak. Hvad betyder \"velkommen\"?",
+      "en": "Thank you. What does \"velkommen\" mean?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Det betyder \"welcome\" på engelsk.",
+      "en": "It means \"welcome\" in English."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Nå ja! Det ord kender jeg godt.",
+      "en": "Oh yes! I know that word."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Sig til, hvis du har spørgsmål.",
+      "en": "Let me know if you have questions."
+    },
+    {
+      "speaker": "Alex",
+      "da": "Mange tak for hjælpen.",
+      "en": "Thank you very much for your help."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Det var så lidt. Vi ses!",
+      "en": "You are welcome. See you!"
+    },
+    {
+      "speaker": "Alex",
+      "da": "Ja, vi ses. Hav en god dag!",
+      "en": "Yes, see you. Have a good day!"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "slug": "time-nature",
+  "title_da": "En tur i skoven",
+  "title_en": "A walk in the forest",
+  "summary_en": "Anna and Mads plan a Sunday walk and notice the changing weather and wildlife.",
+  "speakers": {
+    "Anna": "f",
+    "Mads": "m"
+  },
+  "lines": [
+    {
+      "speaker": "Anna",
+      "da": "Har du lyst til at gå en tur i skoven på søndag?",
+      "en": "Would you like to go for a walk in the forest on Sunday?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Ja, gerne. Hvordan bliver vejret?",
+      "en": "Yes, I would. What will the weather be like?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Vejrudsigten siger sol om formiddagen og regn senere.",
+      "en": "The forecast says sunshine in the morning and rain later."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Så lad os tage af sted tidligt. Hvad med klokken ni?",
+      "en": "Then let us leave early. How about nine o'clock?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Det passer fint. Vi kan mødes ved busstoppestedet.",
+      "en": "That works well. We can meet at the bus stop."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Skal jeg tage noget med?",
+      "en": "Should I bring anything?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "En vandflaske og en regnjakke. Der kan være vådt på stierne.",
+      "en": "A water bottle and a raincoat. The paths may be wet."
+    },
+    {
+      "speaker": "Mads",
+      "da": "God idé. Er der langt til søen?",
+      "en": "Good idea. Is it far to the lake?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Nej, omkring en halv times gang gennem skoven.",
+      "en": "No, about half an hour's walk through the forest."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Se de lysegrønne blade! Foråret er virkelig kommet.",
+      "en": "Look at the light green leaves! Spring has really arrived."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja, og hør fuglene. Der sidder en solsort i det træ.",
+      "en": "Yes, and listen to the birds. There is a blackbird in that tree."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Jeg kan se den. Hvad er det for et træ?",
+      "en": "I can see it. What kind of tree is it?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Det er en bøg. Der er mange bøgetræer her.",
+      "en": "It is a beech. There are many beech trees here."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Nu begynder det vist at regne.",
+      "en": "It seems to be starting to rain now."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja, lad os gå tilbage, før regnen bliver kraftigere.",
+      "en": "Yes, let us head back before the rain gets heavier."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Det var en dejlig tur alligevel.",
+      "en": "It was a lovely walk all the same."
+    }
+  ]
+}

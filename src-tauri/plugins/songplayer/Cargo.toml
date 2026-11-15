@@ -1,0 +1,14 @@
+[package]
+name = "tauri-plugin-songplayer"
+version = "0.1.0"
+edition = "2021"
+description = "Native song playback for Dansk: Android media session, lock screen and Bluetooth controls."
+publish = false
+links = "tauri-plugin-songplayer"
+
+[dependencies]
+tauri = { version = "2" }
+serde = { version = "1", features = ["derive"] }
+
+[build-dependencies]
+tauri-plugin = { version = "2", features = ["build"] }

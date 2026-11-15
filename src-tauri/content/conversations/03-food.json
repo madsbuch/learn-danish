@@ -1,0 +1,92 @@
+{
+  "slug": "food",
+  "title_da": "Frokost på caféen",
+  "title_en": "Lunch at the café",
+  "summary_en": "Anna orders lunch at a café and asks about a vegetarian option.",
+  "speakers": {
+    "Anna": "f",
+    "Tjener": "m"
+  },
+  "lines": [
+    {
+      "speaker": "Tjener",
+      "da": "Hej og velkommen. Er du alene?",
+      "en": "Hello and welcome. Are you on your own?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja. Har I et ledigt bord?",
+      "en": "Yes. Do you have a free table?"
+    },
+    {
+      "speaker": "Tjener",
+      "da": "Ja, du kan sidde ved vinduet. Her er menukortet.",
+      "en": "Yes, you can sit by the window. Here is the menu."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Tak. Hvad er dagens ret?",
+      "en": "Thank you. What is the dish of the day?"
+    },
+    {
+      "speaker": "Tjener",
+      "da": "Det er fisk med kartofler og salat.",
+      "en": "It is fish with potatoes and salad."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Jeg er vegetar. Har I noget uden kød og fisk?",
+      "en": "I am a vegetarian. Do you have anything without meat and fish?"
+    },
+    {
+      "speaker": "Tjener",
+      "da": "Ja, vi har en suppe med grøntsager og linser.",
+      "en": "Yes, we have a soup with vegetables and lentils."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Det lyder godt. Er der fløde i?",
+      "en": "That sounds good. Is there cream in it?"
+    },
+    {
+      "speaker": "Tjener",
+      "da": "Nej, der er ikke fløde i. Suppen er vegansk.",
+      "en": "No, there is no cream in it. The soup is vegan."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Så vil jeg gerne have den. Og et glas postevand.",
+      "en": "Then I would like that. And a glass of tap water."
+    },
+    {
+      "speaker": "Tjener",
+      "da": "Vil du have brød til?",
+      "en": "Would you like bread with it?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja tak, gerne rugbrød.",
+      "en": "Yes please, rye bread would be nice."
+    },
+    {
+      "speaker": "Tjener",
+      "da": "Værsgo. Velbekomme!",
+      "en": "Here you are. Enjoy your meal!"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Tak! Det dufter dejligt.",
+      "en": "Thank you! It smells lovely."
+    },
+    {
+      "speaker": "Tjener",
+      "da": "Smagte maden godt?",
+      "en": "Did you enjoy the food?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja, den var rigtig lækker. Må jeg få regningen?",
+      "en": "Yes, it was really delicious. May I have the bill?"
+    }
+  ]
+}

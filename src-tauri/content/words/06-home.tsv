@@ -1,0 +1,214 @@
+# danish	english	pos
+et hjem	a home	n-neuter
+et hus	a house	n-neuter
+en bolig	a dwelling; a home	n-common
+en lejlighed	a flat; an apartment	n-common
+en villa	a detached house; a villa	n-common
+et rækkehus	a terraced house	n-neuter
+en boligblok	a block of flats	n-common
+en opgang	a shared stairwell; a building entrance	n-common
+en etage	a floor; a storey	n-common
+en stueetage	a ground floor	n-common
+en kælder	a cellar; a basement	n-common
+et loft	a ceiling; an attic	n-neuter
+et tag	a roof	n-neuter
+en skorsten	a chimney	n-common
+en facade	a facade; a building front	n-common
+en mur	a wall of brick or stone	n-common
+en væg	an interior wall	n-common
+et gulv	a floor surface	n-neuter
+en trappe	a staircase	n-common
+et trappetrin	a stair; a step	n-neuter
+et gelænder	a handrail	n-neuter
+en dør	a door	n-common
+en hoveddør	a front door	n-common
+en bagdør	a back door	n-common
+et dørhåndtag	a door handle	n-neuter
+en lås	a lock	n-common
+en nøgle	a key	n-common
+en dørklokke	a doorbell	n-common
+en dørmåtte	a doormat	n-common
+et vindue	a window	n-neuter
+en vindueskarm	a windowsill	n-common
+et gardin	a curtain	n-neuter
+et rullegardin	a roller blind	n-neuter
+en altan	a balcony	n-common
+en terrasse	a terrace; a patio	n-common
+en gårdhave	a courtyard garden	n-common
+en indkørsel	a driveway	n-common
+en garage	a garage	n-common
+et skur	a shed	n-neuter
+et værelse	a room	n-neuter
+en stue	a living room	n-common
+et soveværelse	a bedroom	n-neuter
+et børneværelse	a children's bedroom	n-neuter
+et gæsteværelse	a guest room	n-neuter
+et køkken	a kitchen	n-neuter
+et badeværelse	a bathroom	n-neuter
+en entré	an entrance hall	n-common
+en gang	a corridor; a hallway	n-common
+et bryggers	a utility room	n-neuter
+en spisestue	a dining room	n-common
+et hjemmekontor	a home office	n-neuter
+et møbel	a piece of furniture	n-neuter
+en sofa	a sofa	n-common
+en lænestol	an armchair	n-common
+en stol	a chair	n-common
+et bord	a table	n-neuter
+et spisebord	a dining table	n-neuter
+et sofabord	a coffee table	n-neuter
+en taburet	a stool	n-common
+en reol	a shelving unit; a bookcase	n-common
+en hylde	a shelf	n-common
+et skab	a cupboard; a cabinet	n-neuter
+en skuffe	a drawer	n-common
+en kommode	a chest of drawers	n-common
+en garderobe	a wardrobe; a cloakroom	n-common
+en knage	a coat hook	n-common
+en bøjle	a clothes hanger	n-common
+en seng	a bed	n-common
+en dobbeltseng	a double bed	n-common
+en enkeltseng	a single bed	n-common
+en madras	a mattress	n-common
+en dyne	a duvet	n-common
+en pude	a pillow; a cushion	n-common
+et lagen	a bedsheet	n-neuter
+et dynebetræk	a duvet cover	n-neuter
+et pudebetræk	a pillowcase	n-neuter
+et sengetæppe	a bedspread	n-neuter
+et natbord	a bedside table	n-neuter
+en lampe	a lamp	n-common
+en loftslampe	a ceiling light	n-common
+en elpære	a light bulb	n-common
+en kontakt	a switch	n-common
+en stikkontakt	a power socket	n-common
+et stik	a plug	n-neuter
+en ledning	an electrical cord	n-common
+en forlængerledning	an extension lead	n-common
+en radiator	a radiator	n-common
+en termostat	a thermostat	n-common
+en brændeovn	a wood-burning stove	n-common
+en pejs	a fireplace	n-common
+et tæppe	a rug; a blanket	n-neuter
+et vægur	a wall clock	n-neuter
+en vase	a vase	n-common
+en lysestage	a candlestick	n-common
+et stearinlys	a candle	n-neuter
+en billedramme	a picture frame	n-common
+en dug	a tablecloth	n-common
+en serviet	a napkin	n-common
+et køleskab	a refrigerator	n-neuter
+en fryser	a freezer	n-common
+en ovn	an oven	n-common
+et komfur	a cooker; a stove	n-neuter
+en kogeplade	a hob; a hotplate	n-common
+en emhætte	an extractor hood	n-common
+en mikrobølgeovn	a microwave oven	n-common
+en opvaskemaskine	a dishwasher	n-common
+en elkedel	an electric kettle	n-common
+en kaffemaskine	a coffee maker	n-common
+en brødrister	a toaster	n-common
+en køkkenvask	a kitchen sink	n-common
+en vandhane	a tap	n-common
+en bordplade	a worktop	n-common
+et viskestykke	a tea towel	n-neuter
+en karklud	a dishcloth	n-common
+en opvaskebørste	a washing-up brush	n-common
+et opvaskemiddel	a washing-up liquid	n-neuter
+en svamp	a sponge	n-common
+en affaldsspand	a rubbish bin	n-common
+en affaldspose	a rubbish bag	n-common
+et toilet	a toilet	n-neuter
+en håndvask	a washbasin	n-common
+en bruser	a shower head; a shower	n-common
+et badekar	a bathtub	n-neuter
+et badeforhæng	a shower curtain	n-neuter
+et afløb	a drain	n-neuter
+et håndklæde	a towel	n-neuter
+en bademåtte	a bathmat	n-common
+en toiletrulle	a roll of toilet paper	n-common
+en toiletbørste	a toilet brush	n-common
+en vaskemaskine	a washing machine	n-common
+en tørretumbler	a tumble dryer	n-common
+et tørrestativ	a clothes drying rack	n-neuter
+en vasketøjskurv	a laundry basket	n-common
+et vaskemiddel	a laundry detergent	n-neuter
+et strygejern	an iron for clothes	n-neuter
+et strygebræt	an ironing board	n-neuter
+en støvsuger	a vacuum cleaner	n-common
+en kost	a broom	n-common
+en fejebakke	a dustpan	n-common
+en moppe	a mop	n-common
+en spand	a bucket	n-common
+en klud	a cloth; a rag	n-common
+et rengøringsmiddel	a cleaning product	n-neuter
+et støvkorn	a speck of dust	n-neuter
+en plet	a stain; a spot	n-common
+et rod	a mess; clutter	n-neuter
+en husleje	rent for a home	n-common
+en lejekontrakt	a tenancy agreement	n-common
+en udlejer	a landlord; a landlady	n-common
+en lejer	a tenant	n-common
+et depositum	a security deposit	n-neuter
+en vicevært	a caretaker; a building superintendent	n-common
+en andelsbolig	a cooperative dwelling	n-common
+en ejerlejlighed	an owner-occupied flat	n-common
+en flyttekasse	a moving box	n-common
+en flytning	a move to another home	n-common
+en indflytning	moving into a home	n-common
+en fraflytning	moving out of a home	n-common
+en renovering	a renovation	n-common
+en reparation	a repair	n-common
+en vandskade	water damage	n-common
+en vandmåler	a water meter	n-common
+en elmåler	an electricity meter	n-common
+et strømforbrug	electricity consumption	n-neuter
+et vandforbrug	water consumption	n-neuter
+en fjernvarme	district heating	n-common
+en isolering	insulation	n-common
+en røgalarm	a smoke alarm	n-common
+en brandslukker	a fire extinguisher	n-common
+et værktøj	a tool	n-neuter
+en hammer	a hammer	n-common
+en skruetrækker	a screwdriver	n-common
+en skrue	a screw	n-common
+et søm	a nail for building	n-neuter
+en boremaskine	a drill	n-common
+et målebånd	a tape measure	n-neuter
+en stige	a ladder	n-common
+en pensel	a paintbrush	n-common
+en malerrulle	a paint roller	n-common
+at bo	to live; to reside	v
+at flytte ind	to move in	v
+at flytte ud	to move out	v
+at gøre rent	to clean	v
+at rydde op	to tidy up	v
+at støvsuge	to vacuum	v
+at feje	to sweep	v
+at vaske gulv	to mop the floor	v
+at tørre støv af	to dust	v
+at vaske op	to wash the dishes	v
+at tage opvasken	to do the washing-up	v
+at vaske tøj	to do laundry	v
+at hænge tøj op	to hang up laundry	v
+at stryge tøj	to iron clothes	v
+at rede seng	to make a bed	v
+at lufte ud	to air out a room	v
+at låse døren	to lock the door	v
+at låse op	to unlock	v
+at tænde lyset	to turn on the light	v
+at slukke lyset	to turn off the light	v
+at sortere affald	to sort rubbish	v
+at tømme skraldespanden	to empty the rubbish bin	v
+at vande planter	to water plants	v
+at hænge et billede op	to hang a picture	v
+at skifte sengetøj	to change bed linen	v
+møbleret	furnished	adj
+umøbleret	unfurnished	adj
+rummelig	spacious	adj
+lydtæt	soundproof	adj
+hjemme	at home	adv
+hjemmefra	from home	adv
+indendørs	indoors	adv
+ovenpå	upstairs; on top	adv
+nedenunder	downstairs; underneath	adv

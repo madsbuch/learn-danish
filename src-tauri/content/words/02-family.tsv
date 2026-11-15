@@ -1,0 +1,220 @@
+# danish	english	pos
+en familie	a family	n-common
+et familiemedlem	a family member	n-neuter
+en mor	a mother	n-common
+en far	a father	n-common
+en forælder	a parent	n-common
+forældre	parents	n-plural
+et barn	a child	n-neuter
+børn	children	n-plural
+en søn	a son	n-common
+en datter	a daughter	n-common
+en bror	a brother	n-common
+en søster	a sister	n-common
+søskende	siblings	n-plural
+en storebror	an older brother	n-common
+en lillebror	a younger brother	n-common
+en storesøster	an older sister	n-common
+en lillesøster	a younger sister	n-common
+en bedstemor	a grandmother	n-common
+en bedstefar	a grandfather	n-common
+bedsteforældre	grandparents	n-plural
+en mormor	a maternal grandmother	n-common
+en morfar	a maternal grandfather	n-common
+en farmor	a paternal grandmother	n-common
+en farfar	a paternal grandfather	n-common
+et barnebarn	a grandchild	n-neuter
+en oldemor	a great-grandmother	n-common
+en oldefar	a great-grandfather	n-common
+et oldebarn	a great-grandchild	n-neuter
+en tante	an aunt	n-common
+en onkel	an uncle	n-common
+en moster	a maternal aunt	n-common
+en faster	a paternal aunt	n-common
+en morbror	a maternal uncle	n-common
+en farbror	a paternal uncle	n-common
+en kusine	a female cousin	n-common
+en fætter	a male cousin	n-common
+en niece	a niece	n-common
+en nevø	a nephew	n-common
+en svigermor	a mother-in-law	n-common
+en svigerfar	a father-in-law	n-common
+en svigersøn	a son-in-law	n-common
+en svigerdatter	a daughter-in-law	n-common
+en svoger	a brother-in-law	n-common
+en svigerinde	a sister-in-law	n-common
+en stedmor	a stepmother	n-common
+en stedfar	a stepfather	n-common
+et stedbarn	a stepchild	n-neuter
+en halvsøster	a half-sister	n-common
+en halvbror	a half-brother	n-common
+en tvilling	a twin	n-common
+en enebarnsfamilie	a family with one child	n-common
+et enebarn	an only child	n-neuter
+en baby	a baby	n-common
+et spædbarn	an infant	n-neuter
+et småbarn	a toddler; a young child	n-neuter
+en teenager	a teenager	n-common
+en voksen	an adult	n-common
+en pensionist	a pensioner	n-common
+en dreng	a boy	n-common
+en pige	a girl	n-common
+en mand	a man; a husband	n-common
+en kvinde	a woman	n-common
+en person	a person	n-common
+et menneske	a human being	n-neuter
+folk	people	n-plural
+en ven	a friend (male or unspecified)	n-common
+en veninde	a female friend	n-common
+en bedste ven	a best friend	phr
+en bekendt	an acquaintance	n-common
+en nabo	a neighbour	n-common
+en kæreste	a boyfriend; a girlfriend; a partner	n-common
+en partner	a partner	n-common
+en ægtefælle	a spouse	n-common
+en kone	a wife	n-common
+en hustru	a wife (formal)	n-common
+en enkemand	a widower	n-common
+en enke	a widow	n-common
+en ekskæreste	an ex-partner	n-common
+en brud	a bride	n-common
+en brudgom	a groom	n-common
+et par	a couple	n-neuter
+et forhold	a relationship	n-neuter
+et ægteskab	a marriage	n-neuter
+et bryllup	a wedding	n-neuter
+en skilsmisse	a divorce	n-common
+en forlovelse	an engagement	n-common
+en fødselsdag	a birthday	n-common
+en fødsel	a birth	n-common
+en dåb	a baptism	n-common
+en konfirmation	a confirmation	n-common
+en begravelse	a funeral	n-common
+en familiekomsammen	a family gathering	n-common
+en slægtning	a relative	n-common
+en generation	a generation	n-common
+en barndom	a childhood	n-common
+en ungdom	a youth; a period of being young	n-common
+en alder	an age	n-common
+en aldersforskel	an age difference	n-common
+en opvækst	an upbringing	n-common
+en opdragelse	an upbringing; child-rearing	n-common
+en invitation	an invitation	n-common
+en gæst	a guest	n-common
+et besøg	a visit	n-neuter
+en vært	a host	n-common
+en værtinde	a hostess	n-common
+et venskab	a friendship	n-neuter
+en kærlighed	a love	n-common
+omsorg	care; concern	n-common
+tillid	trust	n-common
+respekt	respect	n-common
+et ansvar	a responsibility	n-neuter
+en aftale	an agreement; an appointment	n-common
+en hemmelighed	a secret	n-common
+en samtale	a conversation	n-common
+et skænderi	an argument; a quarrel	n-neuter
+en undskyldning	an apology; an excuse	n-common
+en støtte	a support	n-common
+et kram	a hug	n-neuter
+et kys	a kiss	n-neuter
+et smil	a smile	n-neuter
+at elske	to love	v
+at holde af	to be fond of	v
+at savne	to miss (someone)	v
+at besøge	to visit	v
+at invitere	to invite	v
+at møde	to meet	v
+at mødes	to meet each other	v
+at hilse	to greet	v
+at præsentere	to introduce; to present	v
+at fejre	to celebrate	v
+at gifte sig	to get married	v
+at blive skilt	to get divorced	phr
+at blive født	to be born	phr
+at vokse op	to grow up	v
+at opdrage	to raise; to bring up	v
+at passe børn	to look after children	phr
+at adoptere	to adopt	v
+at kramme	to hug	v
+at kysse	to kiss	v
+at smile	to smile	v
+at grine	to laugh	v
+at græde	to cry	v
+at drille	to tease	v
+at skændes	to argue; to quarrel	v
+at tilgive	to forgive	v
+at stole på	to trust	v
+at hjælpe	to help	v
+at støtte	to support	v
+at dele	to share	v
+at lytte	to listen	v
+at være sammen	to be together	phr
+gift	married	adj
+ugift	unmarried	adj
+skilt	divorced	adj
+forlovet	engaged	adj
+single	single	adj
+ensom	lonely	adj
+alene	alone	adv
+sammen	together	adv
+ung	young	adj
+gammel	old	adj
+ældre	older; elderly	adj
+yngre	younger	adj
+nyfødt	newborn	adj
+voksen	grown-up; adult	adj
+lille	small; little	adj
+stor	big; large	adj
+høj	tall; high	adj
+lav	short in height; low	adj
+venlig	friendly; kind	adj
+sød	sweet; nice	adj
+rar	nice; kind	adj
+omsorgsfuld	caring	adj
+hjælpsom	helpful	adj
+ærlig	honest	adj
+pålidelig	reliable	adj
+tålmodig	patient	adj
+utålmodig	impatient	adj
+rolig	calm	adj
+stille	quiet	adj
+snakkesalig	talkative	adj
+genert	shy	adj
+modig	brave	adj
+sjov	funny; fun	adj
+alvorlig	serious	adj
+klog	clever; wise	adj
+nysgerrig	curious	adj
+kreativ	creative	adj
+generøs	generous	adj
+høflig	polite	adj
+uhøflig	rude	adj
+stædig	stubborn	adj
+stolt	proud	adj
+glad	happy; pleased	adj
+trist	sad	adj
+vred	angry	adj
+sur	cross; grumpy	adj
+bekymret	worried	adj
+tryg	safe; secure	adj
+forelsket	in love	adj
+lykkelig	happy; blissful	adj
+skuffet	disappointed	adj
+overrasket	surprised	adj
+taknemmelig	grateful	adj
+misundelig	envious	adj
+nervøs	nervous	adj
+spændt	excited; eager	adj
+stolt af	proud of	phr
+beslægtet	related	adj
+fælles	shared; common	adj
+forskellig	different	adj
+lige gammel	the same age	phr
+et familiefoto	a family photo	n-neuter
+en gæsteliste	a guest list	n-common
+en barnevogn	a pram	n-common
+en klapvogn	a pushchair; a stroller	n-common
+en højstol	a high chair	n-common
+en ble	a nappy; a diaper	n-common
+en sut	a dummy; a pacifier	n-common

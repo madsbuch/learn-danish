@@ -1,0 +1,92 @@
+{
+  "slug": "health",
+  "title_da": "En tid hos lægen",
+  "title_en": "A doctor’s appointment",
+  "summary_en": "Anna works at a doctor’s surgery. Mads calls to book an appointment and describe his symptoms.",
+  "speakers": {
+    "Anna": "f",
+    "Mads": "m"
+  },
+  "lines": [
+    {
+      "speaker": "Anna",
+      "da": "Lægeklinikken, det er Anna.",
+      "en": "The doctor's surgery, Anna speaking."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Hej, jeg hedder Mads. Jeg vil gerne bestille en tid hos lægen.",
+      "en": "Hello, my name is Mads. I would like to book a doctor's appointment."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Hvad drejer det sig om?",
+      "en": "What is it about?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Jeg har ondt i halsen og har hostet i flere dage.",
+      "en": "I have a sore throat and have been coughing for several days."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Har du også feber?",
+      "en": "Do you also have a fever?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Det ved jeg ikke. Jeg har ikke målt min temperatur.",
+      "en": "I do not know. I have not taken my temperature."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Hvor længe har du haft ondt i halsen?",
+      "en": "How long have you had a sore throat?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Siden i mandags. I dag er min stemme også hæs.",
+      "en": "Since Monday. Today my voice is hoarse too."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Kan du komme i morgen klokken kvart over ni?",
+      "en": "Can you come tomorrow at a quarter past nine?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Ja, det kan jeg godt. Er det hos min sædvanlige læge?",
+      "en": "Yes, I can. Is it with my usual doctor?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja, hos læge Hansen. Husk at tage dit sundhedskort med.",
+      "en": "Yes, with Doctor Hansen. Remember to bring your health insurance card."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Det gør jeg. Skal jeg tage en liste over min medicin med?",
+      "en": "I will. Should I bring a list of my medication?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja tak, det er en god idé.",
+      "en": "Yes please, that is a good idea."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Kan lægen tale engelsk, hvis jeg mangler et ord?",
+      "en": "Can the doctor speak English if I do not know a word?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja, det kan hun. Vi ses i morgen.",
+      "en": "Yes, she can. See you tomorrow."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Mange tak for hjælpen. Farvel.",
+      "en": "Thank you very much for your help. Goodbye."
+    }
+  ]
+}

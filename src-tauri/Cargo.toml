@@ -1,0 +1,69 @@
+[package]
+name = "learn-danish"
+version = "0.1.0"
+description = "Learn Danish from English — daily gamified practice"
+authors = ["Mads Buch"]
+edition = "2021"
+rust-version = "1.77.2"
+
+# The lib is what Android/iOS link against; the bin is the desktop entrypoint.
+[lib]
+name = "learn_danish_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# Files reach the webview through the custom media:// protocol (files.rs).
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-os = "2"
+# Exporting the database: a save dialog, and writing to whatever it returns
+# (a content:// URI on Android).
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+# Native playback with lock-screen and Bluetooth controls (Kotlin, Android only).
+tauri-plugin-songplayer = { path = "plugins/songplayer" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+rand = "0.9"
+# Generated speech crosses the IPC boundary as a data: URI.
+base64 = "0.22"
+# Content hashes for the files table.
+sha2 = "0.10"
+
+# SQLite is compiled in (`bundled`) so Android/macOS do not depend on a system libsqlite3.
+# Typed SQL: queries are checked against src/schema.rs at compile time.
+diesel = { version = "2.4", features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
+# SQLite itself, compiled in (also for Android, which ships no usable one).
+libsqlite3-sys = { version = "0.35", features = ["bundled"] }
+
+# All outbound HTTP lives in Rust so the webview never issues cross-origin
+# requests — no CORS preflight, and the OpenRouter key never reaches JS.
+# webpki roots are bundled so TLS works identically on Android and macOS.
+reqwest = { version = "0.12", default-features = false, features = [
+  "json",
+  "rustls-tls-webpki-roots",
+  "charset",
+  "http2",
+  "stream",
+] }
+# Consuming the server-sent-event body of a streaming completion.
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+# net/io-util/fs serve songs to Sonos speakers on the local network.
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "net", "io-util", "fs"] }
+
+[features]
+# This feature is used for production builds where `devUrl` points to the filesystem.
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

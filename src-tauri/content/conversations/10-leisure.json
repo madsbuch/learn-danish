@@ -1,0 +1,92 @@
+{
+  "slug": "leisure",
+  "title_da": "Musik og weekendplaner",
+  "title_en": "Music and weekend plans",
+  "summary_en": "Anna and Mads talk about Danish music, a concert and ways to practise listening.",
+  "speakers": {
+    "Anna": "f",
+    "Mads": "m"
+  },
+  "lines": [
+    {
+      "speaker": "Anna",
+      "da": "Hvad lytter du til?",
+      "en": "What are you listening to?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "En dansk sang. Jeg prøver at forstå teksten.",
+      "en": "A Danish song. I am trying to understand the lyrics."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Kan du høre alle ordene?",
+      "en": "Can you hear all the words?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Ikke endnu. Jeg kan forstå omkvædet, men versene går hurtigt.",
+      "en": "Not yet. I can understand the chorus, but the verses are fast."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Prøv at læse teksten, mens du lytter.",
+      "en": "Try reading the lyrics while you listen."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Det hjælper faktisk. Og melodien er nem at huske.",
+      "en": "That actually helps. And the melody is easy to remember."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Spiller du selv et instrument?",
+      "en": "Do you play an instrument yourself?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Jeg spiller lidt guitar, men jeg er ikke særlig god.",
+      "en": "I play a little guitar, but I am not very good."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Det behøver man heller ikke være. Jeg synger i et kor.",
+      "en": "You do not have to be. I sing in a choir."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Hvor tit øver I?",
+      "en": "How often do you rehearse?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Hver tirsdag. Vi skal synge til en koncert næste måned.",
+      "en": "Every Tuesday. We are singing at a concert next month."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Den vil jeg gerne høre. Er der stadig billetter?",
+      "en": "I would like to hear that. Are there still tickets?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja, jeg sender dig et link. Hvad skal du ellers i weekenden?",
+      "en": "Yes, I will send you a link. What else are you doing this weekend?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Jeg vil låne en lydbog på biblioteket og måske gå i biografen.",
+      "en": "I want to borrow an audiobook from the library and perhaps go to the cinema."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Der går en god dansk film med engelske undertekster.",
+      "en": "There is a good Danish film showing with English subtitles."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Så lad os se den sammen på lørdag!",
+      "en": "Then let us see it together on Saturday!"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "slug": "work",
+  "title_da": "Den første arbejdsdag",
+  "title_en": "The first day at work",
+  "summary_en": "Anna welcomes Mads to an office in Copenhagen and explains the team’s routines.",
+  "speakers": {
+    "Anna": "f",
+    "Mads": "m"
+  },
+  "lines": [
+    {
+      "speaker": "Anna",
+      "da": "Velkommen, Mads! Jeg hedder Anna, og jeg skal vise dig rundt.",
+      "en": "Welcome, Mads! My name is Anna, and I will show you around."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Tak! Jeg glæder mig til at møde resten af holdet.",
+      "en": "Thank you! I am looking forward to meeting the rest of the team."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Her er dit skrivebord. Din computer og adgangskode ligger klar.",
+      "en": "Here is your desk. Your computer and password are ready."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Fint. Hvornår begynder vi normalt om morgenen?",
+      "en": "Great. When do we normally start in the morning?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "De fleste kommer mellem otte og ni. Vi har fleksible arbejdstider.",
+      "en": "Most people arrive between eight and nine. We have flexible working hours."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Og hvornår spiser vi frokost?",
+      "en": "And when do we have lunch?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Vi plejer at gå i kantinen klokken halv tolv.",
+      "en": "We usually go to the canteen at half past eleven."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Er der et fælles møde i dag?",
+      "en": "Is there a team meeting today?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Ja, klokken ti i det store mødelokale. Du får mulighed for at præsentere dig.",
+      "en": "Yes, at ten in the large meeting room. You will have a chance to introduce yourself."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Skal jeg forberede noget?",
+      "en": "Do I need to prepare anything?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Bare et par ord om dig selv og det, du har arbejdet med før.",
+      "en": "Just a few words about yourself and what you have worked on before."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Mit dansk er stadig lidt langsomt. Er det i orden at spørge om ord?",
+      "en": "My Danish is still a little slow. Is it all right to ask about words?"
+    },
+    {
+      "speaker": "Anna",
+      "da": "Selvfølgelig. Vi hjælper gerne, og vi kan også tale engelsk.",
+      "en": "Of course. We are happy to help, and we can speak English too."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Tak. Jeg går på sprogskole to aftener om ugen.",
+      "en": "Thank you. I attend language school two evenings a week."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Så får du masser af mulighed for at øve dig her.",
+      "en": "Then you will have plenty of opportunities to practise here."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Det er lige det, jeg håbede på.",
+      "en": "That is just what I was hoping for."
+    }
+  ]
+}

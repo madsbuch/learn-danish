@@ -1,0 +1,215 @@
+# danish	english	pos
+en fritid	leisure time	n-common
+en hobby	a hobby	n-common
+en interesse	an interest	n-common
+en oplevelse	an experience; an event to remember	n-common
+en underholdning	entertainment	n-common
+en kultur	culture	n-common
+en kunst	art	n-common
+et kunstværk	a work of art	n-neuter
+en kunstner	an artist	n-common
+et maleri	a painting	n-neuter
+en tegning	a drawing	n-common
+en skulptur	a sculpture	n-common
+en udstilling	an exhibition	n-common
+et galleri	a gallery	n-neuter
+et museum	a museum	n-neuter
+et teater	a theatre	n-neuter
+en scene	a stage; a scene	n-common
+en forestilling	a performance; a show	n-common
+et skuespil	a play	n-neuter
+en skuespiller	an actor	n-common
+en instruktør	a director	n-common
+en biograf	a cinema	n-common
+en film	a film; a movie	n-common
+en dokumentar	a documentary	n-common
+en komedie	a comedy	n-common
+en gyser	a horror film or story	n-common
+en krimi	a crime novel or drama	n-common
+en animationsfilm	an animated film	n-common
+en undertekst	a subtitle	n-common
+en anmeldelse	a review	n-common
+en hovedrolle	a leading role	n-common
+et publikum	an audience	n-neuter
+en applaus	applause	n-common
+en premiere	a premiere	n-common
+en festival	a festival	n-common
+en koncert	a concert	n-common
+en musik	music	n-common
+en sang	a song	n-common
+en melodi	a melody	n-common
+en rytme	a rhythm	n-common
+en tone	a musical note; a tone	n-common
+et omkvæd	a chorus; a refrain	n-neuter
+et vers	a verse	n-neuter
+en sangtekst	song lyrics	n-common
+en sanger	a singer	n-common
+en musiker	a musician	n-common
+et band	a band	n-neuter
+et orkester	an orchestra	n-neuter
+et kor	a choir	n-neuter
+en dirigent	a conductor	n-common
+et instrument	an instrument	n-neuter
+en guitar	a guitar	n-common
+et klaver	a piano	n-neuter
+en violin	a violin	n-common
+en fløjte	a flute; a whistle	n-common
+en tromme	a drum	n-common
+en bas	a bass; a bass guitar	n-common
+en trompet	a trumpet	n-common
+en højttaler	a loudspeaker	n-common
+et headset	a headset	n-neuter
+en mikrofon	a microphone	n-common
+en plade	a record; a disc	n-common
+et album	an album	n-neuter
+en afspilningsliste	a playlist	n-common
+en optagelse	a recording	n-common
+en dans	a dance	n-common
+en danser	a dancer	n-common
+en ballet	a ballet	n-common
+et diskotek	a nightclub; a disco	n-neuter
+en litteratur	literature	n-common
+en bog	a book	n-common
+en roman	a novel	n-common
+en novelle	a short story	n-common
+et digt	a poem	n-neuter
+en digter	a poet	n-common
+en forfatter	an author	n-common
+en fortælling	a story; a tale	n-common
+et eventyr	a fairy tale; an adventure	n-neuter
+en tegneserie	a comic	n-common
+en lydbog	an audiobook	n-common
+en e-bog	an e-book	n-common
+et bibliotek	a library	n-neuter
+en bibliotekar	a librarian	n-common
+et lånerkort	a library card	n-neuter
+en bogklub	a book club	n-common
+et bogmærke	a bookmark	n-neuter
+en avis	a newspaper	n-common
+et magasin	a magazine	n-neuter
+en artikel	an article	n-common
+en nyhed	a piece of news	n-common
+en nyhedsudsendelse	a news broadcast	n-common
+en radio	a radio	n-common
+et fjernsyn	a television set	n-neuter
+en tv-serie	a TV series	n-common
+en episode	an episode	n-common
+en sæson	a season of a show or sport	n-common
+en kanal	a channel	n-common
+et program	a programme; software	n-neuter
+en udsendelse	a broadcast	n-common
+en podcast	a podcast	n-common
+et interview	an interview	n-neuter
+en sport	sport	n-common
+en idræt	sport; physical education	n-common
+en træning	training; a workout	n-common
+en træner	a coach; a trainer	n-common
+en spiller	a player	n-common
+en modstander	an opponent	n-common
+en kamp	a match; a fight	n-common
+en turnering	a tournament	n-common
+et mesterskab	a championship	n-neuter
+en konkurrence	a competition	n-common
+en sejr	a victory	n-common
+et nederlag	a defeat	n-neuter
+et uafgjort resultat	a draw; a tied result	n-neuter
+en medalje	a medal	n-common
+et trofæ	a trophy	n-neuter
+en dommer	a referee; a judge	n-common
+en tilskuer	a spectator	n-common
+et stadion	a stadium	n-neuter
+en hal	a sports hall; a large hall	n-common
+en svømmehal	an indoor swimming pool	n-common
+et fitnesscenter	a gym; a fitness centre	n-neuter
+en bold	a ball	n-common
+en fodbold	a football; football	n-common
+en håndbold	a handball; handball	n-common
+en basketball	a basketball; basketball	n-common
+en volleyball	a volleyball; volleyball	n-common
+en tennis	tennis	n-common
+en badminton	badminton	n-common
+en svømning	swimming	n-common
+et løb	a race; a run	n-neuter
+en cykling	cycling	n-common
+en gymnastik	gymnastics	n-common
+en yoga	yoga	n-common
+en styrketræning	strength training	n-common
+en opvarmning	a warm-up; heating	n-common
+en udstrækning	stretching	n-common
+et brætspil	a board game	n-neuter
+et kortspil	a card game	n-neuter
+et puslespil	a jigsaw puzzle	n-neuter
+en terning	a die; a cube	n-common
+en spillebrik	a game piece	n-common
+et skakspil	a chess set; a game of chess	n-neuter
+en regel	a rule	n-common
+en runde	a round	n-common
+et point	a point in a game	n-neuter
+et computerspil	a computer game	n-neuter
+en spillekonsol	a games console	n-common
+en computer	a computer	n-common
+en bærbar computer	a laptop	n-common
+en skærm	a screen; a monitor	n-common
+et tastatur	a keyboard	n-neuter
+en computermus	a computer mouse	n-common
+en musemåtte	a mouse mat	n-common
+en mobiltelefon	a mobile phone	n-common
+en smartphone	a smartphone	n-common
+en oplader	a charger	n-common
+et batteri	a battery	n-neuter
+et kamera	a camera	n-neuter
+et fotografi	a photograph	n-neuter
+en fotograf	a photographer	n-common
+en video	a video	n-common
+et internet	the internet	n-neuter
+en hjemmeside	a website	n-common
+en browser	a browser	n-common
+en søgemaskine	a search engine	n-common
+et link	a link	n-neuter
+en e-mail	an email	n-common
+en indbakke	an inbox	n-common
+en vedhæftet fil	an attachment	n-common
+en besked	a message	n-common
+en notifikation	a notification	n-common
+en adgangskode	a password	n-common
+et brugernavn	a username	n-neuter
+en bruger	a user	n-common
+en profil	a profile	n-common
+et opslag	a post on social media; a notice	n-neuter
+en kommentar	a comment	n-common
+en følger	a follower	n-common
+en app	an app	n-common
+en opdatering	an update	n-common
+en fil	a file	n-common
+en sikkerhedskopi	a backup	n-common
+et netværk	a network	n-neuter
+en router	a router	n-common
+et trådløst netværk	a wireless network	n-neuter
+en download	a download	n-common
+en streaming	streaming	n-common
+en indstilling	a setting	n-common
+at synge	to sing	v
+at danse	to dance	v
+at tegne	to draw	v
+at male	to paint	v
+at fotografere	to take photographs	v
+at læse	to read	v
+at spille	to play a game or music	v
+at træne	to train; to work out	v
+at svømme	to swim	v
+at løbe	to run	v
+at vinde	to win	v
+at tabe	to lose; to drop	v
+at klikke	to click	v
+at trykke	to press	v
+at downloade	to download	v
+at uploade	to upload	v
+at gemme	to save; to hide	v
+at slette	to delete	v
+at logge ind	to log in	v
+at logge ud	to log out	v
+at opdatere	to update	v
+at oplade	to charge a battery	v
+at streame	to stream	v
+digital	digital	adj
+trådløs	wireless	adj

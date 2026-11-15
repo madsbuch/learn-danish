@@ -1,0 +1,303 @@
+/**
+ * Danish audio, from one of two sources:
+ *
+ *  1. OpenRouter, synthesised in Rust and cached in SQLite. Works everywhere,
+ *     including Android's WebView, which does not implement `speechSynthesis`.
+ *  2. The platform's own speech engine, when it has one. Free and instant, but
+ *     absent on Android and silent without a Danish voice installed.
+ *
+ * The AI voice wins when it is configured, because it is the only option that
+ * is guaranteed to work on the phone.
+ */
+import { api } from "./api";
+
+let hasKey = false;
+let hasVoice = false;
+/** The speaking speed (Settings): every clip plays at it. */
+let speed = 1;
+
+/** Kept in sync by the app shell whenever settings change. */
+export function setSpeechConfig(config: { hasKey: boolean; hasVoice: boolean; speed?: number }): void {
+  hasKey = config.hasKey;
+  hasVoice = config.hasVoice;
+  if (config.speed && config.speed > 0) speed = config.speed;
+}
+
+const aiVoiceReady = () => hasKey && hasVoice;
+
+/** Names the actual blocker, rather than blaming whichever engine ran last. */
+function unavailableReason(): string {
+  if (hasVoice && !hasKey) {
+    return "Add your OpenRouter API key in Settings — the Danish voice needs it.";
+  }
+  if (hasKey && !hasVoice) {
+    return "Choose a Danish voice in Settings to hear this.";
+  }
+  return "No speech on this device yet. Set up an OpenRouter voice in Settings to hear Danish.";
+}
+
+// ---------------------------------------------------------------- native path
+
+let cachedVoice: SpeechSynthesisVoice | null | undefined;
+
+function danishVoice(): SpeechSynthesisVoice | null {
+  if (cachedVoice !== undefined) return cachedVoice;
+  if (typeof speechSynthesis === "undefined") {
+    cachedVoice = null;
+    return null;
+  }
+  const voices = speechSynthesis.getVoices();
+  // Voices load asynchronously on some platforms; don't cache an empty answer.
+  if (voices.length === 0) return null;
+  cachedVoice = voices.find((v) => v.lang.toLowerCase().startsWith("da")) ?? null;
+  return cachedVoice;
+}
+
+if (typeof speechSynthesis !== "undefined") {
+  speechSynthesis.addEventListener("voiceschanged", () => {
+    cachedVoice = undefined;
+  });
+}
+
+function hasNativeSpeech(): boolean {
+  return typeof speechSynthesis !== "undefined" && typeof SpeechSynthesisUtterance !== "undefined";
+}
+
+function speakNatively(text: string, rate: number): boolean {
+  if (!hasNativeSpeech()) return false;
+  try {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "da-DK";
+    utterance.rate = rate * speed;
+    const voice = danishVoice();
+    if (voice) utterance.voice = voice;
+    speechSynthesis.speak(utterance);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// -------------------------------------------------------------------- ai path
+
+// One element for the whole app, so starting a new clip stops the previous one.
+let player: HTMLAudioElement | null = null;
+
+/**
+ * Plays a clip at `rate` — the speaking speed. Clips are made at the voice's
+ * own pace and sped up or slowed down here, keeping their pitch, so the
+ * setting applies to every clip at once, stored ones included.
+ */
+function play(mime: string, base64: string, rate = speed): Promise<void> {
+  if (!player) player = new Audio();
+  player.pause();
+  player.src = `data:${mime};base64,${base64}`;
+  player.preservesPitch = true;
+  player.defaultPlaybackRate = rate;
+  player.playbackRate = rate;
+  // Autoplay policies can reject this when there was no user gesture; the
+  // caller treats that as "no audio" rather than an error worth showing.
+  return player.play();
+}
+
+/** Plays an already-fetched clip, e.g. a voice preview from Settings. */
+export function playClip(clip: { mime: string; base64: string }): Promise<void> {
+  return play(clip.mime, clip.base64);
+}
+
+export function stop(): void {
+  sequenceToken++;
+  setConversation(null);
+  player?.pause();
+  if (hasNativeSpeech()) {
+    try {
+      speechSynthesis.cancel();
+    } catch {
+      /* nothing playing */
+    }
+  }
+}
+
+/** True when *some* engine could produce audio for this device. */
+export function canSpeak(): boolean {
+  return aiVoiceReady() || hasNativeSpeech();
+}
+
+/** True when audio needs a network round trip the first time it is requested. */
+export function usingAiVoice(): boolean {
+  return aiVoiceReady();
+}
+
+export class SpeechError extends Error {}
+
+/**
+ * Speaks Danish. Resolves once playback has started; rejects only when the AI
+ * voice was asked for and could not deliver, so the UI can explain why.
+ */
+export async function speak(text: string, gender = "", rate = 0.85): Promise<void> {
+  // A line asked for on its own ends a conversation that is playing.
+  if (conversation?.playing) stopConversation();
+  return speakLine(text, gender, rate);
+}
+
+/**
+ * Speaks a line slowly and clearly — its own version, made once and kept,
+ * for a sentence that needs hearing properly.
+ */
+export async function speakSlowly(text: string, gender = ""): Promise<void> {
+  if (conversation?.playing) stopConversation();
+  return speakLine(text, gender, 0.6, true);
+}
+
+async function speakLine(text: string, gender = "", rate = 0.85, slow = false): Promise<void> {
+  const line = text.trim();
+  if (!line) return;
+
+  if (aiVoiceReady()) {
+    try {
+      const clip = await api.speak(line, gender, slow);
+      // The slow version is slow already; the speed setting is for the rest.
+      await play(clip.mime, clip.base64, slow ? 1 : speed);
+      return;
+    } catch (cause) {
+      // Fall back to the platform engine if there is one; otherwise report the
+      // backend's message, which names the model or key that failed.
+      if (speakNatively(line, rate)) return;
+      throw new SpeechError(
+        typeof cause === "string" ? cause : (cause as Error)?.message ?? "Could not play audio.",
+      );
+    }
+  }
+
+  if (!speakNatively(line, rate)) {
+    throw new SpeechError(unavailableReason());
+  }
+}
+
+/** Fire-and-forget speech for places that cannot show an error. */
+export function speakQuietly(text: string, gender = "", rate = 0.85): void {
+  void speak(text, gender, rate).catch(() => {
+    /* the 🔊 button reports failures; auto-play stays silent */
+  });
+}
+
+let sequenceToken = 0;
+
+// ------------------------------------------------------------ conversations
+
+export interface ConversationLine {
+  text: string;
+  gender?: string;
+}
+
+/**
+ * The conversation being read out: which one (`key`), its lines, the line
+ * now, and whether it is playing or paused there. One at a time.
+ */
+export interface Conversation {
+  key: string;
+  lines: ConversationLine[];
+  index: number;
+  playing: boolean;
+}
+
+let conversation: Conversation | null = null;
+const conversationListeners = new Set<() => void>();
+
+function setConversation(next: Conversation | null) {
+  conversation = next;
+  for (const listener of conversationListeners) listener();
+}
+
+export function subscribeConversation(listener: () => void): () => void {
+  conversationListeners.add(listener);
+  return () => conversationListeners.delete(listener);
+}
+
+export function currentConversation(): Conversation | null {
+  return conversation;
+}
+
+/** A conversation's identity: its lines, so the same one is recognised. */
+export function conversationKey(lines: ConversationLine[]): string {
+  return lines.map((line) => line.text).join("\u0001");
+}
+
+/**
+ * Reads a conversation line by line from `from`, each line waiting for the
+ * one before. Lines reuse the cache the 🔊 buttons fill, instead of paying
+ * for one long clip that duplicates them.
+ */
+export async function playConversation(lines: ConversationLine[], from = 0, gapMs = 350): Promise<void> {
+  const token = ++sequenceToken;
+  const key = conversationKey(lines);
+  for (let index = from; index < lines.length; index++) {
+    // A newer sequence, a pause or a stop cancels this one.
+    if (token !== sequenceToken) return;
+    setConversation({ key, lines, index, playing: true });
+    await speakLine(lines[index].text, lines[index].gender ?? "");
+    await finished();
+    if (token !== sequenceToken) return;
+    await new Promise((resolve) => setTimeout(resolve, gapMs));
+  }
+  if (token === sequenceToken) setConversation(null);
+}
+
+/** Pauses on the current line; resume carries on from it. */
+export function pauseConversation() {
+  if (!conversation) return;
+  const paused = { ...conversation, playing: false };
+  sequenceToken++;
+  player?.pause();
+  if (hasNativeSpeech()) {
+    try {
+      speechSynthesis.cancel();
+    } catch {
+      /* nothing playing */
+    }
+  }
+  setConversation(paused);
+}
+
+export function resumeConversation() {
+  if (!conversation || conversation.playing) return;
+  void playConversation(conversation.lines, conversation.index).catch(() => setConversation(null));
+}
+
+export function stopConversation() {
+  if (conversation) stop();
+}
+
+/** Plays several lines back to back (a conversation). */
+export async function speakSequence(lines: ConversationLine[], gapMs = 350): Promise<void> {
+  return playConversation(lines, 0, gapMs);
+}
+
+/** Resolves when the current clip stops, whichever engine is playing it. */
+function finished(): Promise<void> {
+  if (aiVoiceReady() && player) {
+    const element = player;
+    if (element.ended || element.paused) return Promise.resolve();
+    return new Promise((resolve) => {
+      const done = () => {
+        element.removeEventListener("ended", done);
+        element.removeEventListener("error", done);
+        element.removeEventListener("pause", done);
+        resolve();
+      };
+      element.addEventListener("ended", done);
+      element.addEventListener("error", done);
+      element.addEventListener("pause", done);
+    });
+  }
+  if (!hasNativeSpeech()) return Promise.resolve();
+  return new Promise((resolve) => {
+    const poll = setInterval(() => {
+      if (!speechSynthesis.speaking) {
+        clearInterval(poll);
+        resolve();
+      }
+    }, 120);
+  });
+}

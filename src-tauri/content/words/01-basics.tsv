@@ -1,0 +1,226 @@
+# danish	english	pos
+hej	hi; hello	interj
+hej hej	bye	interj
+godmorgen	good morning	interj
+goddag	good day; hello	interj
+godaften	good evening	interj
+godnat	good night	interj
+farvel	goodbye	interj
+vi ses	see you	phr
+vi ses i morgen	see you tomorrow	phr
+på gensyn	until we meet again	phr
+velkommen	welcome	interj
+velbekomme	you are welcome (after a meal); enjoy your meal	interj
+tak	thank you	interj
+mange tak	many thanks	phr
+tusind tak	thank you very much	phr
+selv tak	thank you too; you are welcome	phr
+det var så lidt	you are welcome; it was nothing	phr
+undskyld	excuse me; sorry	interj
+beklager	sorry; I apologize	interj
+pyt	never mind	interj
+ja	yes	adv
+nej	no	adv
+jo	yes (contradicting a negative)	adv
+måske	perhaps; maybe	adv
+selvfølgelig	of course	adv
+helt sikkert	definitely	phr
+gerne	gladly; willingly	adv
+hellere	rather; preferably	adv
+værsgo	here you are; please go ahead	interj
+skål	cheers	interj
+til lykke	congratulations	phr
+god fornøjelse	have fun; enjoy yourself	phr
+god weekend	have a good weekend	phr
+held og lykke	good luck	phr
+hvordan går det	how are things	phr
+det går godt	things are going well	phr
+rart at møde dig	nice to meet you	phr
+hvad hedder du	what is your name	phr
+jeg hedder	my name is	phr
+hvor kommer du fra	where are you from	phr
+jeg forstår ikke	I do not understand	phr
+kan du gentage det	can you repeat that	phr
+tal langsomt	speak slowly	phr
+hvad betyder det	what does that mean	phr
+hvordan siger man	how do you say	phr
+jeg lærer dansk	I am learning Danish	phr
+taler du engelsk	do you speak English	phr
+et øjeblik	one moment	phr
+lige et øjeblik	just a moment	phr
+intet problem	no problem (colloquial)	phr
+jeg	I	pron
+du	you (singular)	pron
+han	he	pron
+hun	she	pron
+den	it (common gender)	pron
+det	it (neuter); that	pron
+vi	we	pron
+I	you (plural)	pron
+de	they	pron
+De	you (formal)	pron
+mig	me	pron
+dig	you (singular object)	pron
+ham	him	pron
+hende	her (object)	pron
+os	us	pron
+jer	you (plural object)	pron
+dem	them	pron
+sig	oneself; himself; herself; themselves	pron
+man	one; people in general	pron
+min	my (common gender)	pron
+mit	my (neuter)	pron
+mine	my (plural)	pron
+din	your (singular, common gender)	pron
+dit	your (singular, neuter)	pron
+dine	your (singular, plural nouns)	pron
+hans	his	pron
+hendes	her (possessive)	pron
+vores	our	pron
+jeres	your (plural possessive)	pron
+deres	their	pron
+sin	his/her own (common gender)	pron
+sit	his/her own (neuter)	pron
+sine	his/her own (plural)	pron
+hvem	who	pron
+hvad	what	pron
+hvilken	which (common gender)	pron
+hvilket	which (neuter)	pron
+hvilke	which (plural)	pron
+hvor	where	adv
+hvornår	when	adv
+hvorfor	why	adv
+hvordan	how	adv
+hvor meget	how much	phr
+hvor mange	how many	phr
+her	here (location)	adv
+der	there (location)	adv
+herhen	to here	adv
+derhen	to there	adv
+nogen	someone; any	pron
+noget	something; some	pron
+ingen	nobody; no	pron
+intet	nothing	pron
+alle	everyone; all	pron
+alt	everything	pron
+hver	each; every (common gender)	pron
+hvert	each; every (neuter)	pron
+begge	both	pron
+anden	other; second (common gender)	adj
+andet	other; second (neuter)	adj
+andre	others; other (plural)	pron
+samme	same	adj
+selv	self; even	pron
+sådan	like this; such	adv
+sådan her	like this	phr
+nul	zero	num
+en	one (common gender); a	num
+et	one (neuter); a	num
+to	two	num
+tre	three	num
+fire	four	num
+fem	five	num
+seks	six	num
+syv	seven	num
+otte	eight	num
+ni	nine	num
+ti	ten	num
+elleve	eleven	num
+tolv	twelve	num
+tretten	thirteen	num
+fjorten	fourteen	num
+femten	fifteen	num
+seksten	sixteen	num
+sytten	seventeen	num
+atten	eighteen	num
+nitten	nineteen	num
+tyve	twenty	num
+enogtyve	twenty-one	num
+tredive	thirty	num
+fyrre	forty	num
+halvtreds	fifty	num
+tres	sixty	num
+halvfjerds	seventy	num
+firs	eighty	num
+halvfems	ninety	num
+hundrede	hundred	num
+tusind	thousand	num
+en million	a million	num
+første	first	num
+tredje	third	num
+fjerde	fourth	num
+femte	fifth	num
+og	and	conj
+eller	or	conj
+men	but	conj
+fordi	because	conj
+hvis	if	conj
+at	that; to (infinitive marker)	conj
+som	who; which; as	conj
+når	when; whenever	conj
+selvom	although; even though	conj
+mens	while	conj
+så	so; then	adv
+også	also; too	adv
+ikke	not	adv
+kun	only	adv
+bare	just; only	adv
+meget	very; much	adv
+lidt	a little; slightly	adv
+mere	more	adv
+mindre	less	adv
+mest	most	adv
+mindst	least	adv
+igen	again	adv
+allerede	already	adv
+endnu	yet; still	adv
+stadig	still	adv
+næsten	almost	adv
+måske senere	perhaps later	phr
+både	both (in both…and)	conj
+enten	either (in either…or)	conj
+hverken	neither (in neither…nor)	conj
+at være	to be	v
+at have	to have	v
+at gøre	to do; to make	v
+at komme	to come	v
+at sige	to say	v
+at vide	to know (a fact)	v
+at kende	to know (a person or place)	v
+at forstå	to understand	v
+at tale	to speak	v
+at lære	to learn; to teach	v
+at hedde	to be called	v
+at betyde	to mean	v
+at gentage	to repeat	v
+at spørge	to ask	v
+at svare	to answer	v
+at kunne	to be able to; can	v
+at skulle	to have to; shall	v
+at ville	to want to; will	v
+at måtte	to be allowed to; must	v
+at behøve	to need	v
+at prøve	to try	v
+at begynde	to begin	v
+at slutte	to end	v
+at fortsætte	to continue	v
+at huske	to remember	v
+at glemme	to forget	v
+et navn	a name	n-neuter
+et fornavn	a first name	n-neuter
+et efternavn	a surname	n-neuter
+et sprog	a language	n-neuter
+dansk	Danish	n
+engelsk	English	n
+en dansker	a Danish person	n-common
+Danmark	Denmark	proper
+England	England	proper
+et ord	a word	n-neuter
+en sætning	a sentence	n-common
+et spørgsmål	a question	n-neuter
+et svar	an answer	n-neuter
+en fejl	a mistake	n-common
+rigtig	correct; real	adj
+forkert	wrong; incorrect	adj
+langsomt	slowly	adv
+tydeligt	clearly	adv

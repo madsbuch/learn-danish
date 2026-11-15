@@ -1,0 +1,92 @@
+{
+  "slug": "home",
+  "title_da": "Den nye lejlighed",
+  "title_en": "The new flat",
+  "summary_en": "Anna visits Mads in his new flat in Aarhus. They talk about the rooms, rent and daily chores.",
+  "speakers": {
+    "Anna": "f",
+    "Mads": "m"
+  },
+  "lines": [
+    {
+      "speaker": "Anna",
+      "da": "Sikke en hyggelig lejlighed! Hvor længe har du boet her?",
+      "en": "What a cosy flat! How long have you lived here?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Jeg flyttede ind for to uger siden. Der står stadig flyttekasser i gangen.",
+      "en": "I moved in two weeks ago. There are still moving boxes in the hallway."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Hvor mange værelser har du?",
+      "en": "How many rooms do you have?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "En stue og to soveværelser. Det lille bruger jeg som kontor.",
+      "en": "A living room and two bedrooms. I use the small one as an office."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Og køkkenet er åbent ind til stuen. Det kan jeg godt lide.",
+      "en": "And the kitchen opens onto the living room. I like that."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Ja, så kan jeg tale med gæsterne, mens jeg laver mad.",
+      "en": "Yes, so I can talk to guests while I cook."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Er der også en altan?",
+      "en": "Is there a balcony too?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Ja, kom og se. Der er plads til to stole og et lille bord.",
+      "en": "Yes, come and see. There is room for two chairs and a small table."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Det er dejligt. Hvad betaler du i husleje?",
+      "en": "That is lovely. How much do you pay in rent?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Otte tusind om måneden. Vand og varme kommer oveni.",
+      "en": "Eight thousand a month. Water and heating cost extra."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Har du din egen vaskemaskine?",
+      "en": "Do you have your own washing machine?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Nej, der er et fælles vaskeri i kælderen. Man bestiller tid på en tavle.",
+      "en": "No, there is a shared laundry room in the basement. You book a time on a board."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Det lyder praktisk. Er der noget, du mangler?",
+      "en": "That sounds practical. Is there anything you still need?"
+    },
+    {
+      "speaker": "Mads",
+      "da": "Jeg mangler gardiner og en lampe til soveværelset.",
+      "en": "I still need curtains and a lamp for the bedroom."
+    },
+    {
+      "speaker": "Anna",
+      "da": "Jeg har en ekstra lampe derhjemme. Du må gerne få den.",
+      "en": "I have a spare lamp at home. You are welcome to have it."
+    },
+    {
+      "speaker": "Mads",
+      "da": "Tusind tak! Så er jeg snart helt på plads.",
+      "en": "Thank you so much! Then I will soon be completely settled in."
+    }
+  ]
+}

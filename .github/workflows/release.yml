@@ -1,0 +1,249 @@
+name: Build and publish latest
+
+# Every merge to main replaces the rolling "latest" release with fresh builds.
+# Pull requests test and compile Android too; only main publishes.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # A newer push to the same branch makes an older run pointless.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  # Content and UI are compiled in, so builds are reproducible from the repo alone.
+  RUST_BACKTRACE: 1
+
+jobs:
+  check:
+    name: Tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          # Pull requests read the cache but never overwrite main's.
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev pkg-config
+
+      - run: bun install --frozen-lockfile
+
+      - name: Type-check and build the frontend
+        run: bun run build
+
+      - name: Rust tests
+        working-directory: src-tauri
+        run: cargo test --locked
+
+  # The build starts alongside the tests instead of waiting for them; only
+  # publishing waits for the tests to pass.
+  android:
+    name: Android (APK)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # Caches Gradle's downloads and build cache between runs.
+      - uses: gradle/actions/setup-gradle@v4
+
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools build-tools;36.0.0 platforms;android-36 ndk;27.2.12479018"
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          key: android
+
+      - run: bun install --frozen-lockfile
+
+      - name: Locate the NDK
+        run: echo "NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> "$GITHUB_ENV"
+
+      - name: Generate and prepare the Android project
+        run: bun run android:init
+
+      # Phones only: 64-bit and 32-bit ARM. x86_64 was for emulators and cost a
+      # third of the Rust compile time.
+      - name: Build the release APK
+        run: bun run android:build
+
+      - name: Sign the APK
+        id: sign
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          tools="$ANDROID_HOME/build-tools/36.0.0"
+          mkdir -p out
+          trap 'rm -f key.jks aligned.apk' EXIT
+
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            : "${KEYSTORE_PASSWORD:?ANDROID_KEYSTORE_PASSWORD is required with a keystore}"
+            : "${KEY_PASSWORD:?ANDROID_KEY_PASSWORD is required with a keystore}"
+            : "${KEY_ALIAS:?ANDROID_KEY_ALIAS is required with a keystore}"
+            echo "$KEYSTORE_BASE64" | base64 -d > key.jks
+            store_pass="$KEYSTORE_PASSWORD"
+            key_pass="$KEY_PASSWORD"
+            alias="$KEY_ALIAS"
+            echo "stable=true" >> "$GITHUB_OUTPUT"
+          else
+            # No signing secret configured: fall back to a throwaway key so the
+            # APK is at least installable. See scripts/make-android-keystore.sh.
+            echo "::warning::No ANDROID_KEYSTORE_BASE64 secret — signing with a throwaway key. This build cannot upgrade a previous install."
+            store_pass="dansk-ephemeral"
+            key_pass="$store_pass"
+            alias="ephemeral"
+            keytool -genkeypair -keystore key.jks -alias "$alias" \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass "$store_pass" -keypass "$key_pass" \
+              -dname "CN=Dansk CI, O=Dansk, C=DK"
+            echo "stable=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          # Tauri names the output directory after the ABI set it built, so find
+          # the APK rather than assuming "universal".
+          mapfile -t apks < <(find src-tauri/gen/android/app/build/outputs/apk -name '*release*.apk')
+          if [ "${#apks[@]}" -ne 1 ]; then
+            echo "Expected one combined release APK; found ${#apks[@]}." >&2
+            find src-tauri/gen/android/app/build/outputs -type f >&2 || true
+            exit 1
+          fi
+          apk="${apks[0]}"
+
+          "$tools/zipalign" -P 16 -f 4 "$apk" aligned.apk
+          "$tools/apksigner" sign \
+            --ks key.jks --ks-pass "pass:$store_pass" \
+            --ks-key-alias "$alias" --key-pass "pass:$key_pass" \
+            --out out/Dansk-android-universal.apk aligned.apk
+          "$tools/apksigner" verify --print-certs out/Dansk-android-universal.apk
+          "$tools/zipalign" -c -P 16 4 out/Dansk-android-universal.apk
+          # apksigner also writes a v4 signature file for incremental installs;
+          # it is not needed to install the APK, so keep it out of the release.
+          rm -f out/*.idsig
+          rm -f key.jks aligned.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: out/*
+          if-no-files-found: error
+
+    outputs:
+      stable-signing: ${{ steps.sign.outputs.stable }}
+
+  publish:
+    name: Publish latest
+    permissions:
+      contents: write
+    needs: [check, android]
+    # Only main publishes. A manual run on another branch still builds the
+    # APK and keeps it as a workflow artefact, for testing before merging.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Flatten artefacts
+        run: |
+          mkdir -p release
+          find artifacts -type f -exec cp {} release/ \;
+          ls -lh release
+
+      - name: Move the latest tag to this commit
+        run: |
+          git tag -f latest "$GITHUB_SHA"
+          git push -f origin refs/tags/latest
+
+      - name: Compose release notes
+        env:
+          # Passed through the environment so quotes and newlines in the commit
+          # message cannot break the shell.
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          cat > notes.md <<'HEADER'
+          Rolling build of `main`. Replaced on every merge.
+
+          ### Install
+
+          **Android** — download `Dansk-android-universal.apk`, then open it on the
+          phone and allow installation from this source. Notifications need to be
+          granted once, in the app's Settings screen.
+
+          HEADER
+          if [ "${{ needs.android.outputs.stable-signing }}" != "true" ]; then
+            cat >> notes.md <<'WARN'
+          > **Note** — no signing key is configured, so this APK is signed with a
+          > throwaway key and cannot upgrade an earlier install. Run
+          > `scripts/make-android-keystore.sh` once and add the four secrets it
+          > prints to make upgrades seamless.
+
+          WARN
+          fi
+          {
+            echo "### This build"
+            echo
+            echo "- Commit \`${GITHUB_SHA::7}\` — ${COMMIT_MESSAGE:-manual run}" | head -1
+            echo "- Built $(date -u '+%Y-%m-%d %H:%M UTC')"
+          } >> notes.md
+
+      # Start from an empty release each time, so no asset from an older build
+      # (or a platform that is no longer built) is left behind. The tag stays.
+      - name: Remove the previous release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release delete latest --yes --repo "$GITHUB_REPOSITORY" || true
+
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest build
+          body_path: notes.md
+          files: release/*
+          draft: false
+          prerelease: false
+          make_latest: true
+          # Point the `latest` tag at this commit instead of leaving it behind.
+          target_commitish: ${{ github.sha }}

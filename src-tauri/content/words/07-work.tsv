@@ -1,0 +1,207 @@
+# danish	english	pos
+et arbejde	work; a job	n-neuter
+et job	a job	n-neuter
+en arbejdsplads	a workplace	n-common
+en medarbejder	an employee; a staff member	n-common
+en kollega	a colleague	n-common
+en chef	a boss	n-common
+en leder	a manager; a leader	n-common
+en arbejdsgiver	an employer	n-common
+en arbejdstager	an employee; a worker	n-common
+en ansat	an employee	n-common
+en afdeling	a department	n-common
+et team	a team	n-neuter
+et firma	a company; a firm	n-neuter
+en virksomhed	a business; an enterprise	n-common
+en organisation	an organisation	n-common
+et kontor	an office	n-neuter
+et mødelokale	a meeting room	n-neuter
+et skrivebord	a desk	n-neuter
+en kontorstol	an office chair	n-common
+en opslagstavle	a noticeboard	n-common
+en printer	a printer	n-common
+en kopimaskine	a photocopier	n-common
+en projektor	a projector	n-common
+et whiteboard	a whiteboard	n-neuter
+en hæftemaskine	a stapler	n-common
+en papirclips	a paper clip	n-common
+en hulmaskine	a hole punch	n-common
+en kuglepen	a ballpoint pen	n-common
+en blyant	a pencil	n-common
+et viskelæder	an eraser	n-neuter
+en lineal	a ruler	n-common
+en notesbog	a notebook	n-common
+et ringbind	a ring binder	n-neuter
+en mappe	a folder	n-common
+et dokument	a document	n-neuter
+en blanket	a form	n-common
+en underskrift	a signature	n-common
+en kontrakt	a contract	n-common
+en stilling	a position; a post	n-common
+en ansøgning	an application	n-common
+et CV	a CV; a résumé	n-neuter
+en jobsamtale	a job interview	n-common
+en jobannonce	a job advert	n-common
+en erfaring	an experience; experience	n-common
+en kvalifikation	a qualification	n-common
+en kompetence	a skill; a competency	n-common
+en reference	a reference	n-common
+en uddannelse	an education; a qualification	n-common
+en praktik	an internship; practical training	n-common
+en praktikant	an intern; a trainee	n-common
+en elevplads	an apprenticeship position	n-common
+en lærling	an apprentice	n-common
+en karriere	a career	n-common
+en forfremmelse	a promotion	n-common
+en opsigelse	a resignation; notice of dismissal	n-common
+en fyring	a dismissal from a job	n-common
+en løn	a salary; wages	n-common
+en lønseddel	a payslip	n-common
+en timeløn	an hourly wage	n-common
+en månedsløn	a monthly salary	n-common
+en pension	a pension	n-common
+en fagforening	a trade union	n-common
+en overenskomst	a collective agreement	n-common
+en tillidsrepræsentant	a union representative	n-common
+en arbejdstid	working hours	n-common
+en arbejdsdag	a working day	n-common
+en arbejdsuge	a working week	n-common
+en vagtplan	a shift schedule	n-common
+en nattevagt	a night shift	n-common
+en pause	a break	n-common
+en frokostpause	a lunch break	n-common
+en fridag	a day off	n-common
+en orlov	a leave of absence	n-common
+en barselsorlov	parental leave	n-common
+en sygemelding	a notification of sickness absence	n-common
+et overarbejde	overtime	n-neuter
+en deltid	part-time work	n-common
+en fuldtid	full-time work	n-common
+en fleksibilitet	flexibility	n-common
+en opgave	a task; an assignment	n-common
+et projekt	a project	n-neuter
+en tidsfrist	a deadline	n-common
+en prioritet	a priority	n-common
+et mål	a goal; an objective	n-neuter
+et resultat	a result	n-neuter
+en rapport	a report	n-common
+en analyse	an analysis	n-common
+en undersøgelse	an investigation; a study	n-common
+en løsning	a solution	n-common
+en beslutning	a decision	n-common
+et forslag	a suggestion; a proposal	n-neuter
+en strategi	a strategy	n-common
+en planlægning	planning	n-common
+en præsentation	a presentation	n-common
+et møde	a meeting	n-neuter
+en dagsorden	an agenda	n-common
+et referat	minutes of a meeting; a summary	n-neuter
+en deltager	a participant	n-common
+en forhandling	a negotiation	n-common
+en samarbejdspartner	a collaborator; a business partner	n-common
+et samarbejde	cooperation; collaboration	n-neuter
+en tilbagemelding	feedback; a response	n-common
+en instruktion	an instruction	n-common
+en vejledning	guidance; instructions	n-common
+en procedure	a procedure	n-common
+en sikkerhedsregel	a safety rule	n-common
+et arbejdsmiljø	a working environment	n-neuter
+en sikkerhedshjelm	a safety helmet	n-common
+en håndværker	a tradesperson	n-common
+en tømrer	a carpenter	n-common
+en elektriker	an electrician	n-common
+en murer	a bricklayer	n-common
+en smed	a metalworker; a blacksmith	n-common
+en mekaniker	a mechanic	n-common
+en ingeniør	an engineer	n-common
+en arkitekt	an architect	n-common
+en programmør	a programmer	n-common
+en revisor	an accountant; an auditor	n-common
+en advokat	a lawyer	n-common
+en journalist	a journalist	n-common
+en forsker	a researcher	n-common
+en oversætter	a translator	n-common
+en tolk	an interpreter	n-common
+en pædagog	a trained educator; a childcare professional	n-common
+en lærer	a teacher	n-common
+en underviser	an instructor; a teacher	n-common
+en skole	a school	n-common
+en folkeskole	a Danish public primary and lower secondary school	n-common
+et gymnasium	an upper secondary school	n-neuter
+en erhvervsskole	a vocational school	n-common
+et universitet	a university	n-neuter
+en højskole	a folk high school	n-common
+en sprogskole	a language school	n-common
+en klasse	a class	n-common
+et klasseværelse	a classroom	n-neuter
+et hold	a class group; a team	n-neuter
+en elev	a school pupil	n-common
+en studerende	a student in further or higher education	n-common
+en medstuderende	a fellow student	n-common
+en studievejleder	a student adviser	n-common
+en rektor	a headteacher; a university rector	n-common
+en lektion	a lesson	n-common
+en undervisning	teaching; tuition	n-common
+en forelæsning	a lecture	n-common
+et seminar	a seminar	n-neuter
+et kursus	a course	n-neuter
+et fag	a school subject; a field	n-neuter
+en læseplan	a curriculum	n-common
+et skema	a timetable; a schedule	n-neuter
+et semester	a semester	n-neuter
+en eksamen	an examination	n-common
+en prøve	a test	n-common
+en karakter	a grade; a mark	n-common
+et eksamensbevis	an examination certificate	n-neuter
+en aflevering	a submitted assignment	n-common
+en lektie	a homework task; a lesson to prepare	n-common
+et gruppearbejde	group work	n-neuter
+en lærebog	a textbook	n-common
+et kapitel	a chapter	n-neuter
+en side	a page	n-common
+et afsnit	a paragraph; a section	n-neuter
+en overskrift	a heading; a headline	n-common
+en fodnote	a footnote	n-common
+en kilde	a source	n-common
+et citat	a quotation	n-neuter
+en ordbog	a dictionary	n-common
+en grammatik	grammar; a grammar book	n-common
+en udtale	pronunciation	n-common
+et ordforråd	a vocabulary	n-neuter
+en stavning	spelling	n-common
+en rettelse	a correction	n-common
+at arbejde	to work	v
+at søge arbejde	to look for work	v
+at ansætte	to employ; to hire	v
+at sige op	to resign	v
+at møde ind	to arrive at work	v
+at holde fri	to take time off	v
+at samarbejde	to cooperate; to collaborate	v
+at planlægge	to plan	v
+at organisere	to organise	v
+at prioritere	to prioritise	v
+at forberede	to prepare	v
+at deltage	to participate	v
+at aflyse	to cancel	v
+at udsætte	to postpone	v
+at underskrive	to sign	v
+at godkende	to approve	v
+at undervise	to teach	v
+at studere	to study	v
+at øve sig	to practise	v
+at aflevere	to hand in	v
+at bestå	to pass an exam	v
+at dumpe	to fail an exam	v
+at rette	to correct; to mark	v
+at forklare	to explain	v
+at notere	to note down	v
+at undersøge	to investigate; to examine	v
+at løse	to solve	v
+faglig	professional; academic	adj
+mundtlig	oral; spoken	adj
+skriftlig	written	adj
+obligatorisk	compulsory	adj
+valgfri	optional	adj
+ansvarlig	responsible	adj
+arbejdsløs	unemployed	adj
+selvstændig	self-employed; independent	adj
