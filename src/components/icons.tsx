@@ -255,7 +255,7 @@ export function CheckIcon() {
   );
 }
 
-/** A drill block: quick, mechanical practice. */
+/** A drill lesson: quick, mechanical practice. */
 export function DrillIcon() {
   return (
     <Glyph>
@@ -264,7 +264,7 @@ export function DrillIcon() {
   );
 }
 
-/** A study block: a lesson to read, then a check-in. */
+/** A study lesson: a lesson to read, then a check-in. */
 export function StudyIcon() {
   return (
     <Glyph>
@@ -274,7 +274,7 @@ export function StudyIcon() {
   );
 }
 
-/** A writing block: a conversation written in Danish. */
+/** A writing lesson: a conversation written in Danish. */
 export function WriteIcon() {
   return (
     <Glyph>
