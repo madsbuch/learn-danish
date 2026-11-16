@@ -1373,7 +1373,7 @@ mod integration {
             podcast: None,
             sections: vec![songs::SongSection {
                 kind: "chorus".into(),
-                lines: vec![songs::SongLine { en: "A coffee, please".into(), da: "En kaffe, tak".into() }],
+                lines: vec![songs::SongLine { en: "A coffee, please".into(), da: "En kaffe, tak".into(), ..Default::default() }],
             }],
         })
         .unwrap();
