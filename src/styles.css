@@ -985,3 +985,12 @@ html.scanning #root {
   padding: var(--space-4) var(--gutter) calc(var(--safe-bottom) + var(--space-6));
   background: var(--bg);
 }
+
+/* After a wrong answer: the answer to hear, and the word in sentences. */
+.wrong-review {
+  width: 100%;
+}
+.wrong-examples {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--bad-line);
+}
