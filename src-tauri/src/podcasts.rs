@@ -27,11 +27,10 @@ use crate::songs::{self, Song, SongDraft, SongLine, SongOrigin, SongSection, Sou
 use crate::speech::{self, Delivery};
 use crate::wiki;
 
-/// The formats an episode can take, each a way of writing and reading it.
-/// "pairs": everyday sentences, English then Danish, like a song's verses.
+/// The formats an episode can take, each a way of writing and reading it
+/// (see `format_of`). "pairs": each sentence in English, then in Danish.
 /// "immersion": only Danish is spoken, in simpler sentences; the English
 /// meaning is shown with each line but not said.
-pub const FORMATS: &[&str] = &["pairs", "immersion"];
 pub const DEFAULT_FORMAT: &str = "pairs";
 
 /// The most of the articles the writer reads, shared between them.
