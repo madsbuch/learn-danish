@@ -114,10 +114,11 @@ diesel::table! {
 }
 
 diesel::table! {
-    /// Wikipedia articles a study lesson is built on (wiki.rs).
+    /// Wikipedia articles a study lesson or a podcast is built on (wiki.rs).
     wiki_sources (id) {
         id -> BigInt,
-        lesson_id -> BigInt,
+        lesson_id -> Nullable<BigInt>,
+        song_id -> Nullable<BigInt>,
         ord -> BigInt,
         lang -> Text,
         title -> Text,
@@ -130,6 +131,8 @@ diesel::table! {
         da_title -> Nullable<Text>,
         da_url -> Nullable<Text>,
         da_content -> Nullable<Text>,
+        html -> Nullable<Text>,
+        da_html -> Nullable<Text>,
         fetched_at -> BigInt,
         checked_at -> BigInt,
     }
