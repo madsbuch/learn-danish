@@ -90,7 +90,8 @@ The app:
   not completing. Writing lessons start guided (word bank, hints) and step up as they pass.
 - Every course has a CEFR level (A1–C2): give one when you make a course — what its words, \
   grammar and tasks demand — and give a lesson its own (update_lesson) only when it differs, \
-  like a challenge a level up. A small model checks each new course's level afterwards.
+  like a challenge a level up. A level you give always stands; a course made without one gets \
+  it from a small model's check of its core lessons.
 - Levels describe material; they never limit it. Make exactly what the learner asks for, at \
   whatever level they ask — never refuse, water down or second-guess a harder request. When no \
   level is asked for, fit what they have been doing; \"harder\" means a level up.
@@ -110,8 +111,11 @@ The app:
   language hook (the city in \"i København\", \"fra København\").
 - Danish must be correct, with diacritics. Words in dictionary form with a short gloss; preserve \
   correct capitalization (the pronoun I and proper names). Sentences should be short and natural.
-- Songs cost the learner credits: one per request. File a new song under the course it fits; \
-  to sort older ones, read their lyrics with get_song and move their lesson with move_lesson.
+- Songs cost the learner credits: one per request. Give a new song or podcast the course it \
+  fits (course_id): it is filed there, with its listening lesson. Put the course's level and the \
+  words it should use in requirements — the songwriter writes at the level it is given (a \
+  beginner's when none is). To sort older ones, read their lyrics with get_song and move their \
+  lesson with move_lesson.
 - You have full control over songs and podcasts. make_song and make_podcast write and make one \
   in one go. When it has to meet something — words from a course (get_course for them), \
   grammar, line length, a structure — draft it first (draft_song, draft_podcast) with those \
@@ -478,7 +482,7 @@ pub fn tool_definitions() -> Vec<Tool> {
                 "properties": {
                     "title": { "type": "string", "description": "Short, e.g. \"Where do you live?\"" },
                     "summary": { "type": "string", "description": "One sentence: what the learner does" },
-                    "complexity": { "type": "string", "enum": ["low", "medium", "high"], "description": "How much Danish it takes: low — a few simple sentences; medium — a short exchange; high — a real conversation. Also sets how simply the partner writes." },
+                    "complexity": { "type": "string", "enum": ["low", "medium", "high"], "description": "How much Danish it takes: low — a few simple sentences; medium — a short exchange; high — a real conversation. How simply the partner writes follows the course's level (or the lesson's own)." },
                     "scenario": { "type": "string", "description": "The situation in English, to the learner: where they are and who they are writing with, e.g. \"You've just moved in. Your new neighbour Pani Ewa stops you on the stairs.\"" },
                     "goals": { "type": "array", "items": { "type": "string" }, "description": "1–4 things the learner has to get across, e.g. \"Say which city you live in\", \"Say who you live with\"" },
                     "period_days": { "type": "integer", "description": "Days between check-ins; leave out for the default" },
@@ -1646,7 +1650,7 @@ fn run_tool(conn: &mut Conn, name: &str, arguments: &str) -> Result<Outcome> {
             let lessons_made = lessons::for_course(conn, course_id)?.len();
             label.push_str(&format!(" · {lessons_made} lessons"));
             Ok(Outcome::acted(
-                json!({ "created": created, "lessons": lessons_made, "lessons": lessons, "writing": writing, "problems": problems }),
+                json!({ "created": created, "total_lessons": lessons_made, "study_lessons_made": lessons, "writing": writing, "problems": problems }),
                 "courseCreated",
                 label,
                 Some(created.course_id),
@@ -3149,8 +3153,8 @@ pub(crate) fn word_chat_rules(about: &str) -> String {
 - When they answer, react like a person would. If their Danish has a slip, show the right form in \
   passing and why, briefly. Then take it one step further: a related phrase, another form, or a \
   new little situation to try.
-- Grammar only when it helps them say the next thing. If they want practice on it, you can make \
-  a lesson — when they ask."
+- Grammar only when it helps them say the next thing. If practice on it would help, offer a \
+  lesson in one line; make it when they say yes."
     )
 }
 
