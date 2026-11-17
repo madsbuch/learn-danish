@@ -102,12 +102,12 @@ Beyond the small demo, course content is created in the app and stored in its
 database. Development tests use isolated historical fixtures; those old
 courses are not included in the app.
 
-## Android releases
+## Releases
 
-The included GitHub workflow tests the app and compiles Android on pull requests.
-On `main`, it also publishes
-`Dansk-android-universal.apk` as a rolling `latest` release after both jobs pass.
-Manual runs on other branches keep the APK as an artifact without publishing.
+The included GitHub workflow tests the app and compiles Android and macOS on
+pull requests. On `main`, it also publishes `Dansk-android-universal.apk` and
+`Dansk-macos-universal.dmg` as a rolling `latest` release after all jobs pass.
+Manual runs on other branches keep the APK and DMG as artifacts without publishing.
 It is not published by local builds. Android initialization applies the same
 launcher icons and keyboard handling locally and in CI.
 
@@ -121,3 +121,8 @@ Keep both the keystore and its password details safe: future upgrades must use
 the same key. GitHub stores the CI copy as encrypted repository secrets.
 For a separate installation, `./scripts/make-android-keystore.sh` generates a
 new key and describes the four secrets to configure.
+
+The macOS DMG holds one universal app (Apple Silicon and Intel). It is ad-hoc
+signed and not notarized, so the first launch is blocked by Gatekeeper: run
+`xattr -dr com.apple.quarantine /Applications/Dansk.app`, or choose *Open Anyway*
+in System Settings → Privacy & Security after the first attempt.
