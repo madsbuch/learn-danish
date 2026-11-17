@@ -367,7 +367,7 @@ mod integration {
                                           (20, 2, 0, 'rød', 'red', 'adj'),
                                           (21, 2, 1, 'hvid', 'white', 'adj'),
                                           (22, 2, 2, 'czarny', 'black', 'adj');
-                 INSERT INTO sentences VALUES (30, 2, 0, 'Himmel jest blåe.', 'The sky is blue.');
+                 INSERT INTO sentences VALUES (30, 2, 0, 'Himlen er blå.', 'The sky is blue.');
                  INSERT INTO conversation_lines VALUES (40, 1, 0, 'Anna', 'f', 'Godmorgen!', 'Good morning!');
                  INSERT INTO reviews VALUES ('word', 10, 100, 3, 2.5, 2, 0, 97), ('word', 20, 100, 3, 2.5, 4, 0, 97);
                  -- A starter topic, cut into a dialogue and a word drill.
@@ -1148,7 +1148,7 @@ mod integration {
             .map(|i| serde_json::json!({ "da": format!("ord{i}"), "en": format!("word {i}"), "pos": "n" }))
             .collect();
         let sentences: Vec<serde_json::Value> = (0..10)
-            .map(|i| serde_json::json!({ "da": format!("To jest zdanie {i}."), "en": format!("This is sentence {i}.") }))
+            .map(|i| serde_json::json!({ "da": format!("Dette er sætning {i}."), "en": format!("This is sentence {i}.") }))
             .collect();
         let study = |title: &str| {
             serde_json::json!({
@@ -1432,7 +1432,7 @@ mod integration {
                 ],
                 "sentences": [
                     { "da": "Min bil er rød.", "en": "My car is red." },
-                    { "da": "Himmel jest blåe.", "en": "The sky is blue." }
+                    { "da": "Himlen er blå.", "en": "The sky is blue." }
                 ],
                 "dialogue": [
                     { "speaker": "Ola", "gender": "f", "da": "Hvad er din yndlingsfarve?", "en": "What is your favourite colour?" },
@@ -1911,7 +1911,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         conn.batch_execute(
             "INSERT INTO songs (id, title, chorus_da, chorus_en, style, sections, lyrics, suno_model, status, created_at)
              VALUES (1, 'Kaffe', 'En kaffe, tak', 'A coffee, please', 'pop', '[]', '', 'V6', 'ready', 0),
-                    (2, 'Farver', 'Himmel jest blåe', 'The sky is blue', 'pop', '[]', '', 'V6', 'failed', 0);
+                    (2, 'Farver', 'Himlen er blå', 'The sky is blue', 'pop', '[]', '', 'V6', 'failed', 0);
 INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES (100, 'song_audio', 'f100.mp3', 'audio/mpeg', 1, '', x'00', 0);
              INSERT INTO song_tracks (id, song_id, ord, remote_id, audio_file_id, play_count)
                  VALUES (10, 1, 0, 'a', 100, 3);",

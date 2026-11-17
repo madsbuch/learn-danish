@@ -342,7 +342,7 @@ mod tests {
 
     #[test]
     fn file_names_are_safe() {
-        assert_eq!(safe_file_name("Kaffe / herbata?"), "Kaffe herbata");
+        assert_eq!(safe_file_name("Kaffe / te?"), "Kaffe te");
         assert_eq!(safe_file_name("   "), "Song");
         assert_eq!(safe_file_name("Godmorgen"), "Godmorgen");
     }
