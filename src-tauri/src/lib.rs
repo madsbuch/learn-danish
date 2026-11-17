@@ -620,7 +620,7 @@ mod integration {
 
         let in_playlist: i64 = t::playlist_tracks::table.count().get_result(&mut conn).unwrap();
         assert_eq!(in_playlist, 2, "playlists keep their takes");
-        assert_eq!(songs::list_songs(&mut conn).unwrap()[0].tracks.len(), 2);
+        assert_eq!(songs::list_songs(&mut conn, false).unwrap()[0].tracks.len(), 2);
         assert_eq!(speech::audio_cache_stats_in(&mut conn).unwrap().clips, 0, "speech is made again");
 
         // Deleting the song deletes its files.
@@ -1389,6 +1389,63 @@ mod integration {
     }
 
     #[test]
+    fn drafts_stay_out_of_the_library_and_a_made_song_is_never_changed() {
+        let mut conn = scratch_db("song-drafts");
+        let draft = songs::normalize_draft(songs::SongDraft {
+            title: "Kaffe".into(),
+            chorus_da: "En kaffe, tak".into(),
+            chorus_en: "A coffee, please".into(),
+            vocal_gender: "f".into(),
+            origin: songs::SongOrigin {
+                brief: "Ordering coffee".into(),
+                made_by: "tutor".into(),
+                requirements: "Only the words of course 1.".into(),
+                given: songs::WriterInput { words: vec!["kaffe = coffee".into()], ..Default::default() },
+                instructions_version: "v1-test".into(),
+                ..Default::default()
+            },
+            sections: vec![songs::SongSection {
+                kind: "chorus".into(),
+                lines: vec![songs::SongLine { en: "A coffee, please".into(), da: "En kaffe, tak".into(), ..Default::default() }],
+            }],
+            ..Default::default()
+        })
+        .unwrap();
+
+        // A draft is the tutor's to look over: not in the Music tab yet.
+        let id = songs::insert_draft(&mut conn, &draft).unwrap();
+        assert!(songs::list_songs(&mut conn, false).unwrap().is_empty());
+        assert_eq!(songs::list_songs(&mut conn, true).unwrap()[0].status, "draft");
+        let stored = songs::load_song(&mut conn, id).unwrap();
+        assert_eq!(stored.origin.requirements, "Only the words of course 1.", "what it was made with is kept");
+        assert_eq!(stored.origin.given.words, ["kaffe = coffee"]);
+
+        // While it is a draft, it changes in place.
+        let (same, mut changed) = songs::editable(&mut conn, id, "tutor").unwrap();
+        assert_eq!(same, Some(id));
+        changed.title = "Kaffe med mælk".into();
+        assert_eq!(songs::store_draft(&mut conn, same, &changed).unwrap(), id);
+        assert_eq!(songs::load_song(&mut conn, id).unwrap().title, "Kaffe med mælk");
+
+        // Once made, changing it gives a new draft based on it.
+        diesel::update(t::songs::table.find(id)).set(t::songs::status.eq("ready")).execute(&mut conn).unwrap();
+        let (new, mut variant) = songs::editable(&mut conn, id, "tutor").unwrap();
+        assert_eq!(new, None, "saved only once the change is made");
+        assert_eq!(variant.origin.based_on, Some(id));
+        assert_eq!(variant.origin.requirements, "Only the words of course 1.", "its requirements still apply");
+        variant.origin.steps.push(songs::OriginStep { kind: "edit".into(), by: "tutor".into(), text: "Edited the style".into(), before: songs::bare(&variant), ..Default::default() });
+        variant.style = "slow piano ballad".into();
+        let new_id = songs::store_draft(&mut conn, new, &variant).unwrap();
+        assert_ne!(new_id, id);
+        let (old, new) = (songs::load_song(&mut conn, id).unwrap(), songs::load_song(&mut conn, new_id).unwrap());
+        assert_eq!((old.status.as_str(), new.status.as_str()), ("ready", "draft"));
+        assert_ne!(old.style, new.style, "the made one is untouched");
+        let step = &new.origin.steps[0];
+        assert_eq!(step.before.as_ref().unwrap().style, old.style, "a step keeps the draft before it");
+        assert_eq!(step.before.as_ref().unwrap().origin, songs::SongOrigin::default(), "without nesting origins");
+    }
+
+    #[test]
     fn songs_round_trip_with_their_lyrics_and_takes() {
         let mut conn = scratch_db("songs");
         let draft = songs::normalize_draft(songs::SongDraft {
@@ -1423,7 +1480,7 @@ mod integration {
             .execute(&mut conn)
             .unwrap();
 
-        let listed = songs::list_songs(&mut conn).unwrap();
+        let listed = songs::list_songs(&mut conn, false).unwrap();
         assert_eq!(listed.len(), 1);
         assert_eq!(listed[0].status, "generating");
         assert_eq!(listed[0].sections, draft.sections, "lyrics survive storage");
@@ -1778,7 +1835,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         stats::collect(&mut conn).unwrap();
         assert!(stats::course_progress(&mut conn).unwrap().iter().any(|p| p.total_lessons > 0));
         lessons::overview(&mut conn).unwrap();
-        songs::gather_context(&mut conn, Some(basics)).unwrap();
+        songs::gather_context(&mut conn).unwrap();
         session::build_lesson(&mut conn, drill.id).unwrap();
     }
 
@@ -1836,7 +1893,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         let gone = tutor::run_tool_for_test(&mut conn, "delete_playlist", serde_json::json!({ "playlist_id": id }));
         assert_eq!(gone["deleted"], "Rano");
         assert!(playlists::list(&mut conn).unwrap().is_empty());
-        assert_eq!(songs::list_songs(&mut conn).unwrap().len(), 3, "the songs stay");
+        assert_eq!(songs::list_songs(&mut conn, false).unwrap().len(), 3, "the songs stay");
     }
 
     #[test]
@@ -1954,7 +2011,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         let deleted = tutor::run_tool_for_test(&mut conn, "delete_songs", serde_json::json!({ "song_ids": [2, 99] }));
         assert_eq!(deleted["_action"]["kind"], "songsDeleted");
         assert_eq!(deleted["deleted"], serde_json::json!(["Farver"]));
-        assert_eq!(songs::list_songs(&mut conn).unwrap().len(), 1);
+        assert_eq!(songs::list_songs(&mut conn, false).unwrap().len(), 1);
     }
 
     #[test]
