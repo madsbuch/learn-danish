@@ -1,21 +1,17 @@
-import { useState } from "react";
-
 import { SlowButton, SpeakButton } from "../components/ui";
-import { Button, Inline, Text } from "../design";
+import { Inline, Text } from "../design";
 import { PictureCard, PictureOptions, Options, pickedAnswer, readingAnswer } from "./shared";
 import { defineExercise, type ExerciseProps } from "./types";
 
 /*
  * Picture lessons: meet it (picture, sound, word); hear it and pick its
  * picture; read it and pick its picture; see the picture and pick the word;
- * type the word from the picture. The English stays out of the way — the
- * picture carries the meaning.
+ * type the word from the picture. The picture carries the meaning; the
+ * English is shown with it when the word is new.
  */
 
-/** A new word from its picture. The English is shown only when asked for. */
+/** A new word from its picture, with its sound and its English. */
 function PictureIntroCard({ exercise }: ExerciseProps) {
-  // Lives with the card, so it starts hidden again on every new card.
-  const [showMeaning, setShowMeaning] = useState(false);
   return (
     <>
       <Text variant="eyebrow">New word</Text>
