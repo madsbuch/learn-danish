@@ -9,14 +9,19 @@ The rules that settle design questions are in
 
 ## The app
 
-- **Exercises:** daily check-ins, word cards, pictures of everyday objects,
-  typing, memory, sentence building, gap fills, dialogues, writing and
-  listening. Each lesson has one type from a single flat list; see
+- **Exercises:** drills (word cards, pictures of everyday objects, typing,
+  memory, sentence building, gap fills, dialogues) and conversations (study,
+  writing and listening). A **check-in** is a lesson coming back on its
+  schedule. Each lesson has one type from a single flat list; see
   [ADDING_A_LESSON_TYPE.md](ADDING_A_LESSON_TYPE.md). Each day the app picks the five
-  most important lessons (slipping, then due, then up to two new); doing them
-  is the day done. Mastered lessons never come back, and a mastered course
-  moves to Mastered by itself. XP, streaks and achievements carry over from
-  the original app.
+  most important lessons (slipping, then due, then up to two new) as a way in;
+  doing them is the day done. Mastery is for good: a mastered lesson never
+  comes back, and a mastered course is ready to close — *Close as mastered* is
+  your own celebration, and final. To revisit a theme, the tutor makes a new
+  course, a level up. A lesson's minutes come from one table per type
+  (`lesson_types::minutes`). Extra practice (a lesson already passed today)
+  earns half XP, still counts toward mastery, and leaves the schedule alone.
+  XP, streaks and achievements carry over from the original app.
 - **Tutor:** ask questions or have the tutor create courses, lessons, drills,
   writing situations and songs on a subject you choose. It teaches Danish in
   English and can switch to Danish conversation when requested.
