@@ -24,18 +24,12 @@ function PictureIntroCard({ exercise }: ExerciseProps) {
           <SpeakButton text={exercise.da} variant="tinted" />
           <SlowButton text={exercise.da} variant="tinted" />
         </Inline>
+        <Text variant="lead" tone="dim" weight="medium">
+          {exercise.meaning}
+        </Text>
         <Text variant="caption" tone="faint">
           {exercise.hint}
         </Text>
-        {showMeaning ? (
-          <Text variant="lead" tone="dim" weight="medium">
-            {exercise.meaning}
-          </Text>
-        ) : (
-          <Button size="sm" onClick={() => setShowMeaning(true)}>
-            Show English
-          </Button>
-        )}
       </div>
     </>
   );
