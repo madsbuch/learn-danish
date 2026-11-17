@@ -6,8 +6,10 @@ Built with **Tauri 2, Rust, SQLite and React** for Android and macOS.
 
 ## The app
 
-- **Exercises:** daily check-ins, word cards, typing, memory, sentence building,
-  gap fills, dialogues, writing and listening. Spaced repetition, XP, streaks,
+- **Exercises:** daily check-ins, word cards, pictures of everyday objects,
+  typing, memory, sentence building, gap fills, dialogues, writing and
+  listening. Each lesson has one type from a single flat list; see
+  [ADDING_A_LESSON_TYPE.md](ADDING_A_LESSON_TYPE.md). Spaced repetition, XP, streaks,
   achievements and adjustable daily goals carry over from the original app.
 - **Tutor:** ask questions or have the tutor create courses, lessons, drills,
   writing situations and songs on a subject you choose. It teaches Danish in
@@ -87,9 +89,11 @@ database copy; API keys are excluded unless explicitly included.
 ```text
 src/design/            shared components, tokens and themes
 src/screens/           exercises, tutor, music, settings and detail screens
+src/exercises/         one module per exercise kind, and their registry
 src/lib/api.ts         typed Tauri command interface
 src/lib/types.ts       shared frontend data shapes (Danish content uses da)
 src-tauri/src/         database, learning engine, agents, speech and music
+src-tauri/src/lesson_types/  every lesson type, one module each, and their registry
 src-tauri/plugins/     Android playback, sharing and background work
 ```
 
