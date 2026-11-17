@@ -31,6 +31,7 @@ diesel::table! {
         da -> Text,
         en -> Text,
         pos -> Text,
+        image_file_id -> Nullable<BigInt>,
     }
 }
 
