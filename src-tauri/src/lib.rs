@@ -1,6 +1,7 @@
 mod agent;
 mod ai;
 mod bench;
+mod convert;
 mod lessons;
 mod levels;
 mod lesson_types;
@@ -284,7 +285,7 @@ mod integration {
         // Ten courses and the course holding the grammar lessons.
         assert_eq!(t::courses::table.count().get_result::<i64>(&mut conn).unwrap(), 11);
         assert!(t::words::table.count().get_result::<i64>(&mut conn).unwrap() >= 160);
-        assert_eq!(t::sentences::table.count().get_result::<i64>(&mut conn).unwrap(), content::COURSES.iter().map(|t| content::parse_sentences(t.sentences).len() as i64).sum::<i64>());
+        assert_eq!(t::sentences::table.count().get_result::<i64>(&mut conn).unwrap(), content::COURSES.iter().map(|t| crate::convert::count(content::parse_sentences(t.sentences).len())).sum::<i64>());
         assert!(t::conversation_lines::table.count().get_result::<i64>(&mut conn).unwrap() >= 100);
 
         // Opening again must not duplicate anything — and a starter course the
@@ -973,7 +974,7 @@ mod integration {
         assert!(lessons::stamp_mastered(&mut conn, mastered).unwrap());
 
         let first = plan::plan(&mut conn, today).unwrap();
-        assert_eq!(first.left.len(), plan::DEFAULT_DAILY as usize, "five, not everything due");
+        assert_eq!(first.left.len(), crate::convert::index(plan::DEFAULT_DAILY), "five, not everything due");
         assert_eq!(first.left[0], slipping, "what slipped comes first");
         assert!(!first.left.contains(&mastered), "a mastered lesson is out of play");
         assert_eq!(plan::plan(&mut conn, today).unwrap().left, first.left, "kept for the day");
@@ -1145,9 +1146,9 @@ mod integration {
         }
         let status = courses::status(&mut conn, course).unwrap();
         assert_eq!(status.status, "completed");
-        assert_eq!((status.passed_core, status.challenges), (core.len() as i64, 1));
+        assert_eq!((status.passed_core, status.challenges), (crate::convert::count(core.len()), 1));
         assert_eq!((status.mastered_lessons, status.next_lesson), (0, None), "passed, but not mastered yet");
-        assert_eq!((status.mastery_points, status.mastery_max), (30 * core.len() as i64, 100 * ids.len() as i64));
+        assert_eq!((status.mastery_points, status.mastery_max), (30 * crate::convert::count(core.len()), 100 * crate::convert::count(ids.len())));
         let first = courses::milestones(&mut conn).unwrap();
         assert!(first.iter().any(|m| m.course_id == course && !m.mastered), "{first:?}");
         assert!(courses::milestones(&mut conn).unwrap().iter().all(|m| m.course_id != course), "celebrated once");
@@ -1158,13 +1159,13 @@ mod integration {
         }
         let status = courses::status(&mut conn, course).unwrap();
         assert_eq!(status.status, "completed", "the challenge is not done");
-        assert_eq!(status.mastered_lessons, core.len() as i64);
+        assert_eq!(status.mastered_lessons, crate::convert::count(core.len()));
         set(&mut conn, *challenge, 1, 100);
         assert_eq!(courses::status(&mut conn, course).unwrap().status, "mastered");
         assert!(courses::milestones(&mut conn).unwrap().iter().any(|m| m.course_id == course && m.mastered));
         assert!(courses::status(&mut conn, course).unwrap().closed_at.is_none(), "mastered: ready to close, by the learner");
         let closed = courses::close(&mut conn, course).unwrap();
-        assert_eq!(closed.lessons, ids.len() as i64);
+        assert_eq!(closed.lessons, crate::convert::count(ids.len()));
         assert!(closed.days >= 1);
         assert!(courses::status(&mut conn, course).unwrap().closed_at.is_some());
 
@@ -1256,7 +1257,7 @@ mod integration {
         assert!(courses::close(&mut conn, course).is_err(), "closed once");
 
         let summary = stats::mastered_summary(&mut conn).unwrap();
-        assert_eq!((summary.courses, summary.lessons), (1, ids.len() as i64));
+        assert_eq!((summary.courses, summary.lessons), (1, crate::convert::count(ids.len())));
         assert_eq!(stats::collect(&mut conn).unwrap().mastered, summary);
 
 
@@ -1602,7 +1603,7 @@ mod integration {
         let overview = speech::audio_overview_in(&mut conn).unwrap();
         let course = overview.courses.iter().find(|c| c.course_id == basics).unwrap();
         assert_eq!((course.stored, course.bytes), (1, 3));
-        assert_eq!(course.total, items.len() as i64);
+        assert_eq!(course.total, crate::convert::count(items.len()));
         assert_eq!((overview.clips, overview.unused_clips), (2, 1), "the old voice's clip is unused");
         assert!(speech::course_audio_in(&mut conn, basics).unwrap()[0].stored);
 
@@ -1722,7 +1723,7 @@ mod integration {
         // Four of the five have their pictures; the fifth is not drawn yet.
         let ids: Vec<i64> = t::words::table.filter(t::words::lesson_id.eq(lesson.id)).order(t::words::ord).select(t::words::id).load(&mut conn).unwrap();
         for (n, id) in ids.iter().take(4).enumerate() {
-            let file = files::store(&mut conn, files::WORD_IMAGE, &format!("w{n}.jpg"), "image/jpeg", &[n as u8]).unwrap();
+            let file = files::store(&mut conn, files::WORD_IMAGE, &format!("w{n}.jpg"), "image/jpeg", &[u8::try_from(n).unwrap()]).unwrap();
             diesel::update(t::words::table.find(id)).set(t::words::image_file_id.eq(file)).execute(&mut conn).unwrap();
         }
         assert_eq!(pictures::missing(&mut conn, lesson.id).unwrap(), [ids[4]]);
@@ -2000,7 +2001,7 @@ mod integration {
             .count()
             .get_result(&mut conn)
             .unwrap();
-        assert_eq!(reach as usize, words.len());
+        assert_eq!(crate::convert::index(reach), words.len());
 
         // Out of one course, it stays; out of the last, it goes with its words.
         let out = tutor::run_tool_for_test(

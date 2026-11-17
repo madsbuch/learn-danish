@@ -402,11 +402,11 @@ pub async fn bench_run(app: tauri::AppHandle, db: State<'_, Db>, model: String) 
 
     let part = |name: &str| -> i64 {
         let scores: Vec<f64> = outcomes.iter().filter(|o| o.0.part == name).map(|o| o.0.score).collect();
-        if scores.is_empty() { 0 } else { (scores.iter().sum::<f64>() / scores.len() as f64 * 100.0).round() as i64 }
+        if scores.is_empty() { 0 } else { crate::convert::round(scores.iter().sum::<f64>() / crate::convert::real_len(scores.len()) * 100.0) }
     };
     let (danish, tools_score, rules) = (part("danish"), part("tools"), part("rules"));
-    let score = ((danish + tools_score + rules) as f64 / 3.0).round() as i64;
-    let seconds = outcomes.iter().map(|o| o.1).sum::<f64>() / outcomes.len().max(1) as f64;
+    let score = crate::convert::round(crate::convert::real(danish + tools_score + rules) / 3.0);
+    let seconds = outcomes.iter().map(|o| o.1).sum::<f64>() / crate::convert::real_len(outcomes.len().max(1));
     let priced: Vec<f64> = outcomes.iter().filter_map(|o| o.2).collect();
     let cost_usd: Option<f64> = (!priced.is_empty()).then(|| priced.iter().sum());
     // Keep the suite's order, not the order answers came back in.
