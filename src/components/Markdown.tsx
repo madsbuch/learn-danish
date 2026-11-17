@@ -43,7 +43,8 @@ function renderBlocks(source: string): ReactNode[] {
       case "heading": {
         // Markdown h1/h2 inside a card should not dwarf the screen's own
         // heading, so everything shifts down a couple of levels visually.
-        const Tag = (`h${Math.min(6, block.level + 2)}`) as "h3";
+        const shifted = block.level + 2;
+        const Tag = shifted <= 3 ? "h3" : shifted === 4 ? "h4" : shifted === 5 ? "h5" : "h6";
         return (
           <Tag key={index} className={`md-h md-h${block.level}`}>
             {renderInline(block.text)}
@@ -194,7 +195,11 @@ function parseBlocks(source: string): Block[] {
       continue;
     }
 
-    if (TABLE_ROW.test(line.trim()) && i + 1 < lines.length && TABLE_RULE.test(lines[i + 1].trim().replace(/\s/g, ""))) {
+    if (
+      TABLE_ROW.test(line.trim()) &&
+      i + 1 < lines.length &&
+      TABLE_RULE.test(lines[i + 1].trim().replace(/\s/g, ""))
+    ) {
       flush();
       const head = cells(line);
       const rows: string[][] = [];
@@ -220,7 +225,7 @@ function parseBlocks(source: string): Block[] {
       flush();
       const body = [quote[1]];
       while (i + 1 < lines.length && QUOTE.test(lines[i + 1])) {
-        body.push(QUOTE.exec(lines[++i])![1]);
+        body.push(QUOTE.exec(lines[++i])?.[1] ?? "");
       }
       blocks.push({ kind: "quote", text: body.join(" ") });
       continue;
@@ -319,7 +324,9 @@ function MathTex({ tex, display = false }: { tex: string; display?: boolean }) {
   }, [tex, display]);
   if (mathml === null) return <code className="md-code">{tex}</code>;
   const Tag = display ? "div" : "span";
-  return <Tag className={display ? "md-math md-math-display" : "md-math"} dangerouslySetInnerHTML={{ __html: mathml }} />;
+  return (
+    <Tag className={display ? "md-math md-math-display" : "md-math"} dangerouslySetInnerHTML={{ __html: mathml }} />
+  );
 }
 
 /** `[[say: …]]`: the Danish, with buttons to hear it normally and slowly. */

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/check-design.mjs && tsc --noEmit && vite build",
+    "build": "node scripts/check-design.mjs && eslint . && tsc --noEmit && vite build",
+    "lint": "eslint .",
     "check:design": "node scripts/check-design.mjs",
     "check:shapes": "cd src-tauri && cargo test --locked shapes_for_the_screens && cd .. && bun scripts/check-shapes.ts",
     "preview": "vite preview",
