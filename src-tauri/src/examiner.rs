@@ -616,62 +616,71 @@ pub struct GoalHelp {
     pub words: Vec<Phrase>,
 }
 
-/// A phrase from a model's JSON: `{"da", "en"}`, under the other names
-/// models reach for, or a "Danish — English" string.
-fn phrase_from(value: &serde_json::Value) -> Option<Phrase> {
-    let pick = |keys: &[&str]| {
-        keys.iter()
-            .find_map(|k| value.get(*k).and_then(|v| v.as_str()))
-            .map(|t| t.trim().to_string())
-            .filter(|t| !t.is_empty())
-    };
-    if let Some(text) = value.as_str() {
-        let (da, en) = [" — ", " – ", " - ", ": "]
-            .iter()
-            .find_map(|sep| text.split_once(sep))
-            .unwrap_or((text, ""));
-        let da = da.trim().to_string();
-        return (!da.is_empty()).then(|| Phrase { da, en: en.trim().to_string() });
+/// A phrase as models write it: `{"da", "en"}` (or the other names they
+/// reach for), or a "Danish — English" string.
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum RawPhrase {
+    Text(String),
+    Pair {
+        #[serde(alias = "danish", alias = "phrase", alias = "text", alias = "word")]
+        da: String,
+        #[serde(default, alias = "english", alias = "meaning", alias = "translation")]
+        en: String,
+    },
+}
+
+impl RawPhrase {
+    fn phrase(self) -> Option<Phrase> {
+        let (da, en) = match self {
+            RawPhrase::Text(text) => {
+                let (da, en) =
+                    [" — ", " – ", " - ", ": "].iter().find_map(|sep| text.split_once(sep)).unwrap_or((&text, ""));
+                (da.trim().to_string(), en.trim().to_string())
+            }
+            RawPhrase::Pair { da, en } => (da.trim().to_string(), en.trim().to_string()),
+        };
+        (!da.is_empty()).then_some(Phrase { da, en })
     }
-    let da = pick(&["da", "danish", "phrase", "text", "word"])?;
-    let en = pick(&["en", "english", "meaning", "translation"]).unwrap_or_default();
-    Some(Phrase { da, en })
+}
+
+/// One goal's help as a model writes it.
+#[derive(Deserialize)]
+struct RawGoal {
+    #[serde(default, alias = "name", alias = "title")]
+    goal: String,
+    #[serde(default, alias = "phrases", alias = "vocabulary")]
+    words: Vec<crate::wire::Lenient<RawPhrase>>,
+    #[serde(default, deserialize_with = "crate::wire::lenient")]
+    starter: Option<RawPhrase>,
+}
+
+/// The bank: `{"goals": [...]}` (or under another name models use), or a
+/// bare list.
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum RawBank {
+    List(Vec<crate::wire::Lenient<RawGoal>>),
+    Wrapped {
+        #[serde(alias = "help", alias = "bank", alias = "items", alias = "word_bank")]
+        goals: Vec<crate::wire::Lenient<RawGoal>>,
+    },
 }
 
 /// A word bank from a model's reply, read leniently: `{"goals": [...]}` or
 /// a bare list, phrases as objects or strings. None when nothing usable is in it.
 fn parse_bank(text: &str) -> Option<Vec<GoalHelp>> {
-    let value = crate::ai::json_value(text)?;
-    let goals = match &value {
-        serde_json::Value::Array(goals) => goals.clone(),
-        serde_json::Value::Object(map) => map
-            .get("goals")
-            .and_then(|g| g.as_array())
-            .or_else(|| map.values().find_map(|v| v.as_array()))
-            .cloned()?,
-        _ => return None,
+    let goals = match crate::ai::json_in::<RawBank>(text).ok()? {
+        RawBank::List(goals) | RawBank::Wrapped { goals } => goals,
     };
-    let help: Vec<GoalHelp> = goals
-        .iter()
+    let help: Vec<GoalHelp> = crate::wire::kept(goals)
         .filter_map(|g| {
-            let goal = ["goal", "name", "title"]
-                .iter()
-                .find_map(|k| g.get(*k).and_then(|v| v.as_str()))
-                .unwrap_or_default()
-                .trim()
-                .to_string();
-            let words: Vec<Phrase> = ["words", "phrases", "vocabulary"]
-                .iter()
-                .find_map(|k| g.get(*k).and_then(|v| v.as_array()))
-                .map(|list| list.iter().filter_map(phrase_from).collect())
-                .unwrap_or_default();
-            let starter = g.get("starter").and_then(phrase_from);
-            let starter = match starter {
+            let words: Vec<Phrase> = crate::wire::kept(g.words).filter_map(RawPhrase::phrase).collect();
+            let starter = match g.starter.and_then(RawPhrase::phrase) {
                 Some(starter) => starter,
-                None if !words.is_empty() => words[0].clone(),
-                None => return None,
+                None => words.first()?.clone(),
             };
-            Some(GoalHelp { goal, starter, words })
+            Some(GoalHelp { goal: g.goal.trim().to_string(), starter, words })
         })
         .collect();
     (!help.is_empty()).then_some(help)
