@@ -9,8 +9,11 @@ Built with **Tauri 2, Rust, SQLite and React** for Android and macOS.
 - **Exercises:** daily check-ins, word cards, pictures of everyday objects,
   typing, memory, sentence building, gap fills, dialogues, writing and
   listening. Each lesson has one type from a single flat list; see
-  [ADDING_A_LESSON_TYPE.md](ADDING_A_LESSON_TYPE.md). Spaced repetition, XP, streaks,
-  achievements and adjustable daily goals carry over from the original app.
+  [ADDING_A_LESSON_TYPE.md](ADDING_A_LESSON_TYPE.md). Each day the app picks the five
+  most important lessons (slipping, then due, then up to two new); doing them
+  is the day done. Mastered lessons never come back, and a mastered course
+  moves to Mastered by itself. XP, streaks and achievements carry over from
+  the original app.
 - **Tutor:** ask questions or have the tutor create courses, lessons, drills,
   writing situations and songs on a subject you choose. It teaches Danish in
   English and can switch to Danish conversation when requested.
