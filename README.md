@@ -4,6 +4,9 @@ A little Danish, every day. A native Danish-learning app for English speakers,
 adapted from Learn Polish with its own identity and app storage.
 Built with **Tauri 2, Rust, SQLite and React** for Android and macOS.
 
+The rules that settle design questions are in
+[PRINCIPLES.md](PRINCIPLES.md).
+
 ## The app
 
 - **Exercises:** daily check-ins, word cards, pictures of everyday objects,
