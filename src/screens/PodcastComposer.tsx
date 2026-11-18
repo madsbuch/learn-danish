@@ -93,9 +93,7 @@ export function PodcastComposer({
   }
 
   const ready =
-    Boolean(writer) &&
-    settings.hasApiKey &&
-    (news || topic.trim() !== "" || (!story && articles.length > 0));
+    Boolean(writer) && settings.hasApiKey && (news || topic.trim() !== "" || (!story && articles.length > 0));
 
   return (
     <Screen title="New podcast" onBack={onCancel}>
@@ -117,7 +115,11 @@ export function PodcastComposer({
             <Field label="Subject" hint={news ? "Optional: narrow the news down. Empty: the day's mix." : undefined}>
               <input
                 value={topic}
-                placeholder={news ? "e.g. housing, cycling, the royal family" : "e.g. the Øresund Bridge, octopuses, a day at the bakery"}
+                placeholder={
+                  news
+                    ? "e.g. housing, cycling, the royal family"
+                    : "e.g. the Øresund Bridge, octopuses, a day at the bakery"
+                }
                 onChange={(event) => setTopic(event.target.value)}
               />
             </Field>
@@ -155,11 +157,10 @@ export function PodcastComposer({
         title="Written from"
         info={
           <p>
-            Facts come from English Wikipedia articles — up to five. Pick them, or leave the list
-            empty to use the best match for the subject. The articles are kept with the episode, so
-            you can read them afterwards in the app (in Danish too). Today's news comes from the
-            news feeds of DR and TV 2, told only as far as the headlines and summaries go. A story is
-            made up, from no articles.
+            Facts come from English Wikipedia articles — up to five. Pick them, or leave the list empty to use the best
+            match for the subject. The articles are kept with the episode, so you can read them afterwards in the app
+            (in Danish too). Today's news comes from the news feeds of DR and TV 2, told only as far as
+            the headlines and summaries go. A story is made up, from no articles.
           </p>
         }
       >
@@ -328,8 +329,8 @@ export function PodcastComposer({
           Make the podcast
         </Button>
         <Text variant="caption" tone="faint" align="center">
-          Written by {writer || "—"} and read aloud in the background — a few minutes. You can lock the
-          phone or switch apps meanwhile.
+          Written by {writer || "—"} and read aloud in the background — a few minutes. You can lock the phone or switch
+          apps meanwhile.
         </Text>
       </Stack>
     </Screen>

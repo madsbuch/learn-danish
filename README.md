@@ -5,7 +5,7 @@ adapted from Learn Polish with its own identity and app storage.
 Built with **Tauri 2, Rust, SQLite and React** for Android and macOS.
 
 The rules that settle design questions are in
-[PRINCIPLES.md](PRINCIPLES.md).
+[PRINCIPLES.md](PRINCIPLES.md); how data is kept, in [DATA.md](DATA.md).
 
 ## The app
 
