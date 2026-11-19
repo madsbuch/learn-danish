@@ -49,12 +49,42 @@ pub fn image_model(conn: &mut Conn) -> String {
     if model.is_empty() { DEFAULT_IMAGE_MODEL.to_string() } else { model }
 }
 
+/// Finds the things in a scene lesson's picture unless another model is
+/// chosen: Gemini Flash reads pictures well, is good at boxing things in
+/// them, keeps to a JSON schema, and costs a fraction of a cent a picture.
+pub const DEFAULT_VISION_MODEL: &str = "google/gemini-2.5-flash";
+
+pub fn vision_model(conn: &mut Conn) -> String {
+    let model = stored_model(conn, "vision_model");
+    if model.is_empty() { DEFAULT_VISION_MODEL.to_string() } else { model }
+}
+
+/// Hears the learner speak (speaking cards, the mic in the chat boxes)
+/// unless another model is chosen: Gemini Flash takes sound in the chat API
+/// (an `input_audio` part), knows Danish well, keeps to a JSON schema, and a
+/// few seconds of speech cost a fraction of a cent.
+pub const DEFAULT_HEARING_MODEL: &str = "google/gemini-2.5-flash";
+
+pub fn hearing_model(conn: &mut Conn) -> String {
+    let model = stored_model(conn, "hearing_model");
+    if model.is_empty() { DEFAULT_HEARING_MODEL.to_string() } else { model }
+}
+
 #[derive(Serialize)]
 struct ImageRequest<'a> {
     model: &'a str,
     messages: [ImageAsk<'a>; 1],
     modalities: [&'static str; 2],
+    /// The picture's shape, for the models that take one (Gemini's); the
+    /// others ignore it and the prompt says it too.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    image_config: Option<ImageConfig<'a>>,
     usage: UsageRequest,
+}
+
+#[derive(Serialize)]
+struct ImageConfig<'a> {
+    aspect_ratio: &'a str,
 }
 
 #[derive(Serialize)]
@@ -65,6 +95,16 @@ struct ImageAsk<'a> {
 
 /// Asks an image model for a picture. Returns its type, bytes and cost.
 pub async fn generate_image(key: &str, model: &str, prompt: &str) -> Result<(String, Vec<u8>, Option<f64>)> {
+    generate_image_shaped(key, model, prompt, None).await
+}
+
+/// [`generate_image`] in a given shape ("4:3"), where the model takes one.
+pub async fn generate_image_shaped(
+    key: &str,
+    model: &str,
+    prompt: &str,
+    aspect_ratio: Option<&str>,
+) -> Result<(String, Vec<u8>, Option<f64>)> {
     let response = crate::http::api()
         .post(format!("{BASE_URL}/chat/completions"))
         .bearer_auth(key)
@@ -74,6 +114,7 @@ pub async fn generate_image(key: &str, model: &str, prompt: &str) -> Result<(Str
             model,
             messages: [ImageAsk { role: "user", content: prompt }],
             modalities: ["image", "text"],
+            image_config: aspect_ratio.map(|aspect_ratio| ImageConfig { aspect_ratio }),
             usage: UsageRequest { include: true },
         })
         .send()
@@ -620,6 +661,116 @@ pub fn json_in<T: serde::de::DeserializeOwned>(text: &str) -> std::result::Resul
     serde_json::from_str(json).map_err(|e| e.to_string())
 }
 
+/// Shows a vision model a picture and asks about it; the answer must follow
+/// `schema` (a JSON Schema, sent as a strict structured output where the
+/// provider has it: elsewhere it is still asked for in the prompt and read
+/// leniently with [`json_in`]).
+pub async fn look_at_image(
+    key: &str,
+    model: &str,
+    prompt: &str,
+    mime: &str,
+    image: &[u8],
+    schema_name: &str,
+    schema: &serde_json::Value,
+) -> Result<Reply> {
+    use base64::Engine as _;
+    let data = base64::engine::general_purpose::STANDARD.encode(image);
+    let body = serde_json::json!({
+        "model": model,
+        "messages": [{
+            "role": "user",
+            "content": [
+                { "type": "text", "text": prompt },
+                { "type": "image_url", "image_url": { "url": format!("data:{mime};base64,{data}") } },
+            ],
+        }],
+        "temperature": 0.1,
+        // Room for a reasoning model's thinking as well as the boxes.
+        "max_tokens": 6000,
+        "response_format": {
+            "type": "json_schema",
+            "json_schema": { "name": schema_name, "strict": true, "schema": schema },
+        },
+        "usage": { "include": true },
+    });
+    let empty = format!("The model {model} said nothing about the picture. Pick one that reads images in Settings.");
+    post_for_reply(key, &body, &empty).await
+}
+
+/// Posts a ready-made chat request (pictures, sound) and reads its reply:
+/// the text, whether it was cut off, and what it cost. `empty` is the error
+/// when the model says nothing.
+async fn post_for_reply(key: &str, body: &serde_json::Value, empty: &str) -> Result<Reply> {
+    let response = crate::http::api()
+        .post(format!("{BASE_URL}/chat/completions"))
+        .bearer_auth(key)
+        .header("HTTP-Referer", "https://github.com/madsbuch/learn-danish")
+        .header("X-Title", "Dansk")
+        .json(body)
+        .send()
+        .await?;
+    let status = response.status();
+    let text = response.text().await?;
+    let parsed: ChatResponse = serde_json::from_str(&text).map_err(|_| {
+        Error::msg(format!(
+            "OpenRouter returned an unexpected response ({status}): {}",
+            text.chars().take(300).collect::<String>()
+        ))
+    })?;
+    if let Some(error) = parsed.error {
+        return Err(Error::msg(format!("OpenRouter: {}", error.message)));
+    }
+    if !status.is_success() {
+        return Err(Error::msg(format!("OpenRouter returned HTTP {status}")));
+    }
+    let tokens = parsed.usage.as_ref().map(Usage::tokens).unwrap_or_default();
+    let cost = parsed.usage.and_then(|u| u.cost);
+    let choice = parsed.choices.into_iter().next();
+    let truncated = choice.as_ref().and_then(|c| c.finish_reason.as_deref()) == Some("length");
+    match choice.and_then(|c| c.message.content).filter(|text| !text.trim().is_empty()) {
+        Some(text) => Ok(Reply { text, truncated, cost, tokens }),
+        None => Err(Error::msg(empty.to_string())),
+    }
+}
+
+/// Lets a model that hears listen to a recording (base64, in `format`:
+/// "wav", "mp3", "m4a", …, sent as an `input_audio` part) and answer
+/// `prompt`; the answer must follow `schema`, as with pictures. The
+/// recording goes no further than this request: nothing keeps it.
+pub async fn listen_to_audio(
+    key: &str,
+    model: &str,
+    prompt: &str,
+    format: &str,
+    audio_base64: &str,
+    schema_name: &str,
+    schema: &serde_json::Value,
+) -> Result<Reply> {
+    let body = serde_json::json!({
+        "model": model,
+        "messages": [{
+            "role": "user",
+            "content": [
+                { "type": "text", "text": prompt },
+                { "type": "input_audio", "input_audio": { "data": audio_base64, "format": format } },
+            ],
+        }],
+        "temperature": 0.0,
+        // A transcript is short; the room is for a reasoning model's
+        // thinking, kept low so the answer comes quickly.
+        "max_tokens": 2000,
+        "reasoning": { "effort": "low" },
+        "response_format": {
+            "type": "json_schema",
+            "json_schema": { "name": schema_name, "strict": true, "schema": schema },
+        },
+        "usage": { "include": true },
+    });
+    let empty = format!("The model {model} heard nothing. Pick one that takes sound in Settings → AI.");
+    post_for_reply(key, &body, &empty).await
+}
+
 // ---------------------------------------------------------------------------
 // Streaming
 // ---------------------------------------------------------------------------
@@ -910,6 +1061,8 @@ struct ModelEntry {
 #[derive(Deserialize)]
 struct Architecture {
     #[serde(default)]
+    input_modalities: Vec<String>,
+    #[serde(default)]
     output_modalities: Vec<String>,
 }
 
@@ -947,7 +1100,9 @@ async fn fetch_catalogue(query: &str) -> Result<Vec<AiModel>> {
             tools: m
                 .supported_parameters
                 .is_some_and(|params| params.iter().any(|p| p == "tools")),
-            images: m.architecture.is_some_and(|a| a.output_modalities.iter().any(|o| o == "image")),
+            images: m.architecture.as_ref().is_some_and(|a| a.output_modalities.iter().any(|o| o == "image")),
+            vision: m.architecture.as_ref().is_some_and(|a| a.input_modalities.iter().any(|i| i == "image")),
+            hears: m.architecture.as_ref().is_some_and(|a| a.input_modalities.iter().any(|i| i == "audio")),
             id: m.id,
         })
         .collect();

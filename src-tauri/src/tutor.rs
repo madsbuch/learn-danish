@@ -115,7 +115,14 @@ The app:
   Keep to lasting facts; name current officeholders only \"as of <year>\". Give the lesson a \
   language hook (the city in \"i København\", \"fra København\").
 - Danish must be correct, with diacritics. Words in dictionary form with a short gloss; preserve \
-  correct capitalization (the pronoun I and proper names). Sentences should be short and natural.
+  correct capitalization (the pronoun I and proper names). Sentences should be short and natural. \
+  With each sentence, list in `endings` its words that stand in another form than their \
+  dictionary one (\"kaffen\" for \"kaffe\", \"store\" for \"stor\"), each with two other real \
+  forms of the same word that do not fit there (\"kaffe\", \"kaffer\"; \"stor\", \"stort\"): the \
+  learner picks the ending when building the sentence from its words. Where a word has a real \
+  Danish neighbour that differs by one sound English ears mix up (\"by\" and \"bi\", \"køre\" \
+  and \"kære\"), give it as the word's `near`: words lessons play the two for the learner to \
+  tell apart.
 - Songs cost the learner credits: one per request. Give a new song or podcast the course it \
   fits (course_id): it is filed there, with its listening lesson. Put the course's level and the \
   words it should use in requirements — the songwriter writes at the level it is given (a \
@@ -312,6 +319,15 @@ fn word_schema() -> Value {
                     "type": "string",
                     "enum": ["n-common", "n-neuter", "n-pl", "n", "proper", "v", "adj", "adv", "num", "pron", "prep", "conj", "part", "interj", "phr"],
                     "description": "Part of speech. Nouns carry their gender: n-common common gender (en), n-neuter neuter (et), n-pl plural-only. Include en/et with singular count nouns; verbs use the infinitive."
+                },
+                "near": {
+                    "type": "object",
+                    "description": "Only when there is one: a real Danish word that differs from this one by a sound English ears mix up (æ/e, ø/y, y/i, å/o, u/o, a stød or none, a short or long vowel, a soft d or none, r/h), without its article or \"at\", e.g. for \"et træ\": {\"da\": \"tre\", \"en\": \"three\"}, for \"en hund\": {\"da\": \"hun\", \"en\": \"she\"}. The learner hears one and picks which. Leave it out otherwise; never a made-up word.",
+                    "properties": {
+                        "da": { "type": "string" },
+                        "en": { "type": "string" }
+                    },
+                    "required": ["da", "en"]
                 }
             },
             "required": ["da", "en", "pos"]
@@ -326,7 +342,20 @@ fn sentence_schema() -> Value {
             "type": "object",
             "properties": {
                 "da": { "type": "string" },
-                "en": { "type": "string" }
+                "en": { "type": "string" },
+                "endings": {
+                    "type": "array",
+                    "description": "The sentence's words that stand in another form than their dictionary form (a definite or plural ending, an adjective with -t or -e, a conjugated verb), for the word-order tiles: the learner sees the dictionary form and picks the ending. Leave out words already in their dictionary form.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "form": { "type": "string", "description": "The word exactly as it stands in the sentence, e.g. \"kaffen\"" },
+                            "base": { "type": "string", "description": "Its dictionary form, without en/et or at, e.g. \"kaffe\"" },
+                            "wrong": { "type": "array", "items": { "type": "string" }, "description": "Two other real forms of the same word that are wrong here, e.g. [\"kaffe\", \"kaffer\"]" }
+                        },
+                        "required": ["form", "base", "wrong"]
+                    }
+                }
             },
             "required": ["da", "en"]
         }
@@ -609,6 +638,125 @@ pub fn tool_definitions() -> Vec<Tool> {
                     "course_id": { "type": "string", "pattern": "^crs_[0-7][0-9a-hjkmnp-tv-z]{25}$", "description": "The course to add it to; leave out only for a one-off that fits no course (it goes in \"Other lessons\")" }
                 },
                 "required": ["title", "words"]
+            }),
+        ),
+        tool(
+            "create_scene_lesson",
+            "Making the scene lesson…",
+            "Make a scene lesson: one illustrated scene (a market stall, a kitchen, a train station, a \
+             doctor's waiting room…) with 6–10 things in it. The learner explores the picture (tap a \
+             thing, hear its name), finds things by their Danish name, names things that light up \
+             (typing them in medium and high lessons), and — if you add sentences — says where things \
+             are. The things become the lesson's words. Use the course's own words where they fit \
+             (same Danish and English). Only nouns you can point at, each unmistakable and drawn once. \
+             The picture is drawn and its things found in the background (about 5 cents); the lesson \
+             works as a word drill until then.",
+            json!({
+                "type": "object",
+                "properties": {
+                    "title": { "type": "string" },
+                    "summary": { "type": "string" },
+                    "scene": { "type": "string", "description": "The scene in English, 1–3 sentences: the place and what is going on, so it can be drawn. Every thing below must fit in it naturally." },
+                    "complexity": { "type": "string", "enum": ["low", "medium", "high"], "description": "low: pick names from options; medium and high: type the names of things the learner knows. Default low." },
+                    "things": word_schema(),
+                    "statements": {
+                        "type": "array",
+                        "description": "Optional, 0–6 \"Where is it?\" sentences about where two of the things are in the scene, for learners ready for prepositions and definite forms. The picture is drawn to match, and a sentence it does not bear out is left out.",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "da": { "type": "string", "description": "e.g. \"Katten er under bordet.\"" },
+                                "en": { "type": "string", "description": "e.g. \"The cat is under the table.\"" },
+                                "subject": { "type": "string", "description": "The thing that is somewhere: its Danish exactly as in things, e.g. \"en kat\"" },
+                                "preposition": { "type": "string", "enum": crate::scenes::PREPOSITIONS },
+                                "object": { "type": "string", "description": "The thing it is placed by: its Danish exactly as in things, e.g. \"et bord\"" },
+                                "phrase": { "type": "string", "description": "The words of da that say where, exactly as written there, e.g. \"under bordet\"" },
+                                "wrong": { "type": "array", "items": { "type": "string" }, "description": "1–3 phrases for a clearly different place, in the right form, e.g. [\"på bordet\", \"ved siden af bordet\"] — never one that could also be true (not \"over\" for \"på\", not \"ved\" for \"ved siden af\")" }
+                            },
+                            "required": ["da", "en", "subject", "preposition", "object", "phrase", "wrong"]
+                        }
+                    },
+                    "course_id": { "type": "string", "pattern": "^crs_[0-7][0-9a-hjkmnp-tv-z]{25}$", "description": "The course to add it to; leave out only for a one-off that fits no course (it goes in \"Other lessons\")" }
+                },
+                "required": ["title", "scene", "things"]
+            }),
+        ),
+        tool(
+            "create_story_lesson",
+            "Writing the story…",
+            "Make a story lesson: a short illustrated story told panel by panel (4–8 panels), each a \
+             picture with 1–3 Danish sentences under it, and a quick question after it. The learner reads \
+             (and hears) it panel by panel, taps words for their meanings, answers the questions, then \
+             practises the story's words. Write it at the lesson's level and build it from the course's \
+             words (same Danish and English); list the words it teaches in words — they become the \
+             lesson's words. Give 1–4 characters, each with a short description of how they look \
+             (age, hair, clothes, colours; an animal's colour and markings): it goes into every picture's \
+             prompt so they look the same throughout. A line someone says names its speaker (their \
+             voice reads it); narration has none. Questions: who, what or where about that panel, in \
+             English for a low lesson and in Danish for medium and high, with 1–3 plausible wrong \
+             answers. The pictures are drawn in the background, panel by panel (about 4 cents each); the \
+             story can be read meanwhile. Everything is checked first: if something is wrong, nothing is \
+             made and you get the list to fix.",
+            json!({
+                "type": "object",
+                "properties": {
+                    "title": { "type": "string" },
+                    "summary": { "type": "string" },
+                    "theme": { "type": "string", "description": "What the story is about, in English, one or two sentences." },
+                    "setting": { "type": "string", "description": "Where it happens, in English, for the pictures (e.g. \"a small Danish town in autumn\")." },
+                    "complexity": { "type": "string", "enum": ["low", "medium", "high"], "description": "The lesson's level: low — short present-tense sentences and questions in English; medium and high — longer sentences, past tense, questions in Danish. Default low." },
+                    "characters": {
+                        "type": "array",
+                        "description": "1–4 people or animals in the story.",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": { "type": "string", "description": "As written in the story, e.g. \"Ida\"" },
+                                "look": { "type": "string", "description": "How they look, in English, short and concrete: \"a girl of about ten with a red raincoat and two dark plaits\"" },
+                                "gender": { "type": "string", "enum": ["f", "m"], "description": "The voice their lines are read in." }
+                            },
+                            "required": ["name", "look", "gender"]
+                        }
+                    },
+                    "panels": {
+                        "type": "array",
+                        "description": "4–8 panels, in story order.",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "picture": { "type": "string", "description": "What the picture shows, in English: who is there, doing what, where. No text in it." },
+                                "lines": {
+                                    "type": "array",
+                                    "description": "1–3 sentences under the picture.",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "da": { "type": "string" },
+                                            "en": { "type": "string" },
+                                            "speaker": { "type": "string", "description": "The character who says it, by name; leave out for narration." },
+                                            "practise": { "type": "boolean", "description": "Also keep it as one of the lesson's sentences to practise (at most 4 in the story)." }
+                                        },
+                                        "required": ["da", "en"]
+                                    }
+                                },
+                                "question": {
+                                    "type": "object",
+                                    "description": "Asked after this panel: who, what or where.",
+                                    "properties": {
+                                        "prompt": { "type": "string", "description": "e.g. \"Who is looking for the dog?\" or \"Hvor sover Bamse?\"" },
+                                        "answer": { "type": "string" },
+                                        "wrong": { "type": "array", "items": { "type": "string" }, "description": "1–3 wrong answers, as long as the right one" }
+                                    },
+                                    "required": ["prompt", "answer", "wrong"]
+                                }
+                            },
+                            "required": ["picture", "lines", "question"]
+                        }
+                    },
+                    "words": word_schema(),
+                    "course_id": { "type": "string", "pattern": "^crs_[0-7][0-9a-hjkmnp-tv-z]{25}$", "description": "The course to add it to; leave out only for a one-off that fits no course (it goes in \"Other lessons\")" }
+                },
+                "required": ["title", "theme", "characters", "panels", "words"]
             }),
         ),
         tool(
@@ -1804,6 +1952,33 @@ fn run_tool(conn: &mut Conn, name: &str, arguments: &str) -> Result<Outcome> {
                 lesson.id,
             ))
         }
+        "create_scene_lesson" => {
+            let args: crate::scenes::NewScene = parse(arguments)?;
+            let lesson = crate::scenes::create(conn, args, "tutor")?;
+            Ok(Outcome::lesson(
+                json!({
+                    "created": lesson_json(&lesson),
+                    "scene": "being drawn in the background, then its things are found in it; until then the lesson is a word drill",
+                }),
+                "lessonCreated",
+                format!("Made “{}” — a scene, {} things", lesson.title, lesson.items),
+                lesson.id,
+            ))
+        }
+        "create_story_lesson" => {
+            let args: crate::stories::NewStory = parse(arguments)?;
+            let panels = args.panels.len();
+            let lesson = crate::stories::create(conn, args, "tutor")?;
+            Ok(Outcome::lesson(
+                json!({
+                    "created": lesson_json(&lesson),
+                    "story": "readable now; its pictures are drawn in the background, panel by panel",
+                }),
+                "lessonCreated",
+                format!("Made “{}” — a story in {panels} pictures, {} words", lesson.title, lesson.items),
+                lesson.id,
+            ))
+        }
         "create_listening_lesson" => {
             let args: ListeningArgs = parse(arguments)?;
             let lesson = lessons::create_listening(
@@ -1850,6 +2025,16 @@ fn run_tool(conn: &mut Conn, name: &str, arguments: &str) -> Result<Outcome> {
                 "words": detail.words.iter().map(|(da, en)| json!({ "da": da, "en": en })).collect::<Vec<_>>(),
                 "sentences": detail.sentences.iter().map(|(da, en)| json!({ "da": da, "en": en })).collect::<Vec<_>>(),
                 "last_checkin_feedback": detail.last_feedback,
+                // A story lesson's story, page by page.
+                "story": detail.story.as_ref().map(|s| json!({
+                    "theme": s.theme,
+                    "characters": s.characters,
+                    "panels": s.panels.iter().map(|p| json!({
+                        "picture": p.picture,
+                        "drawn": p.status,
+                        "lines": p.lines.iter().map(|l| json!({ "da": l.da, "en": l.en, "speaker": l.speaker })).collect::<Vec<_>>(),
+                    })).collect::<Vec<_>>(),
+                })),
                 "sources": crate::wiki::sources_of(conn, args.lesson_id)?
                     .into_iter()
                     .map(|s| json!({ "source_id": s.id, "title": s.title, "lang": s.lang, "url": s.url, "in_danish_too": s.danish_title.is_some() }))
@@ -3115,6 +3300,16 @@ async fn answer(app: &tauri::AppHandle, db: &Db, conversation_id: ConversationId
                         crate::pictures::draw_missing_in_background(app);
                         return ToolOutput { result: done.result, extra: done.action, ends_turn: false };
                     }
+                    if name == "create_scene_lesson" {
+                        drop(guard);
+                        crate::scenes::resume_pending(app);
+                        return ToolOutput { result: done.result, extra: done.action, ends_turn: false };
+                    }
+                    if name == "create_story_lesson" {
+                        drop(guard);
+                        crate::stories::resume_pending(app);
+                        return ToolOutput { result: done.result, extra: done.action, ends_turn: false };
+                    }
                     done
                 };
                 ToolOutput { result: done.result, extra: done.action, ends_turn: false }
@@ -3203,7 +3398,9 @@ pub async fn tutor_talk_about(
                 .find(SentenceId::parse(&item_id).map_err(|e| Error::msg(e.to_string()))?)
                 .select((crate::schema::sentences::da, crate::schema::sentences::en))
                 .first(conn)?,
-            "line" => match (danish, meaning) {
+            // A line of a conversation, or a word of a song or a story (its
+            // line as the meaning: the word itself is what is not known).
+            "line" | "lyric" | "story" => match (danish, meaning) {
                 (Some(da), Some(en)) if !da.trim().is_empty() => (da.trim().to_string(), en.trim().to_string()),
                 _ => return Err(Error::msg("A line needs its Danish and meaning.")),
             },
@@ -3227,6 +3424,10 @@ pub async fn tutor_talk_about(
             format!(
                 "Let's talk about this line from a conversation I practised: “{danish}” ({meaning}). Why is it said like this?"
             )
+        } else if item_kind == "lyric" {
+            format!("What does “{danish}” mean in this line of a song: {meaning}?")
+        } else if item_kind == "story" {
+            format!("What does “{danish}” mean in this sentence of a story I am reading: {meaning}?")
         } else {
             format!("Let's talk about “{danish}”.")
         };

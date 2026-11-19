@@ -7,6 +7,8 @@ import { Markdown } from "../components/Markdown";
 import { ArticleReader, Sources } from "../components/Sources";
 import { SongToListen } from "../components/SongToListen";
 import { WordPictures } from "../components/WordPictures";
+import { SceneHeader } from "../components/SceneHeader";
+import { StoryHeader } from "../components/StoryHeader";
 import { LevelInfo } from "../components/LevelInfo";
 import { SlowButton, SpeakButton } from "../components/ui";
 import {
@@ -35,6 +37,9 @@ import { lessonType } from "../lib/lessonTypes";
 import { useSyncReload } from "../lib/sync";
 import { PERIOD_CHOICES, complexityName, complexityTone, dayToDate, dueLabel, kindName, minutes } from "../lib/lessons";
 import type { CourseProgress, LessonDetail, LessonId, WikiSource } from "../lib/types";
+
+/** Sections that head the page, above its columns: a scene, a story. */
+const HEADERS = ["scene", "story"];
 
 const RESULT_TEXT = {
   pass: "Passed",
@@ -243,6 +248,20 @@ export function LessonPage({
         ) : null;
       case "pictures":
         return <WordPictures lesson={lesson} onChanged={reload} />;
+      case "scene":
+        return <SceneHeader lesson={lesson} onChanged={reload} />;
+      case "story":
+        return <StoryHeader lesson={lesson} onChanged={reload} />;
+      case "where":
+        return lesson.scene && lesson.scene.statements.length > 0 ? (
+          <Section title="Where is it?">
+            <List>
+              {lesson.scene.statements.map(([da, en]) => (
+                <ListItem key={da} selectable title={da} subtitle={en} trailing={<SpeakButton text={da} />} />
+              ))}
+            </List>
+          </Section>
+        ) : null;
       case "words":
         return lesson.words.length > 0 ? (
           <Section title={`${lesson.words.length} words`}>
@@ -282,6 +301,13 @@ export function LessonPage({
   return (
     <Screen title={lesson.title} subtitle={lesson.courseTitle ?? undefined} onBack={onBack} nav={false}>
       {error ? <Banner tone="error">{error}</Banner> : null}
+
+      {/* A picture that is the lesson (a scene) heads the page, across it. */}
+      {type.sections
+        .filter((name) => HEADERS.includes(name))
+        .map((name) => (
+          <Fragment key={name}>{section(name)}</Fragment>
+        ))}
 
       {/* On a wide window: about the lesson on the left, what it teaches on
           the right. On a phone the wrappers vanish (display: contents). */}
@@ -331,9 +357,11 @@ export function LessonPage({
         </div>
 
         <div className="page-split__main">
-          {type.sections.map((name) => (
-            <Fragment key={name}>{section(name)}</Fragment>
-          ))}
+          {type.sections
+            .filter((name) => !HEADERS.includes(name))
+            .map((name) => (
+              <Fragment key={name}>{section(name)}</Fragment>
+            ))}
         </div>
 
         <div className="page-split__side">

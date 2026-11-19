@@ -13,7 +13,9 @@ use crate::models::{DialogueLine, Exercise, Gap, Pair, SessionPlan, Course};
 #[allow(unused_imports)]
 use crate::ids::*;
 
-const DIALOGUE_GAPS: usize = 3;
+/// "What comes next?" cards in a dialogue lesson; a dictation of one more
+/// line follows them.
+pub(crate) const DIALOGUE_GAPS: usize = 2;
 /// Cards in the memory game: this many Danish/English pairs.
 pub(crate) const MEMORY_PAIRS: usize = 6;
 /// Sentences in a fill-the-gaps exercise.
@@ -30,12 +32,24 @@ pub struct WordRow {
     pub reps: i64,
     /// Its picture, when it has one.
     pub image: Option<FileId>,
+    /// A real word it is easily heard as (sounds.rs), when the tutor gave one.
+    pub near: Option<Near>,
+}
+
+/// A word's near neighbour by sound: "tre" for "træ".
+pub struct Near {
+    pub da: String,
+    pub en: String,
 }
 
 pub struct SentenceRow {
     pub id: SentenceId,
     pub da: String,
     pub meaning: String,
+    /// Its words in another form than their dictionary one (tiles.rs).
+    pub endings: Vec<crate::tiles::Ending>,
+    /// Times answered right in a row (its review), 0 when new.
+    pub reps: i64,
 }
 
 pub fn load_course(conn: &mut Conn, course_id: CourseId) -> Result<Course> {
@@ -101,6 +115,10 @@ pub(crate) fn word_intro(w: &WordRow) -> Exercise {
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
         da: w.da.clone(),
         meaning: w.meaning.clone(),
     }
@@ -123,6 +141,10 @@ pub(crate) fn typing(w: &WordRow) -> Exercise {
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
         da: w.da.clone(),
         meaning: w.meaning.clone(),
     }
@@ -145,6 +167,10 @@ pub(crate) fn sentence_intro(s: &SentenceRow) -> Exercise {
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
         da: s.da.clone(),
         meaning: s.meaning.clone(),
     }
@@ -163,33 +189,35 @@ pub(crate) fn practise_word(w: &WordRow, pool: &Distractors, rng: &mut impl rand
 }
 
 pub(crate) fn lesson_words(conn: &mut Conn, lesson_id: LessonId) -> Result<Vec<(WordRow, bool)>> {
-    let rows: Vec<(WordId, String, String, String, Option<FileId>)> = words::table
+    type Row = (WordId, String, String, String, Option<FileId>, String, String);
+    let rows: Vec<Row> = words::table
         .filter(words::lesson_id.eq(lesson_id))
         .order((words::ord, words::id))
-        .select((words::id, words::da, words::en, words::pos, words::image_file_id))
+        .select((words::id, words::da, words::en, words::pos, words::image_file_id, words::near_da, words::near_en))
         .load(conn)?;
     let reps = met(conn, "word", &rows.iter().map(|r| r.0.to_string()).collect::<Vec<_>>())?;
     Ok(rows
         .into_iter()
-        .map(|(id, da, meaning, pos, image)| {
+        .map(|(id, da, meaning, pos, image, near_da, near_en)| {
             let seen = reps.get(&id.to_string()).copied();
-            (WordRow { id, da, meaning, pos, reps: seen.unwrap_or(0), image }, seen.is_none())
+            let near = (!near_da.is_empty()).then_some(Near { da: near_da, en: near_en });
+            (WordRow { id, da, meaning, pos, reps: seen.unwrap_or(0), image, near }, seen.is_none())
         })
         .collect())
 }
 
 pub(crate) fn lesson_sentences(conn: &mut Conn, lesson_id: LessonId) -> Result<Vec<(SentenceRow, bool)>> {
-    let rows: Vec<(SentenceId, String, String)> = sentences::table
+    let rows: Vec<(SentenceId, String, String, String)> = sentences::table
         .filter(sentences::lesson_id.eq(lesson_id))
         .order((sentences::ord, sentences::id))
-        .select((sentences::id, sentences::da, sentences::en))
+        .select((sentences::id, sentences::da, sentences::en, sentences::endings))
         .load(conn)?;
     let seen = met(conn, "sentence", &rows.iter().map(|r| r.0.to_string()).collect::<Vec<_>>())?;
     Ok(rows
         .into_iter()
-        .map(|(id, da, meaning)| {
-            let new = !seen.contains_key(&id.to_string());
-            (SentenceRow { id, da, meaning }, new)
+        .map(|(id, da, meaning, endings)| {
+            let reps = seen.get(&id.to_string()).copied();
+            (SentenceRow { id, da, meaning, endings: crate::tiles::parse(&endings), reps: reps.unwrap_or(0) }, reps.is_none())
         })
         .collect())
 }
@@ -271,6 +299,10 @@ pub(crate) fn dialogue_read(lesson_id: LessonId, course: &Course) -> Exercise {
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
         da: course.title_da.clone(),
         meaning: course.summary.clone(),
     }
@@ -377,6 +409,10 @@ pub(crate) fn picture_memory(words: &[&WordRow], key: String, item_id: LessonId,
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
     })
 }
 
@@ -432,6 +468,10 @@ pub(crate) fn recognise(w: &WordRow, pool: &Distractors, rng: &mut impl rand::Rn
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
         da: w.da.clone(),
         meaning: w.meaning.clone(),
     }
@@ -454,15 +494,25 @@ pub(crate) fn produce(w: &WordRow, pool: &Distractors, rng: &mut impl rand::Rng)
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
         da: w.da.clone(),
         meaning: w.meaning.clone(),
     }
 }
 
+/// Build the sentence from its shuffled words. Words that stand in another
+/// form than their dictionary one (when the sentence has them: tiles.rs) are
+/// laid out in their dictionary form, with the endings to pick from.
 pub(crate) fn word_order(s: &SentenceRow) -> Exercise {
+    let rng = &mut rand::rng();
     let mut tokens: Vec<String> = s.da.split_whitespace().map(str::to_string).collect();
-    tokens.shuffle(&mut rand::rng());
+    tokens.shuffle(rng);
+    let endings = crate::tiles::tile_endings(&tokens, &s.endings, rng);
     Exercise {
+        endings,
         key: format!("s{}-order", s.id),
         kind: "wordOrder".into(),
         item_kind: "sentence".into(),
@@ -480,7 +530,118 @@ pub(crate) fn word_order(s: &SentenceRow) -> Exercise {
         image: None,
         option_images: vec![],
         context: vec![],
+        scene: None,
+        story: None,
+        reply: None,
     }
+}
+
+/// Write what you hear: the sentence is said (normally, slowly, again), and
+/// the learner types it; checked word by word (dictation.rs). Nothing of it
+/// is shown until it is checked.
+pub(crate) fn dictation(s: &SentenceRow) -> Exercise {
+    Exercise {
+        key: format!("s{}-dictation", s.id),
+        kind: "dictation".into(),
+        item_kind: "sentence".into(),
+        item_id: s.id.to_string(),
+        is_new: false,
+        prompt: String::new(),
+        hint: String::new(),
+        answer: s.da.clone(),
+        options: vec![],
+        tokens: vec![],
+        da: s.da.clone(),
+        meaning: s.meaning.clone(),
+        gaps: vec![],
+        pairs: vec![],
+        image: None,
+        option_images: vec![],
+        context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
+    }
+}
+
+/// Say it: a sentence already met, shown and heard, said aloud by the
+/// learner and compared with what was heard (speaking.rs).
+pub(crate) fn say_sentence(s: &SentenceRow) -> Exercise {
+    Exercise {
+        key: format!("s{}-say", s.id),
+        kind: "sayIt".into(),
+        item_kind: "sentence".into(),
+        item_id: s.id.to_string(),
+        prompt: s.da.clone(),
+        answer: s.da.clone(),
+        da: s.da.clone(),
+        meaning: s.meaning.clone(),
+        ..Exercise::default()
+    }
+}
+
+/// Say it, for a word already met.
+pub(crate) fn say_word(w: &WordRow) -> Exercise {
+    Exercise {
+        key: format!("w{}-say", w.id),
+        kind: "sayIt".into(),
+        item_kind: "word".into(),
+        item_id: w.id.to_string(),
+        prompt: w.da.clone(),
+        hint: pretty_pos(&w.pos),
+        answer: w.da.clone(),
+        da: w.da.clone(),
+        meaning: w.meaning.clone(),
+        image: w.image,
+        ..Exercise::default()
+    }
+}
+
+/// A "what comes next" gap made a spoken turn: the learner says the line
+/// rather than picking it, and the other speaker answers — the line after
+/// it, when there is one. The options stay, so that with speaking skipped
+/// it is a choice again.
+pub(crate) fn spoken_turn(gap: Exercise, dialogue: &[DialogueLine]) -> Exercise {
+    let at = dialogue.iter().position(|l| l.da == gap.answer);
+    let reply = at.and_then(|i| dialogue.get(i + 1)).cloned();
+    Exercise { key: format!("{}-say", gap.key), kind: "dialogueSay".into(), reply, ..gap }
+}
+
+/// Dictation of one line of a lesson's dialogue, said in its speaker's
+/// voice: the line itself is the card's `context`, for the voice and the
+/// name. Lines the gaps ask for are left out, and a line of a few words is
+/// preferred (not "Tak." and not a speech).
+pub(crate) fn dialogue_dictation(dialogue: &[DialogueLine], lesson_id: LessonId, skip: &[String], rng: &mut impl rand::Rng) -> Option<Exercise> {
+    let words = |l: &DialogueLine| l.da.split_whitespace().count();
+    let mut lines: Vec<(usize, &DialogueLine)> =
+        dialogue.iter().enumerate().filter(|(_, l)| !skip.contains(&l.da) && words(l) >= 2).collect();
+    lines.shuffle(rng);
+    lines.sort_by_key(|(_, l)| !(3..=10).contains(&words(l)));
+    let (i, line) = lines.first()?;
+    Some(Exercise {
+        key: format!("d{lesson_id}-dictation{i}"),
+        kind: "dictation".into(),
+        item_kind: "dialogue".into(),
+        item_id: lesson_id.to_string(),
+        is_new: false,
+        prompt: String::new(),
+        hint: line.speaker.clone(),
+        answer: line.da.clone(),
+        options: vec![],
+        tokens: vec![],
+        da: line.da.clone(),
+        meaning: line.meaning.clone(),
+        gaps: vec![],
+        pairs: vec![],
+        image: None,
+        option_images: vec![],
+        context: vec![(*line).clone()],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
+    })
 }
 
 /// How many lines of the conversation a gap shows before it.
@@ -530,6 +691,10 @@ pub(crate) fn dialogue_gaps(
                 image: None,
                 option_images: vec![],
                 context: dialogue[i.saturating_sub(DIALOGUE_CONTEXT)..i].to_vec(),
+                endings: vec![],
+                scene: None,
+                story: None,
+                reply: None,
                 da: line.da.clone(),
                 meaning: line.meaning.clone(),
             }
@@ -570,22 +735,33 @@ fn short_gloss(meaning: &str) -> String {
     meaning.split([',', ';']).next().unwrap_or(meaning).trim().to_string()
 }
 
-/// Face-down cards: find each Danish word's English partner.
-pub(crate) fn memory_game(words: &[&WordRow], key: String, item_id: LessonId, rng: &mut impl rand::Rng) -> Option<Exercise> {
-    let mut pool: Vec<&&WordRow> = words.iter().collect();
-    pool.shuffle(rng);
+/// Up to `count` Danish/English pairs from `words`, in their order, no two
+/// alike on either side — two cards that read the same would make a
+/// matching game unwinnable. `pictures`: a pictured word brings its picture
+/// for its second card (in place of the English), no picture twice.
+pub(crate) fn pick_pairs(words: &[&WordRow], count: usize, pictures: bool) -> Vec<Pair> {
     let mut pairs: Vec<Pair> = Vec::new();
-    for w in pool {
+    for w in words {
         let en = short_gloss(&w.meaning);
-        // Two cards that read the same would make the game unwinnable.
-        if en.is_empty() || pairs.iter().any(|p| p.en.eq_ignore_ascii_case(&en) || p.da == w.da) {
+        let image = if pictures { w.image } else { None };
+        if en.is_empty()
+            || pairs.iter().any(|p| p.en.eq_ignore_ascii_case(&en) || p.da == w.da || (image.is_some() && p.image == image))
+        {
             continue;
         }
-        pairs.push(Pair { da: w.da.clone(), en, image: None });
-        if pairs.len() == MEMORY_PAIRS {
+        pairs.push(Pair { da: w.da.clone(), en, image });
+        if pairs.len() == count {
             break;
         }
     }
+    pairs
+}
+
+/// Face-down cards: find each Danish word's English partner.
+pub(crate) fn memory_game(words: &[&WordRow], key: String, item_id: LessonId, rng: &mut impl rand::Rng) -> Option<Exercise> {
+    let mut pool: Vec<&WordRow> = words.to_vec();
+    pool.shuffle(rng);
+    let pairs = pick_pairs(&pool, MEMORY_PAIRS, false);
     if pairs.len() < 4 {
         return None;
     }
@@ -607,11 +783,15 @@ pub(crate) fn memory_game(words: &[&WordRow], key: String, item_id: LessonId, rn
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
     })
 }
 
 /// Splits "Anna." into ("", "Anna", "."), so punctuation stays out of the gap.
-fn split_punctuation(token: &str) -> (&str, &str, &str) {
+pub(crate) fn split_punctuation(token: &str) -> (&str, &str, &str) {
     let start = token.find(|c: char| c.is_alphanumeric()).unwrap_or(token.len());
     let end = token
         .rfind(|c: char| c.is_alphanumeric())
@@ -734,10 +914,14 @@ pub(crate) fn gap_fill(
         image: None,
         option_images: vec![],
         context: vec![],
+        endings: vec![],
+        scene: None,
+        story: None,
+        reply: None,
     }))
 }
 
-fn pretty_pos(code: &str) -> String {
+pub(crate) fn pretty_pos(code: &str) -> String {
     match code {
         "n-common" => "noun, common gender (en)",
         "n-neuter" => "noun, neuter (et)",

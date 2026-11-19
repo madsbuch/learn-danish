@@ -61,6 +61,12 @@ export const BenchRunIdSchema = typeId<"BenchRunId">("bench");
 export type BenchRunId = z.infer<typeof BenchRunIdSchema>;
 export const DeviceIdSchema = typeId<"DeviceId">("dev");
 export type DeviceId = z.infer<typeof DeviceIdSchema>;
+/** A built-in sound pair (sounds.rs): derived from its words, not a row. */
+export const SoundPairIdSchema = typeId<"SoundPairId">("sp");
+export type SoundPairId = z.infer<typeof SoundPairIdSchema>;
+/** One panel of a story lesson. */
+export const PanelIdSchema = typeId<"PanelId">("pnl");
+export type PanelId = z.infer<typeof PanelIdSchema>;
 
 // Mirrors the serde structs in src-tauri/src/models.rs.
 export const CourseSchema = z.object({
@@ -151,6 +157,18 @@ export const ExerciseKindSchema = z.enum([
   "pictureIntro",
   "wordPick",
   "picturePick",
+  "dictation",
+  "soundPair",
+  "sceneExplore",
+  "sceneFind",
+  "sceneName",
+  "sceneType",
+  "sceneWhere",
+  "storyPanel",
+  "storyQuestion",
+  "storyEnd",
+  "sayIt",
+  "dialogueSay",
 ]);
 export type ExerciseKind = z.infer<typeof ExerciseKindSchema>;
 
@@ -169,6 +187,107 @@ export const PairSchema = z.object({
   image: FileIdSchema.nullable(),
 });
 export type Pair = z.infer<typeof PairSchema>;
+
+/** A word-order tile whose ending the learner picks ("kaffe" → "kaffen"). */
+export const TileEndingSchema = z.object({
+  /** Which tile: its index in the card's `tokens`. */
+  token: z.number(),
+  /** What it shows until an ending is picked: the dictionary form. */
+  shown: z.string(),
+  /** The forms to pick from, the right one among them. */
+  choices: z.array(z.string()),
+});
+export type TileEnding = z.infer<typeof TileEndingSchema>;
+
+/** One thing in a scene lesson's picture, and where it is. */
+export const SceneSpotSchema = z.object({
+  wordId: WordIdSchema,
+  da: z.string(),
+  en: z.string(),
+  /** Its box, in fractions of the picture's width and height (0–1, from the top left). */
+  x: z.number(),
+  y: z.number(),
+  w: z.number(),
+  h: z.number(),
+  /** The card points it out: the thing to name, or the two a sentence is about. */
+  lit: z.boolean(),
+});
+export type SceneSpot = z.infer<typeof SceneSpotSchema>;
+
+/** A scene as a card shows it: the picture, its size in pixels, its things. */
+export const SceneCardSchema = z.object({
+  image: FileIdSchema,
+  width: z.number(),
+  height: z.number(),
+  spots: z.array(SceneSpotSchema),
+});
+export type SceneCard = z.infer<typeof SceneCardSchema>;
+
+/** What a sung word means (singalong.rs), looked up by its sung form. */
+export const GlossWordSchema = z.object({
+  /** As sung: lowercase, no punctuation. */
+  form: z.string(),
+  /** Its dictionary form. */
+  da: z.string(),
+  en: z.string(),
+  wordId: WordIdSchema.nullable(),
+  /** One of the words of the song's course: Sing along asks these first. */
+  lesson: z.boolean(),
+});
+export type GlossWord = z.infer<typeof GlossWordSchema>;
+
+/** A sentence under a story's panel, with the voice to read it in. */
+export const StoryLineSchema = z.object({
+  da: z.string(),
+  en: z.string(),
+  /** Who says it; empty for narration. */
+  speaker: z.string(),
+  /** "f" or "m" for a character's line; empty for the narrator. */
+  gender: z.string(),
+});
+export type StoryLine = z.infer<typeof StoryLineSchema>;
+
+/** One panel of a story: its picture (once drawn) and its sentences. */
+export const StoryPanelSchema = z.object({
+  id: PanelIdSchema,
+  /** Its place in the story, from 1. */
+  number: z.number(),
+  /** What the picture shows, in English: for screen readers, and while it is drawn. */
+  picture: z.string(),
+  image: FileIdSchema.nullable(),
+  width: z.number(),
+  height: z.number(),
+  status: z.enum(["waiting", "drawing", "ready", "failed"]),
+  /** Why its picture failed, when it did. */
+  error: z.string(),
+  lines: z.array(StoryLineSchema),
+});
+export type StoryPanel = z.infer<typeof StoryPanelSchema>;
+
+/** A word of a story's lesson, for its last page. */
+export const StoryWordSchema = z.object({
+  wordId: WordIdSchema,
+  da: z.string(),
+  en: z.string(),
+  /** Met for the first time in this story. */
+  new: z.boolean(),
+});
+export type StoryWord = z.infer<typeof StoryWordSchema>;
+
+/** What a story card shows: a panel to read, what a question is about, or the words at the end. */
+export const StoryCardSchema = z.object({
+  title: z.string(),
+  panel: StoryPanelSchema.nullable(),
+  /** Panels in the story. */
+  total: z.number(),
+  /** A question's kind; empty on a panel or the end. */
+  ask: z.enum(["", "choice", "picture", "order"]),
+  /** The meanings of the panel's words. */
+  glossary: z.array(GlossWordSchema),
+  /** The end: the lesson's words, met in the story. */
+  words: z.array(StoryWordSchema),
+});
+export type StoryCard = z.infer<typeof StoryCardSchema>;
 
 export const ExerciseSchema = z.object({
   key: z.string(),
@@ -193,8 +312,85 @@ export const ExerciseSchema = z.object({
   optionImages: z.array(FileIdSchema.nullable()),
   /** Dialogue gaps: the conversation just before the gap, oldest first. */
   context: z.array(DialogueLineSchema),
+  /** Word order: the tiles whose ending is to be picked; empty for plain ordering. */
+  endings: z.array(TileEndingSchema),
+  /** Scene lessons: the picture and where each thing is in it. */
+  scene: SceneCardSchema.nullable(),
+  /** Story lessons: the panel, the question's kind, or the words at the end. */
+  story: StoryCardSchema.nullable(),
+  /** A spoken dialogue turn: the other speaker's answer, said once the line is. */
+  reply: DialogueLineSchema.nullable(),
 });
 export type Exercise = z.infer<typeof ExerciseSchema>;
+
+/** Quick games on Home: enough words to play, the records, today's XP from them. */
+export const QuickGamesSchema = z.object({
+  wordsMet: z.number(),
+  minWords: z.number(),
+  /** Dictation needs a few sentences met. */
+  sentencesMet: z.number(),
+  minSentences: z.number(),
+  matchBestMs: z.number().nullable(),
+  flipBestMoves: z.number().nullable(),
+  flipBestMs: z.number().nullable(),
+  xpToday: z.number(),
+  xpPerDay: z.number(),
+  xpPerGame: z.number(),
+});
+export type QuickGames = z.infer<typeof QuickGamesSchema>;
+
+export const QuickGameKindSchema = z.enum(["match", "flip", "dictation", "sounds", "say"]);
+export type QuickGameKind = z.infer<typeof QuickGameKindSchema>;
+
+/** A sentence to write down in the Dictation game. */
+export const DictationItemSchema = z.object({
+  id: SentenceIdSchema,
+  da: z.string(),
+  meaning: z.string(),
+});
+export type DictationItem = z.infer<typeof DictationItemSchema>;
+
+/** A pair of words that differ by one sound English ears mix up. */
+export const SoundPairSchema = z.object({
+  /** A built-in pair's id; null for a word's own neighbour. */
+  id: SoundPairIdSchema.nullable(),
+  /** What to listen for: "æ or e". */
+  label: z.string(),
+  a: z.string(),
+  aEn: z.string(),
+  b: z.string(),
+  bEn: z.string(),
+});
+export type SoundPair = z.infer<typeof SoundPairSchema>;
+
+/** A round of the Sound pairs game: the pair, and which of it is said. */
+export const SoundRoundSchema = SoundPairSchema.extend({ said: z.string() });
+export type SoundRound = z.infer<typeof SoundRoundSchema>;
+
+/** One game's cards, sentences or rounds. */
+export const QuickGameSchema = z.object({
+  game: QuickGameKindSchema,
+  pairs: z.array(PairSchema),
+  sentences: z.array(DictationItemSchema),
+  sounds: z.array(SoundRoundSchema),
+});
+export type QuickGame = z.infer<typeof QuickGameSchema>;
+
+/** What finishing a quick game brought. */
+export const GameFinishedSchema = z.object({
+  xpGained: z.number(),
+  /** Beat the best before it (a first game only sets one). */
+  record: z.boolean(),
+  bestMs: z.number().nullable(),
+  bestMoves: z.number().nullable(),
+  previousMs: z.number().nullable(),
+  previousMoves: z.number().nullable(),
+  xpToday: z.number(),
+  xpPerDay: z.number(),
+  totalXp: z.number(),
+  level: z.number(),
+});
+export type GameFinished = z.infer<typeof GameFinishedSchema>;
 
 export const SessionPlanSchema = z.object({
   day: z.number(),
@@ -271,6 +467,40 @@ export const WordPictureSchema = z.object({
 });
 export type WordPicture = z.infer<typeof WordPictureSchema>;
 
+/** A scene lesson's picture as its page shows it, and how far along it is. */
+export const SceneInfoSchema = z.object({
+  status: z.enum(["drawing", "locating", "ready", "failed"]),
+  /** Why it failed, when it did. */
+  error: z.string(),
+  /** Being made on this device right now. */
+  working: z.boolean(),
+  description: z.string(),
+  card: SceneCardSchema.nullable(),
+  /** The "Where is it?" sentences the picture bears out: [Danish, English]. */
+  statements: z.array(z.tuple([z.string(), z.string()])),
+});
+export type SceneInfo = z.infer<typeof SceneInfoSchema>;
+
+/** Someone in a story, and how they look in every picture. */
+export const CharacterSchema = z.object({
+  name: z.string(),
+  look: z.string(),
+  gender: z.string(),
+});
+export type Character = z.infer<typeof CharacterSchema>;
+
+/** A story lesson's story as its page shows it: the picture book. */
+export const StoryInfoSchema = z.object({
+  theme: z.string(),
+  characters: z.array(CharacterSchema),
+  panels: z.array(StoryPanelSchema),
+  /** The meanings of every word in it. */
+  glossary: z.array(GlossWordSchema),
+  /** Its pictures are being drawn on this device right now. */
+  working: z.boolean(),
+});
+export type StoryInfo = z.infer<typeof StoryInfoSchema>;
+
 export const LessonDetailSchema = LessonSchema.extend({
   content: z.string(),
   objectives: z.array(z.string()),
@@ -287,6 +517,10 @@ export const LessonDetailSchema = LessonSchema.extend({
   factCheckedAt: z.number().nullable(),
   /** Its words with their ids and pictures. */
   wordPictures: z.array(WordPictureSchema),
+  /** A scene lesson's scene; null for every other lesson. */
+  scene: SceneInfoSchema.nullable(),
+  /** A story lesson's story; null for every other lesson. */
+  story: StoryInfoSchema.nullable(),
 });
 export type LessonDetail = z.infer<typeof LessonDetailSchema>;
 
@@ -400,6 +634,61 @@ export const CheckinTurnSchema = z.object({
 });
 export type CheckinTurn = z.infer<typeof CheckinTurnSchema>;
 
+/** One word of a dictation, compared with the sentence (dictation.rs). */
+export const DiffWordSchema = z.object({
+  /** The word as said; empty for one typed that was not said. */
+  expected: z.string(),
+  /** What was typed in its place; empty for a word left out. */
+  given: z.string(),
+  /** "accents": right, but its Danish letters were left off — accepted, and shown. */
+  status: z.enum(["right", "accents", "wrong", "missing", "extra"]),
+});
+export type DiffWord = z.infer<typeof DiffWordSchema>;
+
+/** A dictation checked: right when every word was heard. */
+export const DictationCheckedSchema = z.object({
+  correct: z.boolean(),
+  words: z.array(DiffWordSchema),
+});
+export type DictationChecked = z.infer<typeof DictationCheckedSchema>;
+
+/** A word said that was heard as another, and the sound that likely did it (sounds.rs). */
+export const SoundTipSchema = z.object({
+  word: z.string(),
+  heard: z.string(),
+  /** The contrast: "æ or e". */
+  label: z.string(),
+  /** What to try. */
+  advice: z.string(),
+  /** A built-in pair of the contrast to hear side by side, when it has one. */
+  pair: z
+    .object({
+      id: z.string().nullable(),
+      label: z.string(),
+      a: z.string(),
+      aEn: z.string(),
+      b: z.string(),
+      bEn: z.string(),
+    })
+    .nullable(),
+});
+export type SoundTip = z.infer<typeof SoundTipSchema>;
+
+/** A spoken attempt compared with what was to be said (speaking.rs). */
+export const SpokenSchema = z.object({
+  correct: z.boolean(),
+  words: z.array(DiffWordSchema),
+  tips: z.array(SoundTipSchema),
+});
+export type Spoken = z.infer<typeof SpokenSchema>;
+
+/** A recording heard: the words, and for a speaking card how they compare. */
+export const HeardSchema = z.object({
+  text: z.string(),
+  spoken: SpokenSchema.nullable(),
+});
+export type Heard = z.infer<typeof HeardSchema>;
+
 export const AnswerResultSchema = z.object({
   correct: z.boolean(),
   expected: z.string(),
@@ -407,6 +696,10 @@ export const AnswerResultSchema = z.object({
   totalXp: z.number(),
   dayXp: z.number(),
   level: z.number(),
+  /** A dictation (or a speaking card's best attempt), word by word; empty for every other kind. */
+  diff: z.array(DiffWordSchema),
+  /** A speaking card: the sounds to try; empty for every other kind. */
+  tips: z.array(SoundTipSchema),
 });
 export type AnswerResult = z.infer<typeof AnswerResultSchema>;
 
@@ -557,6 +850,12 @@ export const SettingsSchema = z.object({
   favoriteModels: z.array(z.string()),
   /** Draws course pictures; empty means the default image model. */
   imageModel: z.string(),
+  /** Finds the things in a scene lesson's picture; empty means the default. */
+  visionModel: z.string(),
+  /** Hears the learner speak; empty means the default. */
+  hearingModel: z.string(),
+  /** Speaking cards in lessons (kept on this device). */
+  speaking: z.boolean(),
   hasKieKey: z.boolean(),
   sunoModel: z.string(),
   sunoModels: z.array(z.string()),
@@ -565,6 +864,8 @@ export const SettingsSchema = z.object({
   /** Empty until first stored. */
   theme: z.enum(["", "system", "light", "dark"]),
   playerRepeat: z.enum(["", "off", "all", "one"]),
+  /** Taps and buzzes with the answers, on a phone (kept on this device). */
+  haptics: z.boolean(),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 
@@ -583,10 +884,14 @@ export const SettingsPatchSchema = z.object({
   wordChatModel: z.string().optional(),
   favoriteModels: z.array(z.string()).optional(),
   imageModel: z.string().optional(),
+  visionModel: z.string().optional(),
+  hearingModel: z.string().optional(),
+  speaking: z.boolean().optional(),
   sunoModel: z.string().optional(),
   songLength: SongLengthSchema.optional(),
   theme: z.enum(["system", "light", "dark"]).optional(),
   playerRepeat: z.enum(["off", "all", "one"]).optional(),
+  haptics: z.boolean().optional(),
 });
 export type SettingsPatch = z.infer<typeof SettingsPatchSchema>;
 
@@ -710,6 +1015,10 @@ export const AiModelSchema = z.object({
   tools: z.boolean(),
   /** Can make images — for course pictures. */
   images: z.boolean(),
+  /** Can read images — for finding the things in a scene. */
+  vision: z.boolean(),
+  /** Takes sound in: can hear the learner speak. */
+  hears: z.boolean(),
 });
 export type AiModel = z.infer<typeof AiModelSchema>;
 

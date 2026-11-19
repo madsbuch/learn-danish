@@ -11,6 +11,7 @@ import type {
   DeviceId,
   EntryId,
   LessonId,
+  PanelId,
   MemoryId,
   PlaylistId,
   SongId,
@@ -25,8 +26,16 @@ import type {
   SongDraft,
   SpeechLine,
   SettingsPatch,
+  QuickGameKind,
 } from "./types";
 import {
+  GameFinishedSchema,
+  DictationCheckedSchema,
+  HeardSchema,
+  SpokenSchema,
+  GlossWordSchema,
+  QuickGameSchema,
+  QuickGamesSchema,
   FileIdSchema,
   JoinResultSchema,
   ResolvedIdSchema,
@@ -160,6 +169,17 @@ export const api = {
     run?: string;
   }) => call(AnswerResultSchema, "submit_answer", { answer }),
   xpDay: (day: number) => call(XpDaySchema, "xp_day", { day }),
+  quickGames: () => call(QuickGamesSchema, "quick_games"),
+  quickGameDeal: (game: QuickGameKind) => call(QuickGameSchema, "quick_game_deal", { game }),
+  quickGameFinish: (game: QuickGameKind, pairs: number, ms: number, moves: number) =>
+    call(GameFinishedSchema, "quick_game_finish", { game, pairs, ms, moves }),
+  dictationCheck: (expected: string, given: string) =>
+    call(DictationCheckedSchema, "dictation_check", { expected, given }),
+  /** Hears a recording (base64, in `format`): for a speaking card, compared
+   *  with `expected`; for a chat box (null), just the words. */
+  speechHear: (audio: string, format: string, expected: string | null) =>
+    call(HeardSchema, "speech_hear", { audio, format, expected }),
+  speechCheck: (expected: string, heard: string) => call(SpokenSchema, "speech_check", { expected, heard }),
   xpHistory: (days: number) =>
     call(z.array(XpHistoryDaySchema), "xp_history", { days }),
   lessonsOverview: () => call(LessonOverviewSchema, "lessons_overview"),
@@ -292,6 +312,10 @@ export const api = {
   wordPictureDraw: (wordId: WordId) =>
     call(FileIdSchema, "word_picture_draw", { wordId }),
   wordPictureDelete: (wordId: WordId) => run("word_picture_delete", { wordId }),
+  /** A scene lesson's picture made again: its things found again, or (`redraw`) a new picture. */
+  sceneMake: (lessonId: LessonId, redraw: boolean) => run("scene_make", { lessonId, redraw }),
+  /** A story's panel drawn again, or (`panelId` null) every panel that failed. */
+  storyDraw: (lessonId: LessonId, panelId: PanelId | null) => run("story_draw", { lessonId, panelId }),
   coursePictureDelete: (courseId: CourseId) =>
     run("course_picture_delete", { courseId }),
   tutorConversations: () =>
@@ -390,6 +414,7 @@ export const api = {
     call(SongSchema, "podcast_rerender", { songId, audio: audio ?? null }),
   songTrackLyrics: (trackId: TrackId) =>
     call(z.array(TimedLineSchema).nullable(), "song_track_lyrics", { trackId }),
+  songGlossary: (songId: SongId) => call(z.array(GlossWordSchema), "song_glossary", { songId }),
 
   playlistsList: () => call(z.array(PlaylistSchema), "playlists_list"),
   playlistCreate: (name: string, trackIds: TrackId[] = []) =>

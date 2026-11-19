@@ -222,7 +222,7 @@ mod legacy {
     }
 }
 
-pub(crate) const SCHEMA_VERSION: i64 = 8;
+pub(crate) const SCHEMA_VERSION: i64 = 12;
 
 /// The schema up to version 6 (integer ids): what an older database is
 /// brought to before it is converted to version 7 (upgrade_v7.rs).
@@ -729,6 +729,17 @@ fn migrate(conn: &mut Conn) -> Result<()> {
         crate::upgrade_v8::run(conn, SCHEMA)?;
     }
     conn.batch_execute(SCHEMA)?;
+    // Version 9: a sentence's endings for word-order tiles (tiles.rs). Older
+    // sentences get none: they keep being built by plain ordering.
+    add_column(conn, "sentences", "endings", "TEXT NOT NULL DEFAULT '[]'")?;
+    // Version 10: a word's near neighbour by sound, for sound-pair cards
+    // (sounds.rs). Older words get none: their lessons use the built-in pairs.
+    add_column(conn, "words", "near_da", "TEXT NOT NULL DEFAULT ''")?;
+    add_column(conn, "words", "near_en", "TEXT NOT NULL DEFAULT ''")?;
+    // Version 11: scene lessons (scenes.rs) — two new tables, made by the
+    // schema above. Nothing to fill in: only new lessons have scenes.
+    // Version 12: story lessons (stories.rs) — stories and story_panels, made
+    // by the schema above. Nothing to fill in: only new lessons have stories.
     // Every synced table watched by triggers that list its current columns:
     // a schema change that adds a column (with an idempotent ALTER here, and
     // a bump of SCHEMA_VERSION) gets its triggers re-made by this.
@@ -1456,11 +1467,11 @@ pub(crate) fn seed_test_courses(conn: &mut Conn) -> Result<()> {
             .execute(conn)?;
         let words: Vec<crate::courses::NewWord> = content::parse_words(course.words)
             .into_iter()
-            .map(|w| crate::courses::NewWord { da: w.da.to_string(), en: w.en.to_string(), pos: w.pos.to_string() })
+            .map(|w| crate::courses::NewWord { da: w.da.to_string(), en: w.en.to_string(), pos: w.pos.to_string(), ..Default::default() })
             .collect();
         let sentences: Vec<crate::courses::NewSentence> = content::parse_sentences(course.sentences)
             .into_iter()
-            .map(|s| crate::courses::NewSentence { da: s.da.to_string(), en: s.en.to_string() })
+            .map(|s| crate::courses::NewSentence { da: s.da.to_string(), en: s.en.to_string(), ..Default::default() })
             .collect();
         let mut lines = Vec::new();
         for line in &convo.lines {
@@ -1571,6 +1582,12 @@ pub(crate) const DEVICE_SETTINGS: &[&str] = &[
     "reminder_minute",
     "tts_prefetch",
     "player_repeat",
+    // Whether this phone taps and buzzes with the answers: a phone's
+    // preference, not the learner's (a computer has nothing to buzz).
+    "haptics",
+    // Speaking cards: whether this device has a microphone worth using (a
+    // phone, not the computer without one), so its own.
+    crate::speaking::SETTING,
     "starter_seeded",
     crate::demo_course::SEEDED,
     crate::starter_retirement::RETIRED,
@@ -1737,7 +1754,8 @@ mod tests {
             achievements, files, file_paths, sync_state, sync_rows, sync_vv, sync_peers, sync_epochs, vault_devices,
             vault_revocations, speech_clips, wiki_sources, lessons, course_lessons, course_words, course_sentences, course_lines, checkins,
             checkin_messages, tutor_conversations, tutor_messages, songs, song_tracks, playlists,
-            playlist_tracks, ai_costs, memories, word_examples, xp_log,
+            playlist_tracks, ai_costs, memories, word_examples, xp_log, scenes, scene_spots, stories,
+            story_panels,
         );
     }
 }

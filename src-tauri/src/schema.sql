@@ -37,6 +37,11 @@ CREATE TABLE IF NOT EXISTS words (
     pos      TEXT    NOT NULL,
     -- A picture of it (picture lessons, or added to a word drill).
     image_file_id TEXT REFERENCES files(id) ON DELETE SET NULL,
+    -- A real word an English ear hears it as ("tre" for "træ"), with
+    -- its gloss, from the tutor: a sound-pair card (sounds.rs). Empty for
+    -- words made without (schema 10): their lessons use the built-in pairs.
+    near_da  TEXT    NOT NULL DEFAULT '',
+    near_en  TEXT    NOT NULL DEFAULT '',
     UNIQUE (lesson_id, da)
 );
 
@@ -46,6 +51,10 @@ CREATE TABLE IF NOT EXISTS sentences (
     ord      INTEGER NOT NULL,
     da       TEXT    NOT NULL,
     en       TEXT    NOT NULL,
+    -- Its words in another form than their dictionary one, from the tutor
+    -- (a JSON list of {form, base, wrong}: tiles.rs). '[]' for sentences
+    -- made without (schema 9): they are built by plain ordering.
+    endings  TEXT    NOT NULL DEFAULT '[]',
     UNIQUE (lesson_id, da)
 );
 
@@ -140,7 +149,7 @@ CREATE TABLE IF NOT EXISTS lessons (
     id            TEXT PRIMARY KEY NOT NULL,
     slug          TEXT    UNIQUE,                -- starter lessons: lesson/<slug>
     -- What it is and how it is practised: one of lesson_types::REGISTRY
-    -- (words | pictures | typing | memory | sentences | gaps | dialogue |
+    -- (words | pictures | scene | story | typing | memory | sentences | gaps | dialogue |
     -- study | listening | writing).
     lesson_type   TEXT    NOT NULL DEFAULT '',
     ord           INTEGER NOT NULL DEFAULT 0,
@@ -345,6 +354,92 @@ CREATE TABLE IF NOT EXISTS word_examples (
     examples   TEXT    NOT NULL,
     created_at INTEGER NOT NULL
 );
+
+-- A scene lesson's picture (scenes.rs): one illustrated scene holding the
+-- lesson's words as things, made in the background — drawn by an image
+-- model, then each thing found in it by a vision model. Keyed by its lesson.
+CREATE TABLE IF NOT EXISTS scenes (
+    lesson_id     TEXT PRIMARY KEY NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    -- The scene as the tutor described it, in English: what the picture
+    -- prompt is made from, with the lesson's words (recreatable).
+    description   TEXT    NOT NULL,
+    -- "Where is it?" sentences about the scene (JSON: da, en, subject and
+    -- object word ids, preposition, phrase, wrong phrases).
+    statements    TEXT    NOT NULL DEFAULT '[]',
+    -- What the image model was last asked, exactly.
+    prompt        TEXT    NOT NULL DEFAULT '',
+    image_file_id TEXT REFERENCES files(id) ON DELETE SET NULL,
+    -- The picture's size in pixels, so the screens lay it out before it loads.
+    width         INTEGER NOT NULL DEFAULT 0,
+    height        INTEGER NOT NULL DEFAULT 0,
+    -- drawing | locating | ready | failed
+    status        TEXT    NOT NULL,
+    -- Why it failed, for the learner (empty otherwise).
+    error         TEXT    NOT NULL DEFAULT '',
+    image_model   TEXT    NOT NULL DEFAULT '',
+    vision_model  TEXT    NOT NULL DEFAULT '',
+    created_at    INTEGER NOT NULL,
+    updated_at    INTEGER NOT NULL
+);
+
+-- Where each thing is in its scene: a box in fractions of the picture's
+-- width and height (0–1, from the top left), found by a vision model.
+CREATE TABLE IF NOT EXISTS scene_spots (
+    id        TEXT PRIMARY KEY NOT NULL,
+    lesson_id TEXT NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    word_id   TEXT NOT NULL REFERENCES words(id) ON DELETE CASCADE,
+    x         REAL NOT NULL,
+    y         REAL NOT NULL,
+    w         REAL NOT NULL,
+    h         REAL NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS scene_spots_lesson ON scene_spots(lesson_id);
+
+-- A story lesson's story (stories.rs): what it is about and who is in it,
+-- told panel by panel (story_panels). Keyed by its lesson.
+CREATE TABLE IF NOT EXISTS stories (
+    lesson_id   TEXT PRIMARY KEY NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    -- What the story is about, in English, as the tutor wrote it.
+    theme       TEXT    NOT NULL,
+    -- Where it happens, for the pictures (may be empty).
+    setting     TEXT    NOT NULL DEFAULT '',
+    -- Who is in it (JSON: name, look — a short description of how they look,
+    -- put in every panel's picture prompt so they stay the same — gender).
+    characters  TEXT    NOT NULL DEFAULT '[]',
+    created_at  INTEGER NOT NULL,
+    updated_at  INTEGER NOT NULL
+);
+
+-- One panel of a story: a picture and 1–3 sentences under it, and a
+-- question asked after it. Its picture is drawn in the background, panel by
+-- panel; the story is readable before (a drawing placeholder shows).
+CREATE TABLE IF NOT EXISTS story_panels (
+    id            TEXT PRIMARY KEY NOT NULL,
+    lesson_id     TEXT    NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    ord           INTEGER NOT NULL,
+    -- What the picture shows, in English (the prompt is made from this, the
+    -- characters and the story's one style: recreatable).
+    picture       TEXT    NOT NULL,
+    -- Its sentences (JSON: da, en, speaker — a character's name for a line
+    -- they say, empty for narration).
+    lines         TEXT    NOT NULL DEFAULT '[]',
+    -- The question after it (JSON: prompt, answer, wrong answers).
+    question      TEXT    NOT NULL DEFAULT '{}',
+    -- What the image model was last asked, exactly.
+    prompt        TEXT    NOT NULL DEFAULT '',
+    image_file_id TEXT REFERENCES files(id) ON DELETE SET NULL,
+    width         INTEGER NOT NULL DEFAULT 0,
+    height        INTEGER NOT NULL DEFAULT 0,
+    -- waiting | drawing | ready | failed
+    status        TEXT    NOT NULL,
+    -- Why its picture failed, for the learner (empty otherwise).
+    error         TEXT    NOT NULL DEFAULT '',
+    image_model   TEXT    NOT NULL DEFAULT '',
+    updated_at    INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS story_panels_lesson ON story_panels(lesson_id, ord);
 
 CREATE INDEX IF NOT EXISTS words_lesson ON words(lesson_id, ord);
 

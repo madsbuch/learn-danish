@@ -24,7 +24,9 @@ mod gaps;
 mod listening;
 mod memory;
 mod pictures;
+mod scene;
 mod sentences;
+mod story;
 mod study;
 mod typing;
 mod words;
@@ -34,6 +36,8 @@ mod writing;
 pub const REGISTRY: &[&LessonType] = &[
     &words::TYPE,
     &pictures::TYPE,
+    &scene::TYPE,
+    &story::TYPE,
     &typing::TYPE,
     &memory::TYPE,
     &sentences::TYPE,
@@ -98,7 +102,7 @@ pub struct LessonType {
     pub unaided_to_master: bool,
     /// What its page shows, in order: objectives | goals | text | situation |
     /// note | sources | song | writing | dialogue | words | sentences |
-    /// pictures (each drawn by src/screens/LessonPage.tsx).
+    /// pictures | scene | where | story (each drawn by src/screens/LessonPage.tsx).
     pub sections: &'static [&'static str],
     /// Its page's button, the first time and after.
     pub start_label: &'static str,

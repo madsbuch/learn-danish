@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { WordChat } from "../components/WordChat";
 import { WrongAnswerReview } from "../components/WrongAnswerReview";
@@ -8,6 +8,7 @@ import { api, errorMessage } from "../lib/api";
 import { useBackHandler } from "../lib/back";
 import { speakQuietly } from "../lib/speech";
 import type { AnswerResult, LessonFinished, Exercise, SessionPlan } from "../lib/types";
+import { hapticRight, hapticWrong } from "../lib/haptics";
 import { playCorrect, playWrong } from "../lib/sounds";
 import { exerciseModule, type AnswerState, type ExerciseProps } from "../exercises";
 import { WordIdSchema } from "../lib/types";
@@ -39,17 +40,26 @@ export function Session({
   const [busy, setBusy] = useState(false);
   const [sessionXp, setSessionXp] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
+  // Every answer of this go, right or not, by card.
+  const [results, setResults] = useState<Record<string, boolean>>({});
 
   // Per-exercise answer state.
   const [picked, setPicked] = useState<string | null>(null);
   const [typed, setTyped] = useState("");
   const [built, setBuilt] = useState<number[]>([]);
+  const [forms, setForms] = useState<Partial<Record<number, string>>>({});
   const [revealAll, setRevealAll] = useState(false);
   const [gapsFilled, setGapsFilled] = useState<(number | null)[]>([]);
   const [memoryTurns, setMemoryTurns] = useState<number | null>(null);
+  // Bumped by a card that submits itself (onDone).
+  const [done, setDone] = useState(0);
 
   // The chat about the current word, when open.
   const [talking, setTalking] = useState(false);
+  // Speaking skipped for the rest of this go (a noisy place): spoken turns
+  // are picked instead, and the Say it cards still to come are left out.
+  const [speakingOff, setSpeakingOff] = useState(false);
+  const [skipped, setSkipped] = useState<ReadonlySet<string>>(new Set());
 
   const bodyRef = useRef<HTMLDivElement>(null);
   // The XP badge swells as points come in.
@@ -58,8 +68,14 @@ export function Session({
   const runKey = useRef(`${plan.lessonId}-${Date.now()}`);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const exercise: Exercise | undefined = plan.exercises[index];
-  const total = plan.exercises.length;
+  const exercises = plan.exercises.filter((e) => !skipped.has(e.key));
+  const card: Exercise | undefined = exercises[index];
+  // A spoken turn with speaking off is the choice it was made from.
+  const exercise: Exercise | undefined = useMemo(
+    () => (card && speakingOff && card.kind === "dialogueSay" ? { ...card, kind: "dialogueGap" } : card),
+    [card, speakingOff],
+  );
+  const total = exercises.length;
   // The module that draws and scores this kind of exercise.
   const module = exercise ? exerciseModule(exercise.kind) : undefined;
 
@@ -70,8 +86,10 @@ export function Session({
     setPicked(null);
     setTyped("");
     setBuilt([]);
+    setForms({});
     setGapsFilled([]);
     setMemoryTurns(null);
+    setDone(0);
     setTalking(false);
     setError(null);
     bodyRef.current?.scrollTo({ top: 0 });
@@ -81,7 +99,7 @@ export function Session({
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [index, exercise?.kind]);
+  }, [index, exercise?.key, exercise?.kind]);
 
   // Pronounce new material as it appears — hearing it first anchors the
   // spelling. Failures stay silent here; the 🔊 button is where they surface.
@@ -91,15 +109,16 @@ export function Session({
     }
   }, [exercise]);
 
-  const answerState: AnswerState = { picked, typed, built, gapsFilled, memoryTurns };
+  const answerState: AnswerState = { picked, typed, built, forms, gapsFilled, memoryTurns };
   const given = exercise && module ? module.given(exercise, answerState) : "";
   const canSubmit = exercise && module ? module.canSubmit(exercise, answerState) : false;
 
-  // Finding the last pair is the answer; no separate Check tap needed.
+  // Finding the last pair (or the thing in the picture) is the answer; no
+  // separate Check tap needed. Run after the render that has the answer in.
   useEffect(() => {
-    if (module?.submitsItself && memoryTurns !== null && phase === "answering") void check();
+    if (((module?.submitsItself && memoryTurns !== null) || done > 0) && phase === "answering") void check();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memoryTurns]);
+  }, [memoryTurns, done]);
 
   /** Submits the answer; true when it was recorded. */
   async function check(): Promise<boolean> {
@@ -122,10 +141,16 @@ export function Session({
       setSessionXp((xp) => xp + answer.xpGained);
       const reading = exerciseModule(exercise.kind).reading;
       if (answer.correct && !reading) setCorrectCount((n) => n + 1);
+      if (!reading) setResults((r) => ({ ...r, [exercise.key]: answer.correct }));
       setPhase("checked");
       if (!reading) {
-        if (answer.correct) playCorrect();
-        else playWrong();
+        if (answer.correct) {
+          playCorrect();
+          hapticRight();
+        } else {
+          playWrong();
+          hapticWrong();
+        }
       }
       if (exercise.da && exercise.itemKind !== "dialogue" && exercise.itemKind !== "set") {
         // Let the chime ring before the word is read out — after a miss too,
@@ -147,14 +172,30 @@ export function Session({
       setIndex(index + 1);
       return;
     }
+    await finish(exercises);
+  }
+
+  async function finish(played: Exercise[]) {
     setBusy(true);
     try {
-      const scored = plan.exercises.filter((e) => !exerciseModule(e.kind).reading).length;
+      const scored = played.filter((e) => !exerciseModule(e.kind).reading).length;
       onFinished(await api.lessonFinish(plan.lessonId, correctCount, scored), sessionXp);
     } catch (cause) {
       setError(errorMessage(cause));
       setBusy(false);
     }
+  }
+
+  /** No more speaking this go: the Say it cards from here on are left out
+   *  (unscored), and spoken turns become choices. */
+  function skipSpeaking() {
+    setSpeakingOff(true);
+    const later = exercises.slice(index).filter((e) => e.kind === "sayIt").map((e) => e.key);
+    if (later.length === 0) return;
+    const left = exercises.filter((e) => !later.includes(e.key));
+    // Nothing after it but Say it cards: the lesson is done.
+    if (index >= left.length) void finish(left);
+    else setSkipped(new Set([...skipped, ...later]));
   }
 
   if (!exercise || !module) {
@@ -176,16 +217,29 @@ export function Session({
   const isChecked = phase === "checked";
   const reading = module.reading ?? false;
 
+  /** The foot button: check the answer, or move on once checked; a reading card is recorded and left. */
+  async function next() {
+    if (busy) return;
+    if (isChecked && !reading) await advance();
+    else if (reading) {
+      if (await check()) await advance();
+    } else if (canSubmit && !module?.submitsItself) await check();
+  }
+
   const exerciseProps: ExerciseProps = {
     ...answerState,
     exercise,
     plan,
     isChecked,
+    diff: result?.diff ?? [],
     setPicked,
     setTyped,
     setBuilt,
+    setForms,
     setGapsFilled,
     onMemoryComplete: setMemoryTurns,
+    onDone: () => setDone((n) => n + 1),
+    onSkipSpeaking: skipSpeaking,
     revealAll,
     onToggleReveal: () => setRevealAll((v) => !v),
     inputRef,
@@ -193,10 +247,13 @@ export function Session({
       if (isChecked) void advance();
       else if (canSubmit) void check();
     },
+    onNext: () => void next(),
+    results,
+    sessionXp,
   };
 
   return (
-    <div className="session">
+    <div className={module.wide ? "session session--wide" : "session"}>
       <div className="session-top">
         <IconButton icon={<CloseIcon />} label="Leave practice" onClick={onQuit} />
         <div className="grow">
@@ -209,7 +266,7 @@ export function Session({
         </span>
       </div>
 
-      <div className="session-body exercise-in" key={exercise.key} ref={bodyRef}>
+      <div className={`session-body ${module.pageTurn ? "page-turn-in" : "exercise-in"}`} key={exercise.key} ref={bodyRef}>
         {error ? <Banner tone="error">{error}</Banner> : null}
 
         {module.render(exerciseProps)}
@@ -262,12 +319,10 @@ export function Session({
             wide
             loading={busy}
             disabled={!canSubmit || module.submitsItself}
-            onClick={async () => {
-              // Reading cards have nothing to check: record them and move on.
-              if ((await check()) && reading) await advance();
-            }}
+            // Reading cards have nothing to check: record them and move on.
+            onClick={() => void next()}
           >
-            {reading ? "Got it" : (module.checkLabel ?? "Check")}
+            {reading ? (module.checkLabel ?? "Got it") : (module.checkLabel ?? "Check")}
           </Button>
         )}
         <Text variant="caption" tone="faint" align="center" as="div">

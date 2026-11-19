@@ -159,7 +159,33 @@ counting and celebrating.
   value. Nothing moves on a reload that changed nothing.
 - **Practice.** The next card slides in; a right answer swells and glows, a
   wrong one shakes; the XP badge bumps (`useBump`). A day done or a new level
-  gets `Confetti`.
+  gets `Confetti`. A sentence tile lifts when picked up and follows the
+  finger above the page; the line makes room, and the tile springs into its
+  slot (FLIP: one-off, ending untransformed). Memory cards turn edge-on to
+  their new face. A running clock writes its own digits (no re-render). A
+  checked dictation's words land one after another (an entrance, once).
+  A speaking card's mic swells its ring with the voice while it records (a
+  shadow driven by a CSS variable, never a transform), and what was heard
+  rises in under it.
+  A scene (`components/Scene.tsx`) fills the width on a phone and as much
+  of the window as the card leaves on a big screen; its rings settle in
+  (one-off) and change colour and glow only — a right find glows green, a
+  miss shakes softly where it landed, the answer after two misses glows
+  gold.
+  A story's page (`components/Story.tsx`) comes in like a page turned — a
+  short slide with a slight turn, back from the left when going back — in
+  practice and in the picture book; its sentences change colour only (the
+  one being read aloud is tinted), and a picture still being drawn breathes
+  in colour on its dashed edge, never in opacity.
+- **Sing along** (the lyrics, `FollowLyrics`): a blank is the word in
+  transparent ink on a dashed line, so filling it moves nothing; it fills
+  by colour with a glow (a shadow), or shows in gold when missed. The
+  choices and the score sit above the scroller, where they may pop; a
+  word's meaning opens in a popover inside it, at once, with no fade.
+- **Haptics** (phones; `src/lib/haptics.ts`, Settings → Voices & sound): a
+  soft tap for a right answer, a firm double buzz for a wrong one, a light
+  tick under a primary button or a tile, a roll with every `Confetti`. Not
+  tied to reduced motion: it has its own switch.
 - **Touch and mouse.** Pressed things scale down a touch and spring back.
   Hover (mouse only, under `(hover: hover) and (pointer: fine)`) changes
   shadow, border or tint — never a transform (see below).

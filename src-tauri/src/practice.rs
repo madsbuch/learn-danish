@@ -22,7 +22,7 @@ use crate::ids::*;
 
 /// Ignores case, punctuation and extra spaces. Standard keyboard alternatives
 /// ae/oe/aa are accepted for æ/ø/å; the feedback always shows Danish spelling.
-fn normalize(text: &str) -> String {
+pub(crate) fn normalize(text: &str) -> String {
     let mut out = String::with_capacity(text.len());
     let mut last_was_space = true;
     for ch in text.trim().to_lowercase().chars() {
@@ -87,7 +87,7 @@ pub struct SubmitAnswer {
 
 /// Cards that are only read (a new word, a new sentence, a dialogue to read
 /// through): nothing is answered, so nothing is scored.
-pub const READING_KINDS: &[&str] = &["intro", "sentenceIntro", "dialogueRead", "pictureIntro"];
+pub const READING_KINDS: &[&str] = &["intro", "sentenceIntro", "dialogueRead", "pictureIntro", "sceneExplore", "storyPanel", "storyEnd"];
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -98,6 +98,13 @@ pub struct AnswerResult {
     pub total_xp: i64,
     pub day_xp: i64,
     pub level: i64,
+    /// A dictation: what was written, word by word against the sentence
+    /// (dictation.rs); a speaking card: what was heard. Empty for every
+    /// other kind.
+    pub diff: Vec<crate::dictation::DiffWord>,
+    /// A speaking card: words heard as others by a known contrast, and what
+    /// to try (speaking.rs). Empty for every other kind.
+    pub tips: Vec<crate::sounds::SoundTip>,
 }
 
 #[tauri::command]
@@ -123,13 +130,44 @@ pub fn submit_answer_in(conn: &mut Conn, answer: SubmitAnswer) -> Result<AnswerR
             total_xp,
             day_xp,
             level: stats::level_from_xp(total_xp),
+            diff: vec![],
+            tips: vec![],
         });
     }
 
-    let correct = answers_match(&answer.expected, &answer.given);
+    // Tiles are given, not typed: their Danish letters and endings are the
+    // point (the ending picked on a tile: "kaffen", not "kaffe"; "rød", not
+    // "roed"), so nothing is forgiven there but case and punctuation.
+    // A dictation is compared word by word, Danish letters typed as ae, oe
+    // and aa forgiven but shown. A sound pair is the one word or the other,
+    // compared exactly: one letter is all that tells them apart ("tå", "to").
+    // A speaking card is what the learner's best attempt was heard as,
+    // compared like a dictation (speaking.rs).
+    let mut diff = vec![];
+    let mut tips = vec![];
+    let correct = match answer.kind.as_str() {
+        "wordOrder" => crate::tiles::fold(&answer.expected) == crate::tiles::fold(&answer.given),
+        "dictation" => {
+            let checked = crate::dictation::check(&answer.expected, &answer.given);
+            diff = checked.words;
+            checked.correct
+        }
+        "soundPair" => answer.expected.trim().to_lowercase() == answer.given.trim().to_lowercase(),
+        "sayIt" | "dialogueSay" => {
+            let spoken = crate::speaking::check(&answer.expected, &answer.given);
+            diff = spoken.words;
+            tips = spoken.tips;
+            spoken.correct
+        }
+        _ => answers_match(&answer.expected, &answer.given),
+    };
+    // A sentence not quite heard is not a sentence forgotten: the learner
+    // knew what to say, and the ear (a model's, in a room) is fallible. It
+    // comes back sooner, but is not started over.
+    let missed = if crate::speaking::KINDS.contains(&answer.kind.as_str()) { srs::HARD } else { srs::AGAIN };
     let grade = answer
         .grade
-        .unwrap_or(if correct { srs::GOOD } else { srs::AGAIN })
+        .unwrap_or(if correct { srs::GOOD } else { missed })
         .clamp(srs::AGAIN, srs::EASY);
 
     // Conversation gaps exercise the dialogue rather than a scheduled item, so
@@ -164,6 +202,8 @@ pub fn submit_answer_in(conn: &mut Conn, answer: SubmitAnswer) -> Result<AnswerR
         total_xp,
         day_xp,
         level: stats::level_from_xp(total_xp),
+        diff,
+        tips,
     })
 }
 

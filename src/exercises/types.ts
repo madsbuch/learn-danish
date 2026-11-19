@@ -1,6 +1,6 @@
 import type { ReactNode, RefObject } from "react";
 
-import type { Exercise, ExerciseKind, SessionPlan } from "../lib/types";
+import type { DiffWord, Exercise, ExerciseKind, SessionPlan } from "../lib/types";
 
 /**
  * Everything a learner can have put in so far on one card. The session owns
@@ -14,6 +14,8 @@ export interface AnswerState {
   typed: string;
   /** Word order: the indices into `exercise.tokens`, in the order placed. */
   built: number[];
+  /** Word order: the ending picked on a tile, by its index into `exercise.tokens`. */
+  forms: Partial<Record<number, string>>;
   /** Fill the gaps: for each gap, the index of the bank word in it, or null. */
   gapsFilled: (number | null)[];
   /** Memory: the turns it took to find every pair, once they are all found. */
@@ -26,12 +28,23 @@ export interface ExerciseProps extends AnswerState {
   plan: SessionPlan;
   /** The answer has been submitted: options lock and show right/wrong. */
   isChecked: boolean;
+  /** Once checked, a dictation word by word (empty for other kinds). */
+  diff: DiffWord[];
   setPicked: (option: string) => void;
   setTyped: (text: string) => void;
   setBuilt: (built: number[]) => void;
+  setForms: (forms: Partial<Record<number, string>>) => void;
   setGapsFilled: (filled: (number | null)[]) => void;
   /** Memory: called once, with the turns taken, when the last pair is found. */
   onMemoryComplete: (turns: number) => void;
+  /** A card that submits itself (finding a thing in a scene, a sentence
+   *  said right): the answer is in, check it — after the state set
+   *  alongside this call has landed. */
+  onDone: () => void;
+  /** Speaking cards: no speaking for the rest of this go (a noisy place, a
+   *  refused microphone). A spoken turn becomes a choice again; a Say it
+   *  card is left out, unscored. */
+  onSkipSpeaking: () => void;
   /** Today's conversation: whether every line's English is showing. */
   revealAll: boolean;
   onToggleReveal: () => void;
@@ -39,6 +52,14 @@ export interface ExerciseProps extends AnswerState {
   inputRef: RefObject<HTMLInputElement | null>;
   /** Enter in the text box: check the answer, or move on once checked. */
   onEnter: () => void;
+  /** What the foot button does now: check, move on, or (a card only read)
+   *  both — for a card turned by a swipe or an arrow key (a story's page). */
+  onNext: () => void;
+  /** This go's answers so far, right or not, by exercise key (a story's last
+   *  page counts its questions). */
+  results: Readonly<Record<string, boolean>>;
+  /** XP earned so far this go. */
+  sessionXp: number;
 }
 
 /**
@@ -57,11 +78,17 @@ export interface ExerciseModule<K extends ExerciseKind = ExerciseKind> {
   /** New material: say `exercise.da` aloud when the card appears. */
   speakOnShow?: boolean;
   /** The answer is complete the moment the learner finishes (memory's last
-   *  pair), so it submits itself and the foot button stays disabled. */
+   *  pair, a thing found), so it submits itself and the foot button stays
+   *  disabled. */
   submitsItself?: boolean;
+  /** Wants the room: a scene, as large as the window allows (the session
+   *  widens past the reading width on a big screen). */
+  wide?: boolean;
+  /** A page of a story: it comes in turning, like a page, not sliding. */
+  pageTurn?: boolean;
   /** Show "da — meaning" in the verdict even after a right answer. */
   revealOnRight?: boolean;
-  /** The foot button's label in place of "Check". */
+  /** The foot button's label in place of "Check" ("Got it" on a reading card). */
   checkLabel?: string;
   /** The card's body, between the error banner and the verdict. */
   render: (props: ExerciseProps) => ReactNode;

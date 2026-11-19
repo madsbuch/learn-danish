@@ -192,6 +192,25 @@ export function SpeakerIcon() {
   );
 }
 
+/** A microphone: speak. */
+export function MicIcon() {
+  return (
+    <Glyph>
+      <rect x="9" y="3" width="6" height="11" rx="3" />
+      <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" />
+    </Glyph>
+  );
+}
+
+/** A square: stop recording. */
+export function StopIcon() {
+  return (
+    <Glyph>
+      <rect x="7" y="7" width="10" height="10" rx="2" />
+    </Glyph>
+  );
+}
+
 export function MutedIcon() {
   return (
     <Glyph>
@@ -306,6 +325,40 @@ export function PictureIcon() {
       <rect x="3.5" y="4.5" width="17" height="15" rx="2.5" />
       <circle cx="9" cy="10" r="1.8" />
       <path d="M4 17.5l5-5 4 4 2.5-2.5 5 4.5" />
+    </Glyph>
+  );
+}
+
+/** A scene: a picture with a thing in it pointed out. */
+export function SceneIcon() {
+  return (
+    <Glyph>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="2.5" />
+      <path d="M4 17.5l4.5-4.5 3.5 3.5" />
+      <rect x="13" y="8" width="5" height="5" rx="1.2" strokeDasharray="2 1.6" />
+    </Glyph>
+  );
+}
+
+/** A story: an open picture book. */
+export function StoryIcon() {
+  return (
+    <Glyph>
+      <path d="M12 6.5c-1.8-1.3-4.6-1.9-8-1.5v13c3.4-.4 6.2.2 8 1.5 1.8-1.3 4.6-1.9 8-1.5V5c-3.4-.4-6.2.2-8 1.5z" />
+      <path d="M12 6.5v13" />
+      <path d="M6 13.5l2-2 2 2" />
+      <circle cx="16.5" cy="10" r="1.3" />
+    </Glyph>
+  );
+}
+
+/** A picture still to be drawn: a pencil. */
+export function PencilIcon() {
+  return (
+    <Glyph>
+      <path d="M4.5 19.5l1-4.2L15.8 5a2 2 0 012.8 0l.4.4a2 2 0 010 2.8L8.7 18.5z" />
+      <path d="M13.8 7l3.2 3.2" />
+      <path d="M4.5 19.5h5" />
     </Glyph>
   );
 }

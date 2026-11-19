@@ -35,13 +35,13 @@ pub fn seed_once(conn: &mut Conn) -> Result<()> {
                 ("engelsk", "English (language)", "n"),
                 ("at hedde", "to be called", "v"),
                 ("at forstå", "to understand", "v"),
-            ].into_iter().map(|(da, en, pos)| NewWord { da: da.into(), en: en.into(), pos: pos.into() }).collect::<Vec<_>>();
+            ].into_iter().map(|(da, en, pos)| NewWord { da: da.into(), en: en.into(), pos: pos.into(), ..Default::default() }).collect::<Vec<_>>();
             let sentences = [
                 ("Hej, jeg hedder Anna.", "Hello, my name is Anna."),
                 ("Hvad hedder du?", "What is your name?"),
                 ("Jeg taler engelsk.", "I speak English."),
                 ("Jeg forstår ikke.", "I do not understand."),
-            ].into_iter().map(|(da, en)| NewSentence { da: da.into(), en: en.into() }).collect::<Vec<_>>();
+            ].into_iter().map(|(da, en)| NewSentence { da: da.into(), en: en.into(), ..Default::default() }).collect::<Vec<_>>();
             let dialogue = [
                 ("Anna", "f", "Hej! Jeg hedder Anna.", "Hello! My name is Anna."),
                 ("Alex", "m", "Hej, Anna. Jeg hedder Alex.", "Hello, Anna. My name is Alex."),

@@ -26,6 +26,10 @@ pub const WORD_CHAT: &str = "word chat";
 pub const EXAMINER: &str = "examiner";
 pub const PARTNER: &str = "writing partner";
 pub const PICTURES: &str = "pictures";
+/// A vision model finding the things in a scene lesson's picture.
+pub const SCENE_SPOTS: &str = "scene spots";
+/// A model hearing the learner speak (speaking.rs).
+pub const HEARING: &str = "hearing";
 pub const FACT_CHECK: &str = "fact check";
 pub const SONGWRITER: &str = "songwriter";
 pub const SONGS: &str = "songs";

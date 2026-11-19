@@ -26,18 +26,35 @@ const MAX_WORDS: usize = 120;
 const MAX_SENTENCES: usize = 60;
 const MAX_DIALOGUE_LINES: usize = 40;
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Default, Deserialize)]
 pub struct NewWord {
     pub da: String,
     pub en: String,
     #[serde(default)]
     pub pos: String,
+    /// A real word an English ear hears it as, for a sound-pair card
+    /// (sounds.rs). Optional: most words have none.
+    #[serde(default)]
+    pub near: Option<NearWord>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+/// A word's near neighbour by sound: "tre" (three) for "træ" (tree).
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct NearWord {
+    pub da: String,
+    #[serde(default)]
+    pub en: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
 pub struct NewSentence {
     pub da: String,
     pub en: String,
+    /// Its words that stand in another form than their dictionary one, so a
+    /// word-order card can ask for the ending (tiles.rs). Optional: without
+    /// them the sentence is built by plain ordering.
+    #[serde(default)]
+    pub endings: Vec<crate::tiles::Ending>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -608,6 +625,14 @@ pub fn insert_items(conn: &mut Conn, lesson_id: LessonId, items: &Items) -> Resu
         if da.is_empty() || en.is_empty() {
             continue;
         }
+        // A neighbour by sound is kept only with its meaning: the card says
+        // what each word of the pair is.
+        let near = word
+            .near
+            .as_ref()
+            .and_then(|n| Some((crate::sounds::clean_near(&da, &n.da)?, clean(&n.en))))
+            .filter(|(_, en)| !en.is_empty())
+            .unwrap_or_default();
         let added = diesel::insert_or_ignore_into(words::table)
             .values((
                 words::id.eq(WordId::new()),
@@ -616,6 +641,8 @@ pub fn insert_items(conn: &mut Conn, lesson_id: LessonId, items: &Items) -> Resu
                 words::da.eq(da),
                 words::en.eq(en),
                 words::pos.eq(normalize_pos(&word.pos)),
+                words::near_da.eq(near.0),
+                words::near_en.eq(near.1),
             ))
             .execute(conn)?;
         if added == 0 {
@@ -635,6 +662,7 @@ pub fn insert_items(conn: &mut Conn, lesson_id: LessonId, items: &Items) -> Resu
         if da.is_empty() || en.is_empty() {
             continue;
         }
+        let endings = crate::tiles::clean_endings(&da, &sentence.endings);
         let added = diesel::insert_or_ignore_into(sentences::table)
             .values((
                 sentences::id.eq(SentenceId::new()),
@@ -642,6 +670,7 @@ pub fn insert_items(conn: &mut Conn, lesson_id: LessonId, items: &Items) -> Resu
                 sentences::ord.eq(ord),
                 sentences::da.eq(da),
                 sentences::en.eq(en),
+                sentences::endings.eq(serde_json::to_string(&endings)?),
             ))
             .execute(conn)?;
         if added == 0 {

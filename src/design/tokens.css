@@ -131,6 +131,21 @@
   --crimson: #c13747;
   --gold: #e8b65b;
   --mint: #61c5a7;
+  /* A scene lesson's picture: rings and labels sit on the drawing itself,
+     so they read the same in both themes — white with a dark edge, labels
+     dark with white letters. */
+  --scene-ring-faint: rgba(255, 255, 255, 0.85);
+  --scene-ring-edge: rgba(12, 10, 30, 0.38);
+  --scene-ring-fill: rgba(255, 255, 255, 0.14);
+  --scene-label-bg: rgba(16, 14, 36, 0.88);
+  --scene-label-ink: #ffffff;
+  /* How much of the window a scene leaves for the rest of its card (the
+     header, the question, the answers, the button), by what the card holds. */
+  --scene-room-explore: 320px;
+  --scene-room-find: 440px;
+  --scene-room-choose: 460px;
+  --scene-room-where: 540px;
+  --scene-room-page: 400px;
   --sky: #78bbd4;
   --scrim: rgba(8, 24, 31, 0.6);
 }

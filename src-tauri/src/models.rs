@@ -76,12 +76,15 @@ pub struct CataloguePage {
 
 /// One thing to do in a session. The backend decides the exercise type from the
 /// item's review history, so the UI only has to render six shapes.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Exercise {
     pub key: String,
     /// intro | recognise | produce | type | sentenceIntro | wordOrder |
-    /// dialogueGap | gapFill | memory
+    /// dialogueGap | gapFill | memory | pictureIntro | wordPick |
+    /// picturePick | dictation | soundPair | sceneExplore | sceneFind |
+    /// sceneName | sceneType | sceneWhere | storyPanel | storyQuestion |
+    /// storyEnd | sayIt | dialogueSay
     pub kind: String,
     /// word | sentence | dialogue | set (several items at once, not scheduled)
     pub item_kind: String,
@@ -112,6 +115,17 @@ pub struct Exercise {
     /// Dialogue gaps: the conversation just before the gap, oldest first —
     /// enough to know where you are without remembering the whole script.
     pub context: Vec<DialogueLine>,
+    /// Word order: the tiles whose ending is to be picked (tiles.rs); empty
+    /// for a sentence built by plain ordering.
+    pub endings: Vec<crate::tiles::TileEnding>,
+    /// Scene lessons: the picture and where each thing is in it (scenes.rs).
+    pub scene: Option<crate::scenes::SceneCard>,
+    /// Story lessons: the panel to read, what a question is about, or the
+    /// story's words at its end (stories.rs).
+    pub story: Option<crate::stories::StoryCard>,
+    /// A spoken dialogue turn (dialogueSay): the other speaker's answer to
+    /// the line, said in their voice once it has been said.
+    pub reply: Option<DialogueLine>,
 }
 
 /// One sentence with a word taken out of it.
@@ -273,6 +287,13 @@ pub struct Settings {
     pub favorite_models: Vec<String>,
     /// Draws course pictures; empty means the default image model.
     pub image_model: String,
+    /// Finds the things in a scene lesson's picture; empty means the default.
+    pub vision_model: String,
+    /// The model that hears the learner speak; empty for the default.
+    pub hearing_model: String,
+    /// Speaking cards in lessons (a setting of this device: a phone in a
+    /// quiet room, a computer with no microphone).
+    pub speaking: bool,
     pub has_kie_key: bool,
     /// The Suno version songs are sung with.
     pub suno_model: String,
@@ -284,6 +305,8 @@ pub struct Settings {
     pub theme: String,
     /// The music player's repeat mode: "off" | "all" | "one", or empty.
     pub player_repeat: String,
+    /// Taps and buzzes with the answers, on a phone (a device setting).
+    pub haptics: bool,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -358,6 +381,10 @@ pub struct AiModel {
     pub tools: bool,
     /// True when the model can make images (course pictures).
     pub images: bool,
+    /// True when the model can read images (finding things in a scene).
+    pub vision: bool,
+    /// True when the model takes sound in (hearing the learner speak).
+    pub hears: bool,
 }
 
 /// One clip of generated speech, ready to become a `data:` URI.
