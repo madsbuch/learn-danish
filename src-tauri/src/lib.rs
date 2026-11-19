@@ -134,6 +134,8 @@ pub fn run() {
             let data = app.path().app_data_dir().map_err(|e| format!("no writable app data directory: {e}"))?;
             // First, so even opening the database can note what it finds.
             diagnostics::init(data.clone());
+            // Work anywhere (every AI request) keeps the app alive (work.rs).
+            work::set_app(app.handle());
             let path = data.join("learn-danish.db");
 
             let mut connection = db::open(&path).map_err(|e| e.to_string())?;
@@ -163,6 +165,8 @@ pub fn run() {
                 songs::resume_pending(app);
                 // Picture lessons whose drawing an earlier run did not finish.
                 pictures::draw_missing_in_background(app);
+                // Course pictures the tutor asked for that an earlier run did not draw.
+                pictures::draw_wanted_in_background(app);
                 // Scene lessons whose picture an earlier run did not finish.
                 scenes::resume_pending(app);
                 // Story lessons whose panels an earlier run did not finish drawing.
@@ -234,6 +238,7 @@ pub fn run() {
             wiki::source_remove,
             wiki::fact_check_lesson,
             pictures::course_picture_delete,
+            pictures::course_picture_status,
             pictures::lesson_add_pictures,
             scenes::scene_make,
             stories::story_draw,
@@ -986,6 +991,50 @@ mod integration {
             .unwrap();
         courses::delete(&mut conn, basics).unwrap();
         assert!(files::info(&mut conn, file).is_err(), "the picture goes with its course");
+    }
+
+    /// A tutor turn that makes a course leaves the database free: the tool
+    /// runs under the lock and lets go before the picture is drawn (taking
+    /// the lock again while holding it waited forever, and the tutor's list
+    /// with it). Meanwhile the next model round, a long wait on the network,
+    /// holds nothing: the list opens at once throughout.
+    #[test]
+    fn the_tutor_list_opens_while_a_turn_makes_a_course() {
+        let db = std::sync::Arc::new(Db::new(scratch_db("tutor-turn-lock")));
+        let turn = {
+            let db = db.clone();
+            std::thread::spawn(move || {
+                let args = serde_json::json!({
+                    "title": "Colours", "title_da": "Farver", "summary": "The basic colours.",
+                    "words": [{ "da": "rød", "en": "red", "pos": "adj" }]
+                });
+                let (_, wanted) = tutor::run_app_tool(&db, "create_course", &args.to_string());
+                // The next round: the model takes its time.
+                std::thread::sleep(std::time::Duration::from_millis(300));
+                wanted
+            })
+        };
+        let mut opened = 0;
+        while !turn.is_finished() {
+            let asked = std::time::Instant::now();
+            tutor::list_conversations(&mut db.lock()).unwrap();
+            assert!(asked.elapsed() < std::time::Duration::from_millis(250), "the list waited {:?}", asked.elapsed());
+            opened += 1;
+            std::thread::sleep(std::time::Duration::from_millis(10));
+        }
+        assert!(opened > 3);
+        let wanted = turn.join().unwrap();
+        assert_eq!(wanted.len(), 1, "the new course wants a picture");
+        // Recorded, so a run that ends before it is drawn draws it next time.
+        let conn = &mut *db.lock();
+        assert_eq!(pictures::wanted(conn), wanted);
+        // The learner deletes it (here: before it was drawn): never drawn again.
+        pictures::delete_picture(conn, wanted[0]).unwrap();
+        assert!(pictures::wanted(conn).is_empty());
+        // Existing courses without a picture are not marked, nor is Other lessons.
+        let other = courses::other_course(conn).unwrap();
+        assert!(!pictures::want(conn, other).unwrap());
+        assert!(pictures::wanted(conn).is_empty());
     }
 
     #[test]
@@ -3396,6 +3445,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         write("LessonDetail", &lessons::detail(&mut conn, drill.id).unwrap());
         write("LessonFinished", &finished);
         write("CourseProgress.list", &stats::course_progress(&mut conn).unwrap());
+        write("CoursePictureStatus", &pictures::PictureStatus { course_id: basics, drawing: false, error: Some("No API key".into()) });
         let collected = stats::collect(&mut conn).unwrap();
         write("Stats", &collected);
         // The Progress screen's achievements: some earned, some part-way.
