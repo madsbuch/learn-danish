@@ -52,7 +52,8 @@ pub fn clean_endings(da: &str, endings: &[Ending]) -> Vec<Ending> {
     let mut kept: Vec<Ending> = Vec::new();
     for ending in endings {
         let form = split_punctuation(ending.form.trim()).1.to_string();
-        let base = split_punctuation(ending.base.trim()).1.to_string();
+        // The dictionary form as a tile shows it: without "en"/"et" or "at".
+        let base = split_punctuation(crate::singalong::bare(&ending.base)).1.to_string();
         let (form_key, base_key) = (fold(&form), fold(&base));
         if form_key.is_empty() || base_key.is_empty() || form_key == base_key || form.contains(' ') || base.contains(' ') {
             continue;
@@ -159,8 +160,8 @@ mod tests {
                 ending("med", "med", &[]),
                 // Not in the sentence.
                 ending("teen", "te", &["teer"]),
-                // Punctuation the tutor left on is taken off.
-                ending("kaffen.", "kaffe", &["kaffer"]),
+                // Punctuation the tutor left on, and the article, are taken off.
+                ending("kaffen.", "en kaffe", &["kaffer"]),
                 // The same word twice: the first counts.
                 ending("store", "storm", &[]),
                 // Two words are not one tile.

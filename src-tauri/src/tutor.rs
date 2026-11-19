@@ -118,7 +118,7 @@ The app:
   correct capitalization (the pronoun I and proper names). Sentences should be short and natural. \
   With each sentence, list in `endings` its words that stand in another form than their \
   dictionary one (\"kaffen\" for \"kaffe\", \"store\" for \"stor\"), each with two other real \
-  forms of the same word that do not fit there (\"kaffe\", \"kaffer\"; \"stor\", \"stort\"): the \
+  forms of the same word, not the dictionary one, that do not fit there (\"kaffer\", \"kaffens\"; \"stort\", \"største\"): the \
   learner picks the ending when building the sentence from its words. Where a word has a real \
   Danish neighbour that differs by one sound English ears mix up (\"by\" and \"bi\", \"køre\" \
   and \"kære\"), give it as the word's `near`: words lessons play the two for the learner to \
@@ -351,7 +351,7 @@ fn sentence_schema() -> Value {
                         "properties": {
                             "form": { "type": "string", "description": "The word exactly as it stands in the sentence, e.g. \"kaffen\"" },
                             "base": { "type": "string", "description": "Its dictionary form, without en/et or at, e.g. \"kaffe\"" },
-                            "wrong": { "type": "array", "items": { "type": "string" }, "description": "Two other real forms of the same word that are wrong here, e.g. [\"kaffe\", \"kaffer\"]" }
+                            "wrong": { "type": "array", "items": { "type": "string" }, "description": "Two other real forms of the same word that are wrong here, e.g. [\"kaffer\", \"kaffens\"]" }
                         },
                         "required": ["form", "base", "wrong"]
                     }
