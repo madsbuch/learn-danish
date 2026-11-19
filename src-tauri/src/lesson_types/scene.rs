@@ -205,6 +205,7 @@ fn where_is(s: &Statement, n: usize, truth: bool, lesson: crate::ids::LessonId, 
         return Exercise {
             prompt: s.da.replacen(&s.phrase, "…", 1),
             hint: "Which fits the picture?".into(),
+            explanation: crate::scenes::explain_place(s, &s.phrase),
             answer: s.phrase.clone(),
             options,
             ..base
@@ -216,6 +217,7 @@ fn where_is(s: &Statement, n: usize, truth: bool, lesson: crate::ids::LessonId, 
         hint: "True or false? Look at the picture.".into(),
         answer: if truth || wrong.is_empty() { TRUE } else { FALSE }.into(),
         options: vec![TRUE.into(), FALSE.into()],
+        explanation: crate::scenes::explain_place(s, if truth || wrong.is_empty() { &s.phrase } else { &wrong }),
         ..base
     }
 }

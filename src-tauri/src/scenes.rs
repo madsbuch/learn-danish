@@ -39,6 +39,46 @@ pub const MAX_STATEMENTS: usize = 6;
 /// The prepositions whose sentences can be checked against the boxes (see
 /// [`holds`]): a sentence the picture does not bear out is never asked.
 pub const PREPOSITIONS: &[&str] = &["under", "på", "over", "ved siden af", "ved", "i"];
+
+/// What a place preposition means, for explaining a "Where is it?" answer.
+/// Prepositions the tutor may use only in wrong phrases ("bag", "foran") are
+/// here too, so those can be explained as well. Longest first, so "ved siden
+/// af" is found before "ved".
+const PLACE_MEANINGS: &[(&str, &str)] = &[
+    ("ved siden af", "next to"),
+    ("under", "under"),
+    ("over", "above"),
+    ("foran", "in front of"),
+    ("bag", "behind"),
+    ("ved", "by"),
+    ("på", "on"),
+    ("i", "in"),
+];
+
+/// The preposition a place phrase starts with, and what it means.
+fn place_meaning(phrase: &str) -> Option<(&'static str, &'static str)> {
+    let lower = phrase.trim().to_lowercase();
+    PLACE_MEANINGS.iter().copied().find(|(word, _)| lower == *word || lower.starts_with(&format!("{word} ")))
+}
+
+/// Why a "Where is it?" answer is what it is, in plain English: what the
+/// preposition said means and what the picture shows instead. Danish nouns
+/// keep their form after a preposition, so unlike Polish there is no ending
+/// to explain. `shown` is the place as the card said it.
+pub fn explain_place(statement: &Statement, shown: &str) -> String {
+    let right = statement.phrase.as_str();
+    let Some((word, means)) = place_meaning(right) else {
+        return format!("In the picture: “{right}” — {}.", statement.en.trim_end_matches('.'));
+    };
+    let truth = format!("In the picture it's “{right}”: {word} means {means}.");
+    if shown.trim().eq_ignore_ascii_case(right.trim()) {
+        return format!("{truth} The noun stays as it is after it.");
+    }
+    match place_meaning(shown) {
+        Some((_, wrong_means)) => format!("“{shown}” would mean {wrong_means}. {truth}"),
+        None => format!("“{shown}” doesn't fit the picture. {truth}"),
+    }
+}
 /// The longest side a scene is kept at: sharp on a large screen, a few
 /// hundred kilobytes in the database.
 const SCENE_SIDE: u32 = 1280;
@@ -994,6 +1034,20 @@ mod tests {
         assert!(holds("på", &on, &table) && !holds("på", &under, &table));
         assert!(holds("over", &lamp, &table) && !holds("over", &under, &table));
         assert!(holds("ved siden af", &beside, &table) && holds("ved", &beside, &table) && !holds("ved siden af", &on, &table));
+        // A wrong place is explained: what it means, and what the picture shows.
+        let statement = Statement {
+            da: "Skibet ligger ved kajen.".into(),
+            en: "The ship is by the quay.".into(),
+            subject: WordId::new(),
+            object: WordId::new(),
+            preposition: "ved".into(),
+            phrase: "ved kajen".into(),
+            wrong: vec!["under kajen".into(), "ved siden af kajen".into()],
+        };
+        let why = explain_place(&statement, "under kajen");
+        assert!(why.contains("would mean under") && why.contains("ved means by"), "{why}");
+        assert!(explain_place(&statement, "ved siden af kajen").contains("would mean next to"));
+        assert!(explain_place(&statement, "ved kajen").contains("ved means by"));
         assert!(holds("i", &inside, &table) && !holds("i", &beside, &table));
         assert!(!holds("bag", &beside, &table), "a preposition the boxes cannot show is never borne out");
     }
