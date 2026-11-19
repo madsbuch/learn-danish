@@ -28,12 +28,12 @@ const aiVoiceReady = () => hasKey && hasVoice;
 /** Names the actual blocker, rather than blaming whichever engine ran last. */
 function unavailableReason(): string {
   if (hasVoice && !hasKey) {
-    return "Add your OpenRouter API key in Settings — the Danish voice needs it.";
+    return "Add your OpenRouter API key in Settings → AI — the Danish voice needs it.";
   }
   if (hasKey && !hasVoice) {
-    return "Choose a Danish voice in Settings to hear this.";
+    return "Choose a Danish voice in Settings → Voices & sound to hear this.";
   }
-  return "No speech on this device yet. Set up an OpenRouter voice in Settings to hear Danish.";
+  return "No speech on this device yet. Set up an OpenRouter key in Settings → AI to hear Danish.";
 }
 
 // ---------------------------------------------------------------- native path
