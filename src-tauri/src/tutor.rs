@@ -122,7 +122,13 @@ The app:
   learner picks the ending when building the sentence from its words. Where a word has a real \
   Danish neighbour that differs by one sound English ears mix up (\"by\" and \"bi\", \"køre\" \
   and \"kære\"), give it as the word's `near`: words lessons play the two for the learner to \
-  tell apart.
+  tell apart. \
+  Give each word and sentence its `grammar`: the structures it shows, as keys from this list \
+  (the learner's Progress page groups what they have met by them):{grammar}
+- Tools that read the learner's answer log (get_learning_overview, find_hard_items, \
+  get_item_history, get_structure_stats, get_mistakes, compare_periods, get_activity) are \
+  available. Asked to tag the grammar of existing courses, list_untagged gives what has none \
+  and tag_grammar sets it.
 - Songs cost the learner credits: one per request. Give a new song or podcast the course it \
   fits (course_id): it is filed there, with its listening lesson. Put the course's level and the \
   words it should use in requirements — the songwriter writes at the level it is given (a \
@@ -158,7 +164,7 @@ pub(crate) fn system_prompt(conn: &mut Conn) -> Result<String> {
 /// a new type is known to the tutor without editing the rules. The same from
 /// turn to turn, so it can be cached.
 pub(crate) fn rules() -> String {
-    format!("{RULES}\n- The lesson types:\n{}", crate::lesson_types::for_tutor())
+    format!("{}\n- The lesson types:\n{}", RULES.replace("{grammar}", &crate::grammar::for_tutor()), crate::lesson_types::for_tutor())
 }
 
 /// What changes from turn to turn: the learner's numbers, what is due, the
@@ -307,6 +313,15 @@ pub(crate) fn learner_state(conn: &mut Conn) -> Result<String> {
 // Tools
 // ---------------------------------------------------------------------------
 
+/// A word's or sentence's grammar tags: keys from the vocabulary.
+fn grammar_prop() -> Value {
+    json!({
+        "type": "array",
+        "items": { "type": "string", "enum": crate::grammar::keys() },
+        "description": "The grammar structures it shows (one to four), from the list. A word: its own grammar (\"neuter\", \"plural-irregular\", \"past-strong\", \"particle-verbs\"); a sentence: the forms, word order, tense, prepositions and agreement it uses (\"definite-singular\", \"inversion\", \"perfect\", \"paa-place\")."
+    })
+}
+
 fn word_schema() -> Value {
     json!({
         "type": "array",
@@ -328,7 +343,8 @@ fn word_schema() -> Value {
                         "en": { "type": "string" }
                     },
                     "required": ["da", "en"]
-                }
+                },
+                "grammar": grammar_prop()
             },
             "required": ["da", "en", "pos"]
         }
@@ -355,7 +371,8 @@ fn sentence_schema() -> Value {
                         },
                         "required": ["form", "base", "wrong"]
                     }
-                }
+                },
+                "grammar": grammar_prop()
             },
             "required": ["da", "en"]
         }
@@ -1205,6 +1222,9 @@ pub fn tool_definitions() -> Vec<Tool> {
             }),
         ),
     ]
+    .into_iter()
+    .chain(crate::tutor_analytics::tools())
+    .collect()
 }
 
 /// What a tool produced: JSON for the model, and, when the app changed, an
@@ -1761,6 +1781,15 @@ fn execute(conn: &mut Conn, name: &str, arguments: &str) -> Outcome {
 }
 
 fn run_tool(conn: &mut Conn, name: &str, arguments: &str) -> Result<Outcome> {
+    if let Some(result) = crate::tutor_analytics::run(conn, name, arguments) {
+        let result = result?;
+        if name == "tag_grammar" {
+            let (words, sentences) = (result["tagged_words"].as_i64().unwrap_or(0), result["tagged_sentences"].as_i64().unwrap_or(0));
+            let label = format!("Tagged the grammar of {words} word{} and {sentences} sentence{}", if words == 1 { "" } else { "s" }, if sentences == 1 { "" } else { "s" });
+            return Ok(Outcome::acted(result, "courseUpdated", label, None));
+        }
+        return Ok(Outcome::data(result));
+    }
     match name {
         "create_course" => {
             let args: CreateArgs = parse(arguments)?;
@@ -2369,11 +2398,17 @@ fn course_detail(conn: &mut Conn, course_id: CourseId) -> Result<Value> {
         .into_iter()
         .map(|(id, reps, lapses)| (id, (reps, lapses)))
         .collect();
+    let tags = crate::grammar::all_links(conn)?;
+    let tag_keys = |id: &str| -> Vec<&'static str> {
+        tags.get(id).map(|ts| ts.iter().filter_map(|t| crate::grammar::by_id(*t)).map(|t| t.key).collect()).unwrap_or_default()
+    };
     let words: Vec<Value> = rows
         .into_iter()
         .map(|(id, da, en, pos, lesson_id)| {
             let seen = history.get(&id.to_string());
             json!({
+                "id": id,
+                "grammar": tag_keys(&id.to_string()),
                 "da": da,
                 "en": en,
                 "pos": pos,
@@ -2387,10 +2422,10 @@ fn course_detail(conn: &mut Conn, course_id: CourseId) -> Result<Value> {
     let sentences: Vec<Value> = course_sentences::table
         .filter(course_sentences::course_id.eq(course_id))
         .order(course_sentences::ord)
-        .select((course_sentences::da, course_sentences::en, course_sentences::lesson_id))
-        .load::<(String, String, LessonId)>(conn)?
+        .select((course_sentences::id, course_sentences::da, course_sentences::en, course_sentences::lesson_id))
+        .load::<(SentenceId, String, String, LessonId)>(conn)?
         .into_iter()
-        .map(|(da, en, lesson_id)| json!({ "da": da, "en": en, "lesson_id": lesson_id }))
+        .map(|(id, da, en, lesson_id)| json!({ "id": id, "grammar": tag_keys(&id.to_string()), "da": da, "en": en, "lesson_id": lesson_id }))
         .collect();
     let dialogue: Vec<Value> = session::dialogue_lines(conn, course_id)?
         .into_iter()

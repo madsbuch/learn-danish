@@ -346,6 +346,39 @@ pub fn misheard(word: &str, heard: &str) -> Option<SoundTip> {
     })
 }
 
+/// Which known contrast tells `word` from `heard`, and which way: the
+/// contrast's label, the spelling in the word and the one heard in its
+/// place ("æ or e", "æ", "e" for "træ" heard as "tre"). For the learning
+/// log (mistakes.rs): a sound pair missed, a word misheard.
+pub fn swap(word: &str, heard: &str) -> Option<Swap> {
+    let (w, h) = (word.to_lowercase(), heard.to_lowercase());
+    if w == h || w.is_empty() || h.is_empty() {
+        return None;
+    }
+    let find = |want: &Sound, got: &Sound| -> Option<(String, String)> {
+        want.spellings.iter().find_map(|ws| {
+            w.match_indices(ws).find_map(|(at, _)| {
+                got.spellings.iter().find_map(|gs| {
+                    let candidate = format!("{}{gs}{}", &w[..at], &w[at + ws.len()..]);
+                    (candidate == h).then(|| ((*ws).to_string(), (*gs).to_string()))
+                })
+            })
+        })
+    };
+    CONFUSIONS.iter().find_map(|c| {
+        let (said, got) = find(&c.a, &c.b).or_else(|| find(&c.b, &c.a))?;
+        Some(Swap { label: c.label.into(), said, heard: got })
+    })
+}
+
+/// A contrast and which way it went (see [`swap`]).
+#[derive(Debug, Clone, PartialEq)]
+pub struct Swap {
+    pub label: String,
+    pub said: String,
+    pub heard: String,
+}
+
 /// Whether two spellings are one word: "aa" is the old spelling of å
 /// ("Aarhus", "Århus"), and an ear may write ä for æ and ö for ø. Danish
 /// spellings that sound alike but differ (hv and v, "hjem" and "jem") are
