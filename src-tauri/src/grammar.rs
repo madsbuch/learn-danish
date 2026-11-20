@@ -442,7 +442,7 @@ pub const REASONS: &[Reason] = &[
     r("object-pronouns", "the object → object form (mig, ham)", OBJ),
     r("after-preposition", "after a preposition → object form (til mig)", OBJ),
     r("genitive-s", "an owner → -s (Peters bil)", GEN),
-    r("possessives", "min / mit / mine follow the thing owned", None),
+    r("possessives", "min / mit / mine agree with the thing owned", None),
     r("sin-sit-sine", "owned by the subject → sin / sit / sine", None),
     r("common-gender", "an en-word → en, -en", None),
     r("neuter", "an et-word → et, -et", None),
