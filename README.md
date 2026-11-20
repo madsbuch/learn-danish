@@ -21,6 +21,11 @@ The rules that settle design questions are in
   course, a level up. A lesson's minutes come from one table per type
   (`lesson_types::minutes`). Extra practice (a lesson already passed today)
   earns half XP, still counts toward mastery, and leaves the schedule alone.
+  A partial (60–84% right) earns half the mastery a pass would, without
+  passing the lesson. A typed answer one letter off a word of four letters or
+  more is **almost**: still a mistake, but half XP, its review comes back
+  sooner rather than starting over, and it counts as half right in the
+  drill's score (85% passes).
   XP, streaks and achievements carry over from the original app.
 - **Tutor:** ask questions or have the tutor create courses, lessons, drills,
   writing situations and songs on a subject you choose. It teaches Danish in
