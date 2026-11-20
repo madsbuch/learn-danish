@@ -14,18 +14,32 @@ The rules that settle design questions are in
   writing and listening). A **check-in** is a lesson coming back on its
   schedule. Each lesson has one type from a single flat list; see
   [ADDING_A_LESSON_TYPE.md](ADDING_A_LESSON_TYPE.md). Each day the app picks the five
-  most important lessons (slipping, then due, then up to two new) as a way in;
-  doing them is the day done. Mastery is for good: a mastered lesson never
-  comes back, and a mastered course is ready to close — *Close as mastered* is
-  your own celebration, and final. To revisit a theme, the tutor makes a new
+  most important lessons (slipping, then due, then up to two new, then — if a
+  place is still free — at most one mastered lesson whose words are due, as a
+  light review) as a way in; doing them, or a quick game on a day with none,
+  is the day done (a failed check-in counts too: it is the work, not the XP).
+  Mastery is for good: a mastered lesson is never due again and never loses
+  it, and a mastered course is ready to close — *Close as mastered* is your
+  own celebration, and final. To revisit a theme, the tutor makes a new
   course, a level up. A lesson's minutes come from one table per type
   (`lesson_types::minutes`). Extra practice (a lesson already passed today)
-  earns half XP, still counts toward mastery, and leaves the schedule alone.
-  A partial (60–84% right) earns half the mastery a pass would, without
-  passing the lesson. A typed answer one letter off a word of four letters or
-  more is **almost**: still a mistake, but half XP, its review comes back
-  sooner rather than starting over, and it counts as half right in the
-  drill's score (85% passes).
+  earns half XP, still counts toward mastery, leaves the schedule alone, and
+  a fail there costs no mastery.
+  Mastery points: the first pass 30, another the same day 10, one a day to
+  two weeks later 16 to 35, an ace (every answer fully right) a quarter more;
+  a partial (60–84% right) half what a repeat pass would at that gap, without
+  passing the lesson; a fail −20. One sitting reaches 90 at most: the last
+  stretch takes a pass on a second day. Every change is written in the
+  lesson's **mastery ledger** (`mastery_log`, `masterylog.rs`), shown on its
+  page as "Mastery points" and to the tutor as `get_mastery_log`. A typed
+  answer one letter off a word of four letters or more, or a dictation or
+  spoken sentence of three words or more with one word off, is **almost**:
+  still a mistake, but half XP, its review comes back sooner rather than
+  starting over, and it counts as half right in the drill's score (85%
+  passes; a drill of three to six scored cards may have one miss). A drill
+  with nothing scored is not graded. A word counts once a day, so only
+  answers on different days make it stick. Reset progress erases the XP log,
+  the mastery ledger, passes, mastery and streak freezes too.
   XP, streaks and achievements carry over from the original app.
 - **Tutor:** ask questions or have the tutor create courses, lessons, drills,
   writing situations and songs on a subject you choose. It teaches Danish in
