@@ -1069,6 +1069,7 @@ mod integration {
         assert!(pictures::wanted(conn).is_empty());
     }
 
+    // Spec: OFF-3, OFF-5, OFF-6, OFF-11, OFF-15
     #[test]
     fn a_course_kept_offline_knows_what_it_lacks() {
         let mut conn = scratch_db("offline-course");
@@ -1154,6 +1155,7 @@ mod integration {
         assert_eq!(off.clips_stored, after.clips_stored);
     }
 
+    // Spec: SPEECH-9, SPEECH-11, SPEECH-12
     #[test]
     fn speech_stored_as_wav_becomes_mp3() {
         let mut conn = scratch_db("speech-mp3");
@@ -1241,6 +1243,7 @@ mod integration {
         assert_eq!(db::foreign_key_violations(conn).unwrap(), 0);
     }
 
+    // Spec: DATA-7, DATA-8
     #[test]
     fn files_keep_referential_integrity() {
         let mut conn = scratch_db("file-integrity");
@@ -1452,6 +1455,7 @@ mod integration {
         assert_eq!(stats::day_xp(&mut conn, today).unwrap(), 30, "the fourth game paid nothing, and still counted");
     }
 
+    // Spec: DRILL-8
     #[test]
     fn an_ace_is_every_answer_right() {
         let mut conn = scratch_db("ace");
@@ -1465,6 +1469,7 @@ mod integration {
         assert_eq!(lessons::load(&mut conn, drills[1].id).unwrap().mastery, 38);
     }
 
+    // Spec: TODAY-6, TODAY-7
     #[test]
     fn a_mastered_lesson_with_due_words_comes_back_as_a_light_review() {
         let mut conn = scratch_db("review-slot");
@@ -2899,6 +2904,7 @@ mod integration {
         assert_eq!((overview.match_best_ms, overview.flip_best_moves), (Some(30_000), Some(7)));
     }
 
+    // Spec: LSN-11
     #[test]
     fn every_lesson_type_can_be_made_and_practised() {
         let mut conn = scratch_db("lesson-types");
