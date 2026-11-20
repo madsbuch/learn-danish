@@ -74,10 +74,19 @@ item and id for id; a requirement added or changed here is ported there.
   to a model and need a connection whatever is downloaded; switching it off
   deletes nothing.
 
-The app starts with one small **First steps** demo course: greetings, names,
-and a few essential words and phrases. Its four short drills let you try the
-app before asking the tutor to build courses around what you want to learn.
-The demo is editable and installed only once; deleting it is permanent.
+The app starts with one small **First steps** demo course with a lesson of
+every type — a dialogue, words, typing, memory cards, pictures, a scene,
+sentences, gaps, a story, a study lesson, a listening lesson and a writing
+lesson — on saying hello and introducing yourself. The drills work without a
+key; the lessons that need pictures, a recording or an AI model say so until
+one is set, and then make them. The demo is editable and installed only once;
+deleting it is permanent.
+
+A lesson is in exactly one course (*Other lessons* counts as one) and is never
+moved: for the same practice elsewhere, the tutor makes a new lesson there.
+Taking a lesson out of its course deletes it. Before version 18 a lesson could
+be listed in several courses; upgrading keeps it in the course it was first
+added to.
 
 Upgrading from the first release replaces the unchanged default collection
 with this single demo. Edited, extended or shared courses are preserved,
@@ -88,8 +97,8 @@ OpenRouter speech provider. Listening clips are cached for reuse. Typing accepts
 `ae`, `oe` and `aa` for `æ`, `ø` and `å`.
 
 AI features require your own OpenRouter key in Settings; song audio also needs
-a kie.ai key. The demo and existing courses' offline exercises work without
-either key.
+a kie.ai key. Drills and courses kept offline work without either key; what
+needs one says so.
 
 ## Visual identity
 
