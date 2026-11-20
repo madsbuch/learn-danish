@@ -1,0 +1,60 @@
+{
+  "$schema": "https://raw.githubusercontent.com/madsbuch/better-github/main/schema/spec.schema.json",
+  "title": "Dansk",
+  "summary": "A Danish learning app for English speakers: small lessons filed in courses, built to order by an AI tutor.",
+  "status": "implemented",
+  "order": 0,
+  "description": "Dansk teaches Danish to an adult who speaks English. Everything is a small lesson, a quick drill or a conversation with an examiner, filed in courses. The app starts with one small demo course; every other course is made for what the learner needs the language for, by a tutor that acts in the app through tools.\n\nIt is a native app for Android and macOS (Tauri: a Rust core with SQLite, and a React interface). Everything the learner has is in one database on the device, and the learner's devices keep it in step directly between them, with no server.\n\nThe AI features are optional and use the learner's own keys: OpenRouter for the tutor, the examiner, speech and pictures, and kie.ai for sung songs. Without a key the demo course still works.\n\nPolski (learn-polish) is the same product for Polish in a separate codebase; Dansk was adapted from it. The two share features, not code.",
+  "requirements": [
+    {
+      "id": "POL-1",
+      "text": "The app runs as a native Android app and a native macOS app from one codebase."
+    },
+    {
+      "id": "POL-2",
+      "text": "A fresh install can be practised offline with no API key: the demo course needs neither the network nor a model.",
+      "status": "deprecated",
+      "deprecation": {
+        "reason": "Not necessary as a promise of the whole app: working without a connection is asked for course by course, where the learner needs it, and a course kept offline has its assets downloaded.",
+        "replacedBy": [
+          "courses/offline"
+        ],
+        "date": "2026-11-20"
+      }
+    },
+    {
+      "id": "POL-3",
+      "text": "The interface is English; Danish is the content being learnt."
+    },
+    {
+      "id": "POL-4",
+      "text": "The webview never reaches the database itself, and makes no outside request of its own except loading the pictures of Wikipedia articles from upload.wikimedia.org; every other read, write and request is a command in the Rust core."
+    },
+    {
+      "id": "POL-5",
+      "text": "API keys are kept in the app's database; once saved they are not handed back to the interface as text, only as whether a key is set or as a QR picture."
+    },
+    {
+      "id": "POL-6",
+      "text": "No chat model is chosen by default: until the learner picks one in Settings, the features that need it are off and say so."
+    }
+  ],
+  "code": [
+    "README.md",
+    "PRINCIPLES.md",
+    "src-tauri/src/lib.rs",
+    "src-tauri/src/commands.rs",
+    "src/lib/api.ts",
+    "src/App.tsx"
+  ],
+  "related": [
+    "principles",
+    "courses",
+    "lessons",
+    "today",
+    "tutor",
+    "music",
+    "data",
+    "courses/offline"
+  ]
+}

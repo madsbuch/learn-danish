@@ -7,6 +7,21 @@ Built with **Tauri 2, Rust, SQLite and React** for Android and macOS.
 The rules that settle design questions are in
 [PRINCIPLES.md](PRINCIPLES.md); how data is kept, in [DATA.md](DATA.md).
 
+## The spec
+
+What the app is meant to do is written down in [`.spec`](.spec): one JSON
+file per part of the product, each with requirements that can be checked
+against the code (`MAST-7`, `SYNC-3`). The format is the one described in
+[spec-llms.txt](https://raw.githubusercontent.com/madsbuch/better-github/refs/heads/main/spec-llms.txt);
+read it before changing the spec. A change in behaviour and the change to
+its requirements go in the same commit: new behaviour gets new requirements,
+changed behaviour a new version of its requirement with the reason, and a
+requirement no longer wanted is deprecated with the reason, never deleted.
+`bun run build` checks the spec (`bun run check:spec` alone).
+
+Polski ([learn-polish](https://github.com/madsbuch/learn-polish)) has the same spec, item for
+item and id for id; a requirement added or changed here is ported there.
+
 ## The app
 
 - **Exercises:** drills (word cards, pictures of everyday objects, typing,
@@ -49,6 +64,12 @@ The rules that settle design questions are in
   exercises.
 - **Settings:** AI models and keys, voices, audio cache, themes, reminders,
   costs, memories and database export.
+- **Courses kept offline:** a course's page has *Keep this course offline*.
+  Switched on, the app downloads everything its lessons play and show — the
+  audio of every word, sentence and line and every picture — and tops it up
+  as the course grows (`src-tauri/src/offline.rs`). Conversation lessons talk
+  to a model and need a connection whatever is downloaded; switching it off
+  deletes nothing.
 
 The app starts with one small **First steps** demo course: greetings, names,
 and a few essential words and phrases. Its four short drills let you try the
