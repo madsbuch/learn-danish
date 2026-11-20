@@ -54,20 +54,22 @@ item and id for id; a requirement added or changed here is ported there.
   starting over, and it counts as half right in the drill's score (85%
   passes; a drill of three to six scored cards may have one miss). A drill
   with nothing scored is not graded. A word counts once a day, so only
-  answers on different days make it stick. Reset progress erases the XP log,
-  the mastery ledger, passes, mastery and streak freezes too.
+  answers on different days make it stick.
   XP, streaks and achievements carry over from the original app.
 - **Tutor:** ask questions or have the tutor create courses, lessons, drills,
-  writing situations and songs on a subject you choose. It teaches Danish in
-  English and can switch to Danish conversation when requested.
+  writing situations and songs on a subject you choose. It replies in the language
+  you write in (English when that is unclear) and can switch to Danish
+  conversation when requested.
 - **Music:** generate learning songs with English/Danish verses and Danish
   choruses; play, organise, download and cast them, with lyrics and listening
   exercises.
 - **Settings:** AI models and keys, voices, audio cache, themes, reminders,
   costs, memories and database export.
 - **Courses kept offline:** a course's page has *Keep this course offline*.
-  Switched on, the app downloads everything its lessons play and show — the
-  audio of every word, sentence and line and every picture — and tops it up
+  Switched on, the app downloads everything in it that is not a conversation —
+  the audio of every word, sentence and line, at normal speed and slowly; the
+  example sentences a wrong answer shows for each word; and every picture —
+  and tops it up
   as the course grows (`src-tauri/src/offline.rs`). Conversation lessons talk
   to a model and need a connection whatever is downloaded; switching it off
   deletes nothing.
