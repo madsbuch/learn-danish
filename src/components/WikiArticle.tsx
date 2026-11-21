@@ -118,7 +118,7 @@ const REMOVE = [
   ".geo-nondefault",
 ].join(",");
 
-/** Sections of references and links elsewhere, in English, Danish and Polish. */
+/** Sections of references and links elsewhere, in English and Danish. */
 const SKIPPED_SECTIONS = new Set([
   "see also",
   "references",
@@ -139,11 +139,6 @@ const SKIPPED_SECTIONS = new Set([
   "litteratur",
   "noter",
   "fodnoter",
-  "zobacz też",
-  "przypisy",
-  "linki zewnętrzne",
-  "bibliografia",
-  "uwagi",
 ]);
 
 export function parseArticle(html: string): Article {

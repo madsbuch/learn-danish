@@ -76,7 +76,7 @@ A new install creates the version 7 tables directly.
 - **Chips**: in the tutor's messages (and tool-call labels), any TypeID is
   shown as a chip with the title, which opens it. Cached per id.
 - **Diagnostics log**: a logged message that holds TypeIDs gets each one's
-  title after it — `ls_01jd… (Pierwsze spotkanie)` — so a pasted log is both
+  title after it — `ls_01jd… (Første møde)` — so a pasted log is both
   exact and readable.
 
 ## Tests

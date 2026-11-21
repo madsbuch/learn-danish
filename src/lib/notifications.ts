@@ -109,7 +109,7 @@ export async function sendTestNotification(): Promise<boolean> {
   }
 }
 
-const ASKED_FOR_WORK = "polski.notifications.askedForWork";
+const ASKED_FOR_WORK = "dansk.notifications.askedForWork";
 
 /**
  * The first time the app works in the background (the tutor writing, a

@@ -125,7 +125,7 @@ fn messages(item: &Item) -> Vec<Wire> {
 }
 
 /// The writing partner's core rules, as the app gives them.
-const PARTNER: &str = "You play Pani Ewa, the learner's new neighbour, meeting them on the stairs. \
+const PARTNER: &str = "You play Hanne, the learner's new neighbour, meeting them on the stairs. \
 This is a role-play in writing, in Danish only, at level A1: very short, simple sentences.
 - Stay in character. Write only in Danish. Never translate, never explain grammar, never switch \
   to English.
@@ -300,7 +300,7 @@ fn score_tools(task: ToolTask, turn: &ai::Turn) -> (f64, String) {
                 {
                     score += 0.1
                 } else {
-                    notes.push("words missing their Polish or English".into())
+                    notes.push("words missing their Danish or English".into())
                 }
                 if danish.iter().any(|w| w.chars().any(|c| DIACRITICS.contains(c))) { score += 0.1 } else { notes.push("no diacritics at all".into()) }
                 let known = danish.iter().filter(|w| WEATHER.contains(&w.as_str())).count();

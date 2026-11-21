@@ -35,7 +35,7 @@ function Tally({ at, of, misses }: { at: number; of: number; misses: number }) {
 function Verdict({ correct, children }: { correct: boolean; children?: ReactNode }) {
   return (
     <div className="verdict pop" data-correct={correct}>
-      <Text weight="bold">{correct ? "Dobrze! ✓" : "Not quite"}</Text>
+      <Text weight="bold">{correct ? "Flot! ✓" : "Not quite"}</Text>
       {children}
     </div>
   );

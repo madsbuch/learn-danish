@@ -529,12 +529,12 @@ mod tests {
         let before = counts(&mut conn);
         assert_eq!(before.2, 6);
         // Reopening neither duplicates the demo nor overwrites a learner's rename.
-        diesel::update(courses_table::table.find(id)).set(courses_table::title_en.eq("My first Polish")).execute(&mut conn).unwrap();
+        diesel::update(courses_table::table.find(id)).set(courses_table::title_en.eq("My first Danish")).execute(&mut conn).unwrap();
         drop(conn);
         let mut conn = db::open(&path("fresh")).unwrap();
         assert_eq!(courses_table::table.count().get_result::<i64>(&mut conn).unwrap(), 1);
         assert_eq!(counts(&mut conn), before);
-        assert_eq!(courses_table::table.find(id).select(courses_table::title_en).first::<String>(&mut conn).unwrap(), "My first Polish");
+        assert_eq!(courses_table::table.find(id).select(courses_table::title_en).first::<String>(&mut conn).unwrap(), "My first Danish");
         assert_eq!(db::foreign_key_violations(&mut conn).unwrap(), 0);
     }
 

@@ -574,7 +574,7 @@ mod integration {
                  INSERT INTO words VALUES (10, 1, 0, 'hej', 'hi', 'interj'),
                                           (20, 2, 0, 'rød', 'red', 'adj'),
                                           (21, 2, 1, 'hvid', 'white', 'adj'),
-                                          (22, 2, 2, 'czarny', 'black', 'adj');
+                                          (22, 2, 2, 'sort', 'black', 'adj');
                  INSERT INTO sentences VALUES (30, 2, 0, 'Himlen er blå.', 'The sky is blue.');
                  INSERT INTO conversation_lines VALUES (40, 1, 0, 'Anna', 'f', 'Godmorgen!', 'Good morning!');
                  INSERT INTO reviews VALUES ('word', 10, 100, 3, 2.5, 2, 0, 97), ('word', 20, 100, 3, 2.5, 4, 0, 97);
@@ -654,7 +654,7 @@ mod integration {
         let memory = titled(&mut conn, "Colours — memory");
         assert_eq!(word_owner(&mut conn, "rød"), memory);
         assert_eq!(word_owner(&mut conn, "hvid"), memory);
-        assert_eq!(word_owner(&mut conn, "czarny"), lesson(&mut conn, "topic/2/words-1"));
+        assert_eq!(word_owner(&mut conn, "sort"), lesson(&mut conn, "topic/2/words-1"));
         let sentence: LessonId = t::sentences::table
             .filter(t::sentences::da.eq("Himlen er blå."))
             .select(t::sentences::lesson_id)
@@ -986,8 +986,8 @@ mod integration {
         assert_eq!(speech::audio_cache_stats_in(&mut conn).unwrap().clips, 0, "speech is made again");
 
         // Deleting the song deletes its files.
-        let kawa: SongId = t::songs::table.filter(t::songs::title.eq("Kaffe")).select(t::songs::id).first(&mut conn).unwrap();
-        songs::delete_song(&mut conn, kawa).unwrap();
+        let kaffe_song: SongId = t::songs::table.filter(t::songs::title.eq("Kaffe")).select(t::songs::id).first(&mut conn).unwrap();
+        songs::delete_song(&mut conn, kaffe_song).unwrap();
         let left: i64 = t::files::table.count().get_result(&mut conn).unwrap();
         assert_eq!(left, 0);
         assert!(!on_disk.exists(), "and their copies on disk");
@@ -1253,10 +1253,10 @@ mod integration {
         // A picture, a song take with art, a speech clip, and a stray file.
         let picture = files::store(&mut conn, files::COURSE_IMAGE, "c.png", "image/png", b"p").unwrap();
         diesel::update(t::courses::table.find(basics)).set(t::courses::image_file_id.eq(Some(picture))).execute(&mut conn).unwrap();
-        let kawa = SongId::derived("test", "kawa");
+        let kaffe_song = SongId::derived("test", "kaffe_song");
         conn.batch_execute(&format!(
             "INSERT INTO songs (id, title, chorus_da, chorus_en, style, sections, lyrics, suno_model, status, created_at)
-             VALUES ('{kawa}', 'Kaffe', 'Kaffe', 'Coffee', 'pop', '[]', '', 'V6', 'ready', 0);",
+             VALUES ('{kaffe_song}', 'Kaffe', 'Kaffe', 'Coffee', 'pop', '[]', '', 'V6', 'ready', 0);",
         ))
         .unwrap();
         let audio = files::store(&mut conn, files::SONG_AUDIO, "a.mp3", "audio/mpeg", b"a").unwrap();
@@ -1264,7 +1264,7 @@ mod integration {
         diesel::insert_into(t::song_tracks::table)
             .values((
                 t::song_tracks::id.eq(TrackId::new()),
-                t::song_tracks::song_id.eq(kawa),
+                t::song_tracks::song_id.eq(kaffe_song),
                 t::song_tracks::ord.eq(0),
                 t::song_tracks::remote_id.eq("r"),
                 t::song_tracks::audio_file_id.eq(audio),
@@ -1285,7 +1285,7 @@ mod integration {
         assert!(files::info(&mut conn, stray).is_err());
 
         // Deleting what owns files deletes them; nothing dangles afterwards.
-        songs::delete_song(&mut conn, kawa).unwrap();
+        songs::delete_song(&mut conn, kaffe_song).unwrap();
         courses::delete(&mut conn, basics).unwrap();
         diesel::delete(t::speech_clips::table).execute(&mut conn).unwrap();
         assert_eq!(files::collect_orphans(&mut conn).unwrap(), 1, "the clip's file, once its clip was removed by hand");
@@ -1924,7 +1924,7 @@ mod integration {
         // A course of challenges only can be completed.
         let hard = courses::create_empty(&mut conn, "Hard things", "").unwrap();
         let tough = lessons::create_study(&mut conn, serde_json::from_value(serde_json::json!({
-            "title": "Aspect", "complexity": "high", "content": "x", "objectives": ["y"], "course_id": hard
+            "title": "Word order", "complexity": "high", "content": "x", "objectives": ["y"], "course_id": hard
         })).unwrap(), "tutor").unwrap().id;
         diesel::update(t::lessons::table.find(tough)).set(t::lessons::challenge.eq(1)).execute(&mut conn).unwrap();
         assert_eq!(courses::status(&mut conn, hard).unwrap().status, "active");
@@ -2229,8 +2229,8 @@ mod integration {
                     kind: "type".into(),
                     item_kind: "word".into(),
                     item_id: word.to_string(),
-                    expected: "kot".into(),
-                    given: "kot".into(),
+                    expected: "kat".into(),
+                    given: "kat".into(),
                     ..Default::default()
                 },
             )
@@ -2309,7 +2309,7 @@ mod integration {
                 "title": "At the market", "title_da": "Na targu", "summary": "Buying food.", "level": "a1",
                 "words": words, "sentences": sentences,
                 "dialogue": [
-                    { "speaker": "Ola", "gender": "f", "da": "Godmorgen!", "en": "Good morning!" },
+                    { "speaker": "Ida", "gender": "f", "da": "Godmorgen!", "en": "Good morning!" },
                     { "speaker": "Jan", "gender": "m", "da": "Godmorgen, jeg vil gerne have nogle æbler.", "en": "Good morning, apples please." }
                 ],
                 "study_lessons": [study("At have — to have"), study("Making polite requests with gerne")],
@@ -2934,7 +2934,7 @@ mod integration {
                     .iter()
                     .map(|(da, en)| sentence(&format!("{da} {n}"), en))
                     .collect(),
-                    dialogue: (0..4).map(|i| line(if i % 2 == 0 { "Ola" } else { "Jan" }, &format!("Linje {n}x{i} i samtalen."), &format!("Line {i}."))).collect(),
+                    dialogue: (0..4).map(|i| line(if i % 2 == 0 { "Ida" } else { "Jan" }, &format!("Linje {n}x{i} i samtalen."), &format!("Line {i}."))).collect(),
                 };
                 let (lesson, _) = lessons::create_drill(&mut conn, course, kind.name, "", kind.id, "low", &items, None, "tutor").unwrap();
                 if kind.id == "pictures" {
@@ -3699,8 +3699,8 @@ mod integration {
                     { "da": "Himlen er blå.", "en": "The sky is blue." }
                 ],
                 "dialogue": [
-                    { "speaker": "Ola", "gender": "f", "da": "Hvad er din yndlingsfarve?", "en": "What is your favourite colour?" },
-                    { "speaker": "Tomek", "gender": "m", "da": "Grøn.", "en": "Green." }
+                    { "speaker": "Ida", "gender": "f", "da": "Hvad er din yndlingsfarve?", "en": "What is your favourite colour?" },
+                    { "speaker": "Mads", "gender": "m", "da": "Grøn.", "en": "Green." }
                 ]
             }),
         );
@@ -3848,7 +3848,7 @@ mod integration {
                 "words": [
                     { "da": "rød", "en": "red", "pos": "adj" },
                     { "da": "hvid", "en": "white", "pos": "adj" },
-                    { "da": "czarny", "en": "black", "pos": "adj" },
+                    { "da": "sort", "en": "black", "pos": "adj" },
                     { "da": "grøn", "en": "green", "pos": "adj" }
                 ]
             }),
@@ -3919,7 +3919,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
                 "title": "Where do you live?",
                 "summary": "Tell a new neighbour where you live.",
                 "complexity": "low",
-                "scenario": "You've just moved in. Your neighbour Pani Ewa stops you on the stairs.",
+                "scenario": "You've just moved in. Your neighbour Hanne stops you on the stairs.",
                 "goals": ["Say which city you live in", "Say who you live with"]
             }),
         );
@@ -3931,7 +3931,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         assert_eq!(detail.lesson.course_ids, vec![writing], "filed in Writing by default");
 
         let prompt = examiner::writing_prompt(&mut conn, &detail).unwrap();
-        assert!(prompt.contains("Say who you live with") && prompt.contains("Pani Ewa"));
+        assert!(prompt.contains("Say who you live with") && prompt.contains("Hanne"));
         assert!(prompt.contains("understand only Danish"));
         assert!(prompt.contains("A1"), "a low lesson gets simple Danish");
 
@@ -4412,7 +4412,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         let food = db::require_course_id(&mut conn, 3).unwrap();
         conn.batch_execute(&format!(
             "INSERT INTO songs (id, title, chorus_da, chorus_en, style, sections, lyrics, suno_model, status, created_at, course_id)
-             VALUES ('{s2}', 'Obiad', 'Smacznego', 'Enjoy', 'pop', '[]', '', 'V6', 'ready', 0, '{food}');",
+             VALUES ('{s2}', 'Middag', 'Velbekomme', 'Enjoy', 'pop', '[]', '', 'V6', 'ready', 0, '{food}');",
             s2 = song(2),
         ))
         .unwrap();
@@ -4477,8 +4477,8 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         .unwrap();
         let listed = tutor::run_tool_for_test(&mut conn, "list_songs", serde_json::json!({}));
         assert_eq!(listed.as_array().unwrap().len(), 2);
-        let kawa = listed.as_array().unwrap().iter().find(|s| s["title"] == "Kaffe").unwrap();
-        assert_eq!(kawa["plays"], 3);
+        let kaffe_song = listed.as_array().unwrap().iter().find(|s| s["title"] == "Kaffe").unwrap();
+        assert_eq!(kaffe_song["plays"], 3);
 
         let deleted = tutor::run_tool_for_test(&mut conn, "delete_songs", serde_json::json!({ "song_ids": [song(2), song(99)] }));
         assert_eq!(deleted["_action"]["kind"], "songsDeleted");
@@ -4550,7 +4550,7 @@ INSERT INTO files (id, kind, name, mime, size, sha256, bytes, created_at) VALUES
         // sentences 2000…, lines 3000….
         let mut demo_sql = String::from(
             "INSERT INTO topics (id, slug, ord, kind, title_da, title_en, summary_en, created_at)
-                 VALUES (3, 'demo-first-steps', 3, 'course', 'Pierwsze kroki', 'First steps', '', 0);",
+                 VALUES (3, 'demo-first-steps', 3, 'course', 'Første skridt', 'First steps', '', 0);",
         );
         let (mut word_no, mut sentence_no, mut line_no) = (1000, 2000, 3000);
         let mut first_demo_word = None;

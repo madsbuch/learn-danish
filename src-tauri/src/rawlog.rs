@@ -889,7 +889,7 @@ pub async fn learning_log_export(app: tauri::AppHandle, db: State<'_, Db>, filte
         let rows = all_rows(conn, &filter)?;
         let offset = db::get_setting_i64(conn, "tz_offset_minutes", 0);
         let (y, m, d) = crate::commands::civil_date(db::today(conn));
-        (export_text(&rows, &format, offset)?, format!("polski-learning-log-{y:04}-{m:02}-{d:02}.{format}"))
+        (export_text(&rows, &format, offset)?, format!("dansk-learning-log-{y:04}-{m:02}-{d:02}.{format}"))
     };
     let (sender, receiver) = tokio::sync::oneshot::channel();
     app.dialog()
@@ -917,8 +917,8 @@ mod tests {
 
     #[test]
     fn csv_fields_are_quoted_when_they_must_be() {
-        assert_eq!(csv_field("kot"), "kot");
-        assert_eq!(csv_field("kot, pies"), "\"kot, pies\"");
+        assert_eq!(csv_field("kat"), "kat");
+        assert_eq!(csv_field("kat, hund"), "\"kat, hund\"");
         assert_eq!(csv_field("say \"hi\""), "\"say \"\"hi\"\"\"");
         assert_eq!(clock(0, 60), "01:00");
         assert_eq!(clock(86_399_000, 0), "23:59");

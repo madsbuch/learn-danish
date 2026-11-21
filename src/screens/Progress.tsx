@@ -213,7 +213,7 @@ function Met({
       page: { page: "structures" },
       value: data?.structuresMet ?? 0,
       label: "Structures",
-      note: "Cases, verb forms, agreement…",
+      note: "Word order, verb forms, en and et…",
       memory: "met:structures",
     },
     {

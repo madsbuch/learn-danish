@@ -65,9 +65,8 @@ fn place_meaning(phrase: &str) -> Option<(&'static str, &'static str)> {
 }
 
 /// Why a "Where is it?" answer is what it is, in plain English: what the
-/// preposition said means and what the picture shows instead. Danish nouns
-/// keep their form after a preposition, so unlike Polish there is no ending
-/// to explain. `shown` is the place as the card said it.
+/// preposition said means and what the picture shows instead. `shown` is
+/// the place as the card said it.
 pub fn explain_place(statement: &Statement, shown: &str) -> String {
     let right = statement.phrase.as_str();
     let Some((word, means)) = place_meaning(right) else {
@@ -75,7 +74,7 @@ pub fn explain_place(statement: &Statement, shown: &str) -> String {
     };
     let truth = format!("In the picture it's “{right}”: {word} means {means}.");
     if shown.trim().eq_ignore_ascii_case(right.trim()) {
-        return format!("{truth} The noun stays as it is after it.");
+        return truth;
     }
     match place_meaning(shown) {
         Some((_, wrong_means)) => format!("“{shown}” would mean {wrong_means}. {truth}"),
@@ -1050,7 +1049,7 @@ mod tests {
         let why = explain_place(&statement, "under kajen");
         assert!(why.contains("would mean under") && why.contains("ved means by"), "{why}");
         assert!(explain_place(&statement, "ved siden af kajen").contains("would mean next to"));
-        assert!(explain_place(&statement, "ved kajen").contains("ved means by"));
+        assert_eq!(explain_place(&statement, "ved kajen"), "In the picture it's “ved kajen”: ved means by.", "no ending to explain");
         assert!(holds("i", &inside, &table) && !holds("i", &beside, &table));
         assert!(!holds("bag", &beside, &table), "a preposition the boxes cannot show is never borne out");
     }

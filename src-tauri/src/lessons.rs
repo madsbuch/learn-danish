@@ -48,7 +48,7 @@ fn listening_objectives(complexity: &str) -> Vec<String> {
         objectives.push("Fill in a missing word in a line of the song".into());
     }
     if complexity == "high" {
-        objectives.push("Explain the grammar of a line (case, verb form, agreement)".into());
+        objectives.push("Explain the grammar of a line (word order, verb form, agreement)".into());
         objectives.push("Retell what the song is about in simple Danish".into());
     }
     objectives

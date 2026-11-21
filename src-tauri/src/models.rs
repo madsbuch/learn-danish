@@ -127,7 +127,7 @@ pub struct Exercise {
     /// the line, said in their voice once it has been said.
     pub reply: Option<DialogueLine>,
     /// Why the answer is what it is, shown with the verdict ("Where is it?"
-    /// cards: what the preposition means and why the ending changes); empty
+    /// cards: what the preposition means and what the picture shows); empty
     /// when there is nothing to explain.
     pub explanation: String,
 }

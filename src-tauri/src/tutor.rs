@@ -112,7 +112,7 @@ The app:
   a closed course is getting old, or the learner brings up its theme, offer a new course on it, \
   a level up: build on what it taught (get_course shows it), don't repeat its words and lessons.
 - Grammar, culture, listening and writing lessons belong in the course whose material they \
-  explain or use: the accusative in the bakery course, a logician's podcast in the logic course. \
+  explain or use: the definite ending in the bakery course, a logician's podcast in the logic course. \
   Give their course_id. Only a lesson that truly fits no course goes in \"Other lessons\" (the \
   folder for one-offs, which never ends). A lesson is in one course only and is never moved: \
   for one in another course, make a new lesson there.
@@ -447,7 +447,7 @@ pub fn tool_definitions() -> Vec<Tool> {
                     "dialogue": dialogue_schema(),
                     "study_lessons": {
                         "type": "array",
-                        "description": "1–2 short lessons on the grammar the dialogue and sentences use (a case ending, a verb form), each a study lesson checked by the examiner",
+                        "description": "1–2 short lessons on the grammar the dialogue and sentences use (a definite ending, a verb form), each a study lesson checked by the examiner",
                         "items": {
                             "type": "object",
                             "properties": {
@@ -562,7 +562,7 @@ pub fn tool_definitions() -> Vec<Tool> {
                     "title": { "type": "string", "description": "Short, e.g. \"Where do you live?\"" },
                     "summary": { "type": "string", "description": "One sentence: what the learner does" },
                     "complexity": { "type": "string", "enum": ["low", "medium", "high"], "description": "How much Danish it takes: low — a few simple sentences; medium — a short exchange; high — a real conversation. How simply the partner writes follows the course's level (or the lesson's own)." },
-                    "scenario": { "type": "string", "description": "The situation in English, to the learner: where they are and who they are writing with, e.g. \"You've just moved in. Your new neighbour Pani Ewa stops you on the stairs.\"" },
+                    "scenario": { "type": "string", "description": "The situation in English, to the learner: where they are and who they are writing with, e.g. \"You've just moved in. Your new neighbour Hanne stops you on the stairs.\"" },
                     "goals": { "type": "array", "items": { "type": "string" }, "description": "1–4 things the learner has to get across, e.g. \"Say which city you live in\", \"Say who you live with\"" },
                     "period_days": { "type": "integer", "description": "Days between check-ins; leave out for the default" },
                     "course_id": { "type": "string", "pattern": "^crs_[0-7][0-9a-hjkmnp-tv-z]{25}$", "description": "The course to file it in; leave out only for a one-off that fits no course (it goes in \"Other lessons\")" }
@@ -3556,10 +3556,10 @@ mod tests {
         assert_eq!(serde_json::from_str::<Value>(&args).unwrap(), json!({"lesson_id": 4, "course_id": 2}));
         let (name, args) = current_call(
             "create_course",
-            r#"{"title": "x", "lessons": [{"title": "y", "lesson": "**Mam**"}]}"#,
+            r#"{"title": "x", "lessons": [{"title": "y", "lesson": "**Jeg har**"}]}"#,
         );
         assert_eq!(name, "create_course");
-        assert_eq!(serde_json::from_str::<Value>(&args).unwrap()["study_lessons"][0]["content"], "**Mam**");
+        assert_eq!(serde_json::from_str::<Value>(&args).unwrap()["study_lessons"][0]["content"], "**Jeg har**");
         assert_eq!(current_call("order_course_blocks", "{}").0, "order_course_lessons");
     }
 

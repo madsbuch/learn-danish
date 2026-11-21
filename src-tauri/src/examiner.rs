@@ -864,7 +864,7 @@ pub async fn writing_scaffold(db: State<'_, Db>, lesson_id: LessonId) -> Result<
          For each goal give a simple sentence starter they can finish, and 4–6 useful words or \
          short phrases (in the form they would use them in the sentence), each with its English \
          meaning. Simple, correct, everyday Danish (A1). Reply with only JSON: \
-         {{\"goals\": [{{\"goal\": \"…\", \"starter\": {{\"da\": \"Mam…\", \"en\": \"I have…\"}}, \
+         {{\"goals\": [{{\"goal\": \"…\", \"starter\": {{\"da\": \"Jeg har…\", \"en\": \"I have…\"}}, \
          \"words\": [{{\"da\": \"…\", \"en\": \"…\"}}]}}]}}",
         detail.content,
         detail.objectives.iter().map(|o| format!("- {o}")).collect::<Vec<_>>().join("\n"),
@@ -915,7 +915,7 @@ pub async fn writing_hint(db: State<'_, Db>, checkin_id: CheckinId) -> Result<St
          partner and moves toward a goal not reached yet, with one or two key words left as \
          blanks (___) for them to fill in, then the English meaning in parentheses, then the \
          missing words' English in brackets. One line, nothing else. Example: \
-         Mam ___ i ___. (I have a kitchen and a bedroom.) [kitchen, bedroom]",
+         Jeg har et ___ og et ___. (I have a kitchen and a bedroom.) [kitchen, bedroom]",
         detail.objectives.iter().map(|o| format!("- {o}")).collect::<Vec<_>>().join("\n"),
         if chat.is_empty() { "(nothing yet)".into() } else { chat },
     );
@@ -972,8 +972,8 @@ mod tests {
     #[test]
     fn verdicts_parse_in_either_spelling() {
         let a: Assessment =
-            serde_json::from_str(r#"{"result":"pass","summary":"Good.","to_review":["sa vs jest"]}"#).unwrap();
-        assert_eq!(a.to_review, vec!["sa vs jest"]);
+            serde_json::from_str(r#"{"result":"pass","summary":"Good.","to_review":["er vs var"]}"#).unwrap();
+        assert_eq!(a.to_review, vec!["er vs var"]);
         let b: Assessment = serde_json::from_str(r#"{"result":"fail","summary":"x","toReview":[]}"#).unwrap();
         assert_eq!(b.result, "fail");
         // The last answer's feedback comes in, and stays out of what the

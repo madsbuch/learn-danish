@@ -847,7 +847,7 @@ function StructuresPage({ nav }: { nav: Nav }) {
       nav={nav}
       info={
         <p>
-          Cases, verb forms, agreement and more, from the grammar tags on your
+          Word order, verb forms, en and et and more, from the grammar tags on your
           words and sentences. Tap one for its explanation, your examples and
           your mistakes.
         </p>

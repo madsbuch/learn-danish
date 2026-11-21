@@ -534,7 +534,7 @@ mod tests {
         let written = serde_json::to_string(&EventDetails { v: 2, slow: Some(true), ..EventDetails::default() }).unwrap();
         assert_eq!(written, r#"{"v":2,"slow":true}"#, "compact: only what is set");
         // Details written at version 1 still read.
-        let old = read_details(r#"{"v":1,"options":["kot","pies"]}"#);
+        let old = read_details(r#"{"v":1,"options":["kat","hund"]}"#);
         assert_eq!((old.v, old.options.len(), old.shown), (1, 2, None));
         assert!(check_event(&EventIn { kind: "lesson_opened".into(), source: "fridge".into(), ..EventIn::default() }).is_err());
     }

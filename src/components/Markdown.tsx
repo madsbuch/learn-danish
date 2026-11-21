@@ -287,7 +287,7 @@ const INLINE = [
     pattern: new RegExp(`(${TYPE_ID.source})`),
     render: (body: string, key: number) => <IdChip key={key} id={body} />,
   },
-  // A small player the agents can offer: [[say: rozgrzewka]], or
+  // A small player the agents can offer: [[say: opvarmning]], or
   // [[say:m: Godmorgen]] for a man's voice. First, so nothing inside it
   // is taken for emphasis.
   {
