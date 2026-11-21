@@ -42,6 +42,7 @@ const MAX_ROUNDS: usize = 8;
 // Prompt
 // ---------------------------------------------------------------------------
 
+// Spec: TUTOR-6
 pub(crate) const RULES: &str = "\
 You are the tutor in Dansk, an app for learning Danish. You explain Danish, suggest what to \
 practise, and — when asked — change the app with your tools.
