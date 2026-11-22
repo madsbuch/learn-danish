@@ -2691,6 +2691,38 @@ mod integration {
     }
 
     // Spec: DRILL-10
+    // Spec: SPK-11, SPK-12
+    #[test]
+    fn a_sentences_lesson_plays_sound_pairs_with_its_own_words() {
+        let mut conn = scratch_db("sentence-sounds");
+        let course = db::require_course_id(&mut conn, 1).unwrap();
+        crate::levels::set_course_level(&mut conn, course, "A1").unwrap();
+        let mut lesson = |format: &str, items: serde_json::Value| -> LessonId {
+            let key = if format == "words" { "words" } else { "sentences" };
+            let made = tutor::run_tool_for_test(
+                &mut conn,
+                "create_drill_lesson",
+                serde_json::json!({ "title": "Sounds", "format": format, "complexity": "low", "course_id": course, key: items }),
+            );
+            serde_json::from_value(made["_action"]["lessonId"].clone()).unwrap()
+        };
+        let counts = lesson("sentences", serde_json::json!([{ "da": "Jeg har to katte.", "en": "I have two cats." }]));
+        let plain = lesson("sentences", serde_json::json!([{ "da": "Jeg har en kat.", "en": "I have a cat." }]));
+        lesson("words", serde_json::json!([{ "da": "en kop", "en": "cup", "pos": "n-common", "near": { "da": "en kok", "en": "a cook" } }]));
+        let coffee = lesson("sentences", serde_json::json!([{ "da": "En kop kaffe, tak.", "en": "A cup of coffee, please." }]));
+        let sounds = |conn: &mut Conn, id: LessonId| {
+            let plan = session::build_lesson(conn, id).unwrap();
+            let at: Vec<usize> = plan.exercises.iter().enumerate().filter(|(_, e)| e.kind == "soundPair").map(|(n, _)| n).collect();
+            let gaps = plan.exercises.iter().position(|e| e.kind == "gapFill");
+            assert!(at.iter().all(|n| gaps.is_none_or(|g| *n < g)), "the round comes before the gaps");
+            at.iter().map(|n| plan.exercises[*n].options.join("/")).collect::<Vec<_>>()
+        };
+        // At A1 too: "to" stands in the sentence, so its built-in pair comes.
+        assert_eq!(sounds(&mut conn, counts), ["tå/to"]);
+        assert!(sounds(&mut conn, plain).is_empty(), "nothing matches: no round");
+        assert_eq!(sounds(&mut conn, coffee), ["kop/kok"]);
+    }
+
     #[test]
     fn sentence_tiles_ask_for_the_endings_the_tutor_gave() {
         let mut conn = scratch_db("sentence-tiles");
