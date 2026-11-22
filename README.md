@@ -44,12 +44,14 @@ item and id for id; a requirement added or changed here is ported there.
   own celebration, and final. To revisit a theme, the tutor makes a new
   course, a level up. A lesson's minutes come from one table per type
   (`lesson_types::minutes`). Extra practice (a lesson already passed today)
-  earns half XP, still counts toward mastery, leaves the schedule alone, and
-  a fail there costs no mastery.
+  earns half XP, still counts toward mastery and leaves the schedule alone.
   Mastery points: the first pass 30, another the same day 10, one a day to
   two weeks later 16 to 35, an ace (every answer fully right) a quarter more;
-  a partial (60–84% right) half what a repeat pass would at that gap, without
-  passing the lesson; a fail −20. One sitting reaches 90 at most: the last
+  a go short of a pass a share of that by its score — nothing at half right
+  or less, the full amount at 85% — without passing the lesson; nothing ever
+  takes points away. A drill's cards follow its level (A1 never types or
+  writes a whole sentence from hearing it) and each item's familiarity; XP
+  grows with the card's difficulty and the level. One sitting reaches 90 at most: the last
   stretch takes a pass on a second day. Every change is written in the
   lesson's **mastery ledger** (`mastery_log`, `masterylog.rs`), shown on its
   page as "Mastery points" and to the tutor as `get_mastery_log`. A typed
