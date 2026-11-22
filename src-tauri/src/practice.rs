@@ -142,7 +142,6 @@ pub struct AnswerResult {
     pub xp_gained: i64,
     pub total_xp: i64,
     pub day_xp: i64,
-    pub level: i64,
     /// A dictation: what was written, word by word against the sentence
     /// (dictation.rs); a speaking card: what was heard. Empty for every
     /// other kind.
@@ -194,7 +193,6 @@ fn submit_steps(conn: &mut Conn, answer: SubmitAnswer) -> Result<AnswerResult> {
             xp_gained: 0,
             total_xp,
             day_xp,
-            level: stats::level_from_xp(total_xp),
             diff: vec![],
             tips: vec![],
         });
@@ -332,7 +330,6 @@ fn submit_steps(conn: &mut Conn, answer: SubmitAnswer) -> Result<AnswerResult> {
         xp_gained: xp,
         total_xp,
         day_xp,
-        level: stats::level_from_xp(total_xp),
         diff,
         tips,
     })
@@ -398,6 +395,12 @@ pub struct LessonFinished {
     pub total: i64,
     /// What it did to the lesson's mastery points: its row in the ledger.
     pub mastery: Option<crate::masterylog::MasteryEntry>,
+    /// "ace" | "pass" | "partial" | "fail"; "" when not graded.
+    pub grade: String,
+    /// This go mastered the lesson.
+    pub mastered_now: bool,
+    /// What the misses cost: the next grade up and its mastery change.
+    pub impact: Option<lessons::Impact>,
     #[serde(flatten)]
     pub session: SessionResult,
 }
@@ -493,6 +496,9 @@ fn lesson_finish_steps(
             almost,
             total,
             mastery: None,
+            grade: String::new(),
+            mastered_now: false,
+            impact: None,
             session: finish_up(conn, &before, first)?,
         });
     }
@@ -508,6 +514,9 @@ fn lesson_finish_steps(
     // Spec: DRILL-8
     let ace = almost == 0 && correct >= total;
     let go = lessons::Go { via: "drill", run, score: Some((correct, almost, total)), extra };
+    // What the misses cost, by the rules about to grade it.
+    // Spec: SUM-8
+    let impact = lessons::impact(conn, &current, result, ace, go.score, extra, today)?;
     let (lesson, entry) = if extra {
         // Extra practice leaves the schedule alone, but still earns mastery.
         let entry = lessons::credit_mastery(conn, &current, result, ace, today, &go)?;
@@ -516,6 +525,8 @@ fn lesson_finish_steps(
         lessons::record_go(conn, lesson_id, result, ace, &go)?
     };
     let first = stats::mark_practised(conn, today)?;
+    // Spec: SUM-9
+    let mastered_now = !current.mastered && lesson.mastered;
     Ok(LessonFinished {
         lesson,
         result: result.into(),
@@ -524,20 +535,34 @@ fn lesson_finish_steps(
         correct,
         almost,
         total,
+        grade: lessons::Grade::of(result, ace).key().into(),
+        mastered_now,
         mastery: Some(entry),
+        impact,
         session: finish_up(conn, &before, first)?,
     })
+}
+
+/// A conversation's summary: what it did to the lesson's mastery points (its
+/// row in the ledger), whether it mastered the lesson, and the stats.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CheckinSummary {
+    pub mastery: Option<crate::masterylog::MasteryEntry>,
+    pub mastered_now: bool,
+    #[serde(flatten)]
+    pub session: SessionResult,
 }
 
 /// Stats after a check-in, for the summary screen. What counts as newly
 /// unlocked is what was unlocked since the check-in began.
 #[tauri::command]
-pub async fn checkin_summary(db: State<'_, Db>, checkin_id: CheckinId, first_completion_today: bool) -> Result<SessionResult> {
+pub async fn checkin_summary(db: State<'_, Db>, checkin_id: CheckinId, first_completion_today: bool) -> Result<CheckinSummary> {
     let mut guard = db.lock();
     checkin_summary_in(&mut guard, checkin_id, first_completion_today)
 }
 
-pub fn checkin_summary_in(conn: &mut Conn, checkin_id: CheckinId, first_completion_today: bool) -> Result<SessionResult> {
+pub fn checkin_summary_in(conn: &mut Conn, checkin_id: CheckinId, first_completion_today: bool) -> Result<CheckinSummary> {
     use crate::schema::checkins;
     let started: i64 = checkins::table.find(checkin_id).select(checkins::started_at).first(conn)?;
     let before: std::collections::HashSet<String> = achievements::table
@@ -546,7 +571,9 @@ pub fn checkin_summary_in(conn: &mut Conn, checkin_id: CheckinId, first_completi
         .load::<String>(conn)?
         .into_iter()
         .collect();
-    finish_up(conn, &before, first_completion_today)
+    // Spec: SUM-3, SUM-9
+    let (mastery, mastered_now) = crate::masterylog::for_run(conn, &checkin_id.to_string())?;
+    Ok(CheckinSummary { mastery, mastered_now, session: finish_up(conn, &before, first_completion_today)? })
 }
 
 #[cfg(test)]
