@@ -161,7 +161,7 @@ src/design/            shared components, tokens and themes
 src/screens/           exercises, tutor, music, settings and detail screens
 src/exercises/         one module per exercise kind, and their registry
 src/lib/api.ts         typed Tauri command interface
-src/lib/types.ts       shared frontend data shapes (Danish content uses da)
+src/lib/schemas.ts     shared frontend data shapes (Danish content uses da)
 src-tauri/src/         database, learning engine, agents, speech and music
 src-tauri/src/lesson_types/  every lesson type, one module each, and their registry
 src-tauri/plugins/     Android playback, sharing and background work

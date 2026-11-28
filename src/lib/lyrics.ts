@@ -9,7 +9,7 @@
  * English on the left, Danish on the right. Verses sing both, English first;
  * the chorus sings only the Danish.
  */
-import type { SongSection, SongSectionKind } from "./types";
+import type { SongSection, SongSectionKind } from "./schemas";
 
 const LABELS: Record<SongSectionKind, string> = {
   verse: "Verse",

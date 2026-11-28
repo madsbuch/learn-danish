@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { Button, Text } from "../design";
 import { useBackLayer } from "../lib/navigation";
-import type { GlossWord } from "../lib/types";
+import type { GlossWord } from "../lib/schemas";
 
 /*
  * What a tapped Danish word means, in a small popover under it (or over it
